@@ -1,6 +1,7 @@
 FROM ubuntu:16.04
 
-# Install dependencies
+# Install server dependencies
+RUN apt-get install --fix-missing #reset
 RUN apt-get update --yes && apt-get upgrade --yes
 RUN apt-get install git nodejs npm \
 libcairo2-dev libjpeg8-dev libpango1.0-dev libgif-dev libpng-dev build-essential g++ \
@@ -11,12 +12,16 @@ RUN ln -s `which nodejs` /usr/bin/node
 
 # Non-privileged user
 RUN useradd -m audiogram
-USER audiogram
 WORKDIR /home/audiogram
 
 # Clone repo
-RUN git clone https://github.com/nypublicradio/audiogram.git
-WORKDIR /home/audiogram/audiogram
+COPY . /home/audiogram
+RUN chown -R audiogram:audiogram /home/audiogram
 
-# Install dependencies
+# Install application dependencies
+USER audiogram
+WORKDIR /home/audiogram/audiogram
 RUN npm install
+
+#EXPOSE 8081
+CMD [ "npm", "start" ]

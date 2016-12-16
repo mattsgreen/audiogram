@@ -3,6 +3,7 @@ var d3 = require("d3"),
     video = require("./video.js"),
     minimap = require("./minimap.js"),
     sampleWave = require("./sample-wave.js"),
+    logger = require("../lib/logger/"),
     getRenderer = require("../renderer/"),
     getWaveform = require("./waveform.js");
 
@@ -11,10 +12,15 @@ var context = d3.select("canvas").node().getContext("2d");
 var theme,
     caption,
     file,
+    background,
     selection;
 
 function _file(_) {
   return arguments.length ? (file = _) : file;
+}
+
+function _background(_) {
+  return arguments.length ? (background = _, redraw()) : background;
 }
 
 function _theme(_) {
@@ -72,11 +78,11 @@ function redraw() {
 
   resize(theme.width, theme.height);
 
-  video.kill();
+  video.kill(); //'ed the radio star...
 
   var renderer = getRenderer(theme);
 
-  renderer.backgroundImage(theme.backgroundImageFile || null);
+  renderer.backgroundImage(background || null);
 
   renderer.drawFrame(context, {
     caption: caption,
@@ -86,18 +92,18 @@ function redraw() {
 
 }
 
-function loadAudio(f, cb) {
+function loadAudio(audioFile, cb) {
 
   d3.queue()
-    .defer(getWaveform, f)
-    .defer(audio.src, f)
+    .defer(getWaveform, audioFile)
+    .defer(audio.src, audioFile)
     .await(function(err, data){
 
       if (err) {
         return cb(err);
       }
 
-      file = f;
+      file = audioFile;
       minimap.redraw(data.peaks);
 
       cb(err);
@@ -110,6 +116,7 @@ module.exports = {
   caption: _caption,
   theme: _theme,
   file: _file,
-  selection: _selection,
-  loadAudio: loadAudio
+  background: _background,
+  loadAudio: loadAudio,
+  selection: _selection
 };

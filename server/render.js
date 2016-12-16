@@ -17,7 +17,8 @@ function validate(req, res, next) {
 
   }
 
-  if (!req.file || !req.file.filename) {
+  var audioFile = req.files['audio'][0]
+  if (!audioFile || !audioFile.filename) {
     return res.status(500).send("No valid audio received.");
   }
 
@@ -36,18 +37,30 @@ function validate(req, res, next) {
 
 function route(req, res) {
 
-  var id = req.file.destination.split(path.sep).pop();
+  var audioFile = req.files['audio'][0];
+  var audioId = audioFile.destination.split(path.sep).pop();
 
-  transports.uploadAudio(path.join(req.file.destination, "audio"), "audio/" + id,function(err) {
+  var backgroundFile = req.files['background'][0];
+  var backgroundId = backgroundFile.destination.split(path.sep).pop();
+  var backgroundImagePath = "background/" + backgroundId
+
+  transports.uploadBackground(path.join(backgroundFile.destination, "background"), backgroundImagePath, function(err) {
+    if (err) {
+      throw err;
+    }
+  });
+
+  transports.uploadAudio(path.join(audioFile.destination, "audio"), "audio/" + audioId, function(err) {
 
     if (err) {
       throw err;
     }
 
     // Queue up the job with a timestamp
-    transports.addJob(_.extend({ id: id, created: (new Date()).getTime() }, req.body));
+    var themeWithBackgroundImage =  _.extend(req.body.theme, { customBackgroundPath: backgroundImagePath });
+    transports.addJob(_.extend({ id: audioId, created: (new Date()).getTime(), theme: themeWithBackgroundImage }, req.body));
 
-    res.json({ id: id });
+    res.json({ id: audioId });
 
     // If there's no separate worker, spawn one right away
     if (!serverSettings.worker) {

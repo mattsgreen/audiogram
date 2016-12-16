@@ -7,3 +7,5 @@ junk/
 media/
 *.log
 .jobs
+.idea/
+*.iml

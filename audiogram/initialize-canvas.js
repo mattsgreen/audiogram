@@ -3,18 +3,21 @@ var fs = require("fs"),
     Canvas = require("canvas"),
     getRenderer = require("../renderer/");
 
+// Settings
+var serverSettings = require("../lib/settings/");
+
 function initializeCanvas(theme, cb) {
 
   // Fonts pre-registered in bin/worker
   var renderer = getRenderer(theme);
 
-  if (!theme.backgroundImage) {
-    return cb(null, renderer);
-  }
+  // TODO if a theme has a background image (perhaps a default) use that one in preference
+  // if (!(theme.customBackgroundPath || theme.backgroundImage)) {
+  //   return cb(null, renderer);
+  // }
 
   // Load background image from file (done separately so renderer code can work in browser too)
-  fs.readFile(path.join(__dirname, "..", "settings", "backgrounds", theme.backgroundImage), function(err, raw){
-
+  fs.readFile(path.join(serverSettings.storagePath, theme.customBackgroundPath), function(err, raw){
     if (err) {
       return cb(err);
     }

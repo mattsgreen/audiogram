@@ -4,6 +4,8 @@ var d3 = require("d3"),
     video = require("./video.js"),
     audio = require("./audio.js");
 
+var backgroundFile;
+
 d3.json("/settings/themes.json", function(err, themes){
 
   var errorMessage;
@@ -42,9 +44,9 @@ function submitted() {
   var theme = preview.theme(),
       caption = preview.caption(),
       selection = preview.selection(),
-      file = preview.file();
+      audioFile = preview.file()
 
-  if (!file) {
+  if (!audioFile) {
     d3.select("#row-audio").classed("error", true);
     return setClass("error", "No audio file selected.");
   }
@@ -62,7 +64,8 @@ function submitted() {
 
   var formData = new FormData();
 
-  formData.append("audio", file);
+  formData.append("audio", audioFile);
+  formData.append("background", backgroundFile);
   if (selection.start || selection.end) {
     formData.append("start", selection.start);
     formData.append("end", selection.end);
@@ -174,6 +177,9 @@ function initialize(err, themesWithImages) {
   // If there's an initial piece of audio (e.g. back button) load it
   d3.select("#input-audio").on("change", updateAudioFile).each(updateAudioFile);
 
+  // If there's an initial background image (e.g. back button) load it
+  d3.select("#input-background").on("change", updateBackground).each(updateBackground); //try deleting the each and see if it all still works. claim biscuit prize from squio
+
   d3.select("#return").on("click", function(){
     d3.event.preventDefault();
     video.kill();
@@ -218,6 +224,28 @@ function updateAudioFile() {
 
 }
 
+function updateBackground() {
+
+    d3.select("#row-background").classed("error", false);
+
+    // Skip if empty
+    if (!this.files || !this.files[0]) {
+        preview.background(null);
+        setClass(null);
+        return true;
+    }
+
+    function getImage(file) {
+       var backgroundImageFile = new Image();
+       backgroundImageFile.src = window.URL.createObjectURL( file );
+       return backgroundImageFile
+    }
+
+    backgroundFile = this.files[0]
+    preview.background(getImage(backgroundFile));
+
+}
+
 function updateCaption() {
   preview.caption(this.value);
 }
@@ -245,7 +273,7 @@ function preloadImages(themes) {
 
   imageQueue.awaitAll(initialize);
 
-  function getImage(theme, cb) {
+  function getImage(theme, cb) { //Q. where does this cb get passed in??
 
     if (!theme.backgroundImage) {
       return cb(null, theme);
@@ -260,7 +288,7 @@ function preloadImages(themes) {
       return cb(null, theme);
     };
 
-    theme.backgroundImageFile.src = "/settings/backgrounds/" + theme.backgroundImage;
+    theme.backgroundImageFile.src = "/settings/backgrounds/" + theme.backgroundImage;  //Q.  i thought there needs to be an explicit return statement.  or is this all side-effect making?
 
   }
 

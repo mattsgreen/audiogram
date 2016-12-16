@@ -22,6 +22,7 @@ function Audiogram(id) {
   this.dir = path.join(serverSettings.workingDirectory, this.id);
 
   this.audioPath = path.join(this.dir, "audio");
+  this.backgroundPath = path.join(this.dir, "background");
   this.videoPath = path.join(this.dir, "video.mp4");
   this.frameDir = path.join(this.dir, "frames");
 

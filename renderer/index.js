@@ -55,7 +55,7 @@ module.exports = function(t) {
 
     // Write the caption
     if (options.caption) {
-      wrapText(context, options.caption);
+      wrapText(context, options.caption === "undefined" ? "" : options.caption);
     }
 
     return this;

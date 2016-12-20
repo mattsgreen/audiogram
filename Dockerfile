@@ -11,17 +11,24 @@ redis-server --yes
 RUN ln -s `which nodejs` /usr/bin/node
 
 # Non-privileged user
-RUN useradd -m audiogram
-WORKDIR /home/audiogram
+RUN useradd -m audiogram #reset
 
-# Clone repo
-COPY . /home/audiogram
+# early copy of client side javascript required for postinstall script
+ADD ./client/* /home/audiogram/src/client/
+ADD ./lib/logger/* /home/audiogram/src/client/
+
+# Install application dependencies (see http://www.clock.co.uk/blog/a-guide-on-how-to-cache-npm-install-with-docker)
+ADD ./package.json /home/audiogram/src/package.json
 RUN chown -R audiogram:audiogram /home/audiogram
 
-# Install application dependencies
 USER audiogram
-WORKDIR /home/audiogram/audiogram
+WORKDIR /home/audiogram/src
 RUN npm install
 
-#EXPOSE 8081
-CMD [ "npm", "start" ]
+# Copy rest of source
+USER root
+COPY . /home/audiogram/src
+RUN chown -R audiogram:audiogram /home/audiogram
+
+ENV NODE_ENV production
+#CMD [ "npm", "start" ]

@@ -31,4 +31,4 @@ COPY . /home/audiogram/src
 RUN chown -R audiogram:audiogram /home/audiogram
 
 ENV NODE_ENV production
-#CMD [ "npm", "start" ]
+CMD [ "sh", "bin/start.sh" ]

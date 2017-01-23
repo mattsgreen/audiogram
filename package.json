@@ -7,12 +7,12 @@
     "unsafe-perm": true
   },
   "scripts": {
-    "start": "npm run postinstall && bin/server",
+    "start": "bin/server",
+    "debug": "DEBUG=1 bin/server",
     "worker": "bin/worker",
-    "postinstall": "mkdir -p editor/js && browserify client/index.js > editor/js/bundle.js",
-    "rebuild": "npm run postinstall",
+
+    "build": "mkdir -p editor/js && browserify client/index.js > editor/js/bundle.js",
     "watch": "mkdir -p editor/js && watchify client/index.js -o editor/js/bundle.js",
-    "debug": "npm run postinstall && DEBUG=1 bin/server",
     "test": "rm -rf test/tmp && tape 'test/**/*-test.js'"
   },
   "repository": {

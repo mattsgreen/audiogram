@@ -5,12 +5,33 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="http://bbc.github.io/internalGEL/dist/internalgel-bootstrap.css">
+    <!--<link rel="stylesheet" href="http://bbc.github.io/internalGEL/dist/internalgel-fonts.css">-->
+    <link rel="stylesheet" href="http://bbc.github.io/internalGEL/dist/internalgel.css" id="intGEL-stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600" rel="stylesheet" type="text/css">
     <link href="/css/base.css" rel="stylesheet" type="text/css">
     <link href="/css/editor.css" rel="stylesheet" type="text/css">
     <link href="/fonts/fonts.css" rel="stylesheet" type="text/css">
+    <link href="/css/main.css" rel="stylesheet" type="text/css">
+    <!-- Icons -->
+    <!-- 16x16 -->
+    <link rel="shortcut icon" href="favicon.ico">
+    <!-- 32x32 -->
+    <link rel="icon" type="image/png" href="favicon-32x32.png" sizes="32x32">
+    <!-- 48x48 -->
+    <link rel="icon" type="image/png" href="favicon-48x48.png" sizes="48x48">
+    <!-- 96x96 -->
+    <link rel="icon" type="image/png" href="favicon-96x96.png" sizes="96x96">
   </head>
   <body class="loading">
+    <header>
+      <svg class="labs-logo" width="62" height="80">
+        <image class="labs-logo-image" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="images/labs-logo.svg" src="images/labs-logo.png" width="62" height="80"></image>
+      </svg>
+
+      <h1>Audiogram<span class="title-superscript">ALPHA</span></h1>
+      <a class="about-link" href="about.html">About</a>
+    </header>
     <div class="container">
       <h1>Audiogram</h1>
       <div id="loading">
@@ -34,7 +55,7 @@
           <select id="input-theme" name="theme"></select>
         </div>
         <div id="preview">
-          <div style="background-color: black;">
+          <div>
             <div id="canvas">
               <canvas width="640" height="360"></canvas>
               <div id="preview-label">Preview</div>
@@ -87,6 +108,15 @@
         </div>
       </div><!-- #loaded -->
     </div><!-- .container -->
+
+    <footer class="site-footer-wrap">
+        <div class="message-box-wrap">
+        <div class="message-box">
+          <h3>Please note:</h3>This is a prototype.  This means that this tool and its infrastructure is still under development and may present errors or be unavailable at times.  Please contact newslabs-development@lists.forge.bbc.co.uk with error reports.
+        </div>
+        </div>
+    </footer>
+
     <script src="/js/bundle.js"></script>
     <!-- Force load custom fonts -->
     <script src="/fonts/fonts.js"></script>

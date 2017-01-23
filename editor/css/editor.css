@@ -1,6 +1,6 @@
 div.container {
   width: 640px;
-  margin-bottom: 2rem;
+  margin-bottom: 60px;
 }
 
 h1 {
@@ -175,7 +175,6 @@ input[type='text'] {
 /* Minimap */
 svg {
   border-top: 1px solid #444;
-  background-color: #dedede;
 }
 
 g.background path {

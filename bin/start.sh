@@ -1,3 +1,3 @@
 #!/bin/bash
 nohup redis-server &
-npm start
+npm start > console.log

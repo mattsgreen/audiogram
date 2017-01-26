@@ -173,9 +173,6 @@ input[type='text'] {
 }
 
 /* Minimap */
-svg {
-  border-top: 1px solid #444;
-}
 
 g.background path {
   fill: #999;

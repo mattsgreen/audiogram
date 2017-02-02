@@ -4,7 +4,8 @@ var express = require("express"),
     path = require("path"),
     multer = require("multer"),
     uuid = require("node-uuid"),
-    mkdirp = require("mkdirp");
+    mkdirp = require("mkdirp"),
+    auth = require('./auth.js');
 
 // Routes and middleware
 var logger = require("../lib/logger/"),
@@ -17,6 +18,12 @@ var logger = require("../lib/logger/"),
 var serverSettings = require("../lib/settings/");
 
 var app = express();
+
+// whitelist
+const NODE_ENV = process.env.NODE_ENV ? process.env.NODE_ENV : "development" ;
+const whitelist = require('../whitelist.json');
+NODE_ENV === 'production' && app.use(auth(whitelist));
+console.log("RLW NODE_ENV === " + NODE_ENV);
 
 app.use(compression());
 app.use(logger.morgan());

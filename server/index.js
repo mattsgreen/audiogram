@@ -23,8 +23,8 @@ var app = express();
 const NODE_ENV = process.env.NODE_ENV ? process.env.NODE_ENV : "development" ;
 const whitelist = require('../whitelist.json');
 NODE_ENV === 'production' && app.use(auth(whitelist));
-console.log("RLW NODE_ENV === " + NODE_ENV);
 
+// use middlewares
 app.use(compression());
 app.use(logger.morgan());
 

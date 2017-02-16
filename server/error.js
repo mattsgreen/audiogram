@@ -2,6 +2,8 @@ var serverSettings = require("../lib/settings/");
 
 module.exports = function(err, req, res, next) {
 
+  console.log("RLW in error handler: " + err.code + " / " + err.name + " / " + err.message);
+
   if (!err) {
 
     // This should never happen

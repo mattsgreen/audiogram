@@ -7,6 +7,8 @@ var serverSettings = require("../lib/settings/"),
 
 function validate(req, res, next) {
 
+  console.log("RLW validating");
+
   try {
 
     req.body.theme = JSON.parse(req.body.theme);
@@ -37,6 +39,8 @@ function validate(req, res, next) {
 
 function route(req, res) {
 
+  console.log("RLW routing");
+
   var audioFile = req.files['audio'][0];
   var audioId = audioFile.destination.split(path.sep).pop();
 
@@ -53,6 +57,7 @@ function route(req, res) {
   transports.uploadAudio(path.join(audioFile.destination, "audio"), "audio/" + audioId, function(err) {
 
     if (err) {
+      console.log("RLW routing err");
       throw err;
     }
 

@@ -41,6 +41,7 @@ function render(job) {
   audiogram.render(function(err){
 
     if (err) {
+      console.log("RLW: ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ");
       audiogram.status("error");
       audiogram.set("error", err.toString());
       throw err;

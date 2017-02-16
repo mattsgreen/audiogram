@@ -105,6 +105,7 @@ function poll(id) {
           video.update(result.url, preview.theme().name);
           setClass("rendered");
         } else if (result.status === "error") {
+          console.log("RLW status error");
           error(result.error);
         } else {
           d3.select("#loading-message").text(statusMessage(result));
@@ -118,6 +119,7 @@ function poll(id) {
 }
 
 function error(msg) {
+  console.log("RLW  client error function: "  + msg.code + " / " + msg.name + " / " + msg.message);
 
   if (msg.responseText) {
     msg = msg.responseText;
@@ -138,6 +140,8 @@ function error(msg) {
 
 // Once images are downloaded, set up listeners
 function initialize(err, themesWithImages) {
+
+  console.log("RLW initializing");
 
   // Populate dropdown menu
   d3.select("#input-theme")

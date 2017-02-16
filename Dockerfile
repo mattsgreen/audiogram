@@ -32,5 +32,5 @@ RUN chown -R audiogram:audiogram /home/audiogram
 
 RUN npm run build
 
-ENV NODE_ENV production
+ENV NODE_ENV development
 CMD [ "sh", "bin/start.sh" ]

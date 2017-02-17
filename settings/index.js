@@ -28,6 +28,5 @@ module.exports = {
     { family: "Source Sans Pro", file: path.join(__dirname, "fonts", "SourceSansPro-Italic.ttf"), style: "italic" },
     { family: "Source Sans Pro", file: path.join(__dirname, "fonts", "SourceSansPro-BoldItalic.ttf"), weight: "bold", style: "italic" }
   ],
-  redisHost: "127.0.0.1",
-  maxUploadSize: 2000
+  redisHost: "127.0.0.1"
 };

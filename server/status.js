@@ -26,6 +26,7 @@ module.exports = function(req, res) {
       }
 
       if (hash === null) {
+        console.error("Error getting hash with id " + req.params.id);
         hash = { status: "unknown" };
       }
 

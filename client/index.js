@@ -2,9 +2,7 @@ var d3 = require("d3"),
     $ = require("jquery"),
     preview = require("./preview.js"),
     video = require("./video.js"),
-    audio = require("./audio.js"),
-    serverSettings = require("../lib/settings/"),
-    formatting = require("../lib/formatting.js");
+    audio = require("./audio.js");
 
 var backgroundFile;
 
@@ -120,29 +118,23 @@ function poll(id) {
 
 }
 
-function error(err) {
-  console.log("RLW  client error function: "  + err.code + " / " + err.name + " / " + err.message);
+function error(msg) {
+  console.log("RLW  client error function: "  + msg.code + " / " + msg.name + " / " + msg.message);
 
-  //handle errors we might encounter before we encounter express server (eg. from nginx proxy)
-  var msg = ""
-  if (err.error === 413) {
-    msg = "One of the files you are uploading is too large.  The size limit for files is " + formatting.prettySize(serverSettings.maxUploadSize) + "MB." +
-        "If your large file is an audio file try converting it to an MP3.  If your large file is an image file try converting it to a JPEG."
-  }
-  else if (err.responseText) {
-    err = err.responseText;
+  if (msg.responseText) {
+    msg = msg.responseText;
   }
 
-  if (typeof err !== "string") {
-    err = JSON.stringify(err);
+  if (typeof msg !== "string") {
+    msg = JSON.stringify(msg);
   }
 
-  if (!err) {
-    err = "Unknown error";
+  if (!msg) {
+    msg = "Unknown error";
   }
 
   d3.select("#loading-message").text("Loading...");
-  setClass("error", err);
+  setClass("error", msg);
 
 }
 

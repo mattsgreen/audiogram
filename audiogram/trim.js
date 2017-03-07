@@ -1,4 +1,4 @@
-var exec = require("child_process").spawn,
+var exec = require("child_process").exec,
     probe = require("../lib/probe.js");
 
 function trimAudio(options, cb) {

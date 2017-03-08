@@ -16,6 +16,11 @@ function initializeCanvas(theme, cb) {
   //   return cb(null, renderer);
   // }
 
+  // Load BBC watermark
+  var dog = new Canvas.Image;
+  dog.src = path.join(serverSettings.storagePath, "../editor/images/bbc.png");
+  renderer.bbcDog(dog);
+
   // Load background image from file (done separately so renderer code can work in browser too)
   fs.readFile(path.join(serverSettings.storagePath, theme.customBackgroundPath), function(err, raw){
     if (err) {

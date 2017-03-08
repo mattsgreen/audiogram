@@ -35,6 +35,9 @@ function _selection(_) {
   return arguments.length ? (selection = _) : selection;
 }
 
+bbcDog = new Image();
+bbcDog.src = "/images/bbc.png";
+
 minimap.onBrush(function(extent){
 
   var duration = audio.duration();
@@ -82,6 +85,7 @@ function redraw() {
 
   var renderer = getRenderer(theme);
 
+  renderer.bbcDog(bbcDog || null);
   renderer.backgroundImage(background || null);
 
   renderer.drawFrame(context, {

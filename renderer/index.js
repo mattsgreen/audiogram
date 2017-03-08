@@ -6,12 +6,18 @@ module.exports = function(t) {
 
   var renderer = {},
       backgroundImage,
+      bbcDog,
       wrapText,
       theme;
 
   renderer.backgroundImage = function(_) {
     if (!arguments.length) return backgroundImage;
     backgroundImage = _;
+    return this;
+  };
+  renderer.bbcDog = function(_) {
+    if (!arguments.length) return bbcDog;
+    bbcDog = _;
     return this;
   };
 
@@ -50,6 +56,14 @@ module.exports = function(t) {
     if (backgroundImage) {
       context.drawImage(backgroundImage, 0, 0, theme.width, theme.height);
     }
+
+    // Overlay BBC watermark
+    let A, h, w, o;
+    A = 0.0035 * (theme.width*theme.height);
+    h = Math.sqrt(A/3.5);
+    w = h*3.5;
+    o = h/1.5;
+    context.drawImage(bbcDog, o, o, w, h);
 
     patterns[theme.pattern || "wave"](context, options.waveform, theme);
 

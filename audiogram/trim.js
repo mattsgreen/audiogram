@@ -1,5 +1,4 @@
-var exec = require("child_process").spawn,
-    probe = require("../lib/probe.js");
+var probe = require("../lib/probe.js");
 
 function trimAudio(options, cb) {
 
@@ -17,9 +16,28 @@ function trimAudio(options, cb) {
 
   }
 
-  var cmd = "ffmpeg -i \"" + options.origin + "\" -ss " + (options.startTime || 0) + " -t " + (options.endTime - options.startTime) + " -acodec libmp3lame -b:a 128k \"" + options.destination + "\"";
+  function run(args, callback) {
+    var err;
+    var spawn = require("child_process").spawn;
+    var command = spawn("ffmpeg", args);
+    command.stderr.on('data', function(data) {
+      err = "trimAudio - ffmpeg error: " + data;
+    });
+    command.on('exit', function() {
+      return callback(err);
+    });
+  }
 
-  spawn(cmd, cb);
+  var args = [
+    '-loglevel', 'error',
+    '-i', options.origin,
+    '-ss', (options.startTime || 0),
+    '-t', (options.endTime - options.startTime),
+    '-acodec', 'libmp3lame',
+    '-b:a', '128k',
+    options.destination
+  ];
+  run(args, function(err){cb(err)});
 
 }
 

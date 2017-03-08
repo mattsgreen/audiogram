@@ -54,7 +54,24 @@ module.exports = function(t) {
     context.fillRect(0, 0, theme.width, theme.height);
 
     if (backgroundImage) {
-      context.drawImage(backgroundImage, 0, 0, theme.width, theme.height);
+      let h, w, r,
+          H, W, R;
+      // Source dimensions
+      h = options.backgroundImageSize.height;
+      w = options.backgroundImageSize.width;
+      r = w/h;
+      // Target dimensions
+      H = theme.height;
+      W = theme.width;
+      R = W/H;
+      // Draw
+      if (r===R) {
+        context.drawImage(backgroundImage, 0, 0, W, H);
+      } else if ( (R>r && r>1) || (R<r && r<=1) ) {
+        context.drawImage(backgroundImage, 0, (h-(w/R))/2, w, (w/R), 0, 0, W, H); // Crop & vertical align
+      } else {
+        context.drawImage(backgroundImage, (w-(h*R))/2, 0, (h*R), h, 0, 0, W, H); // Crop & horizontal align
+      }
     }
 
     // Overlay BBC watermark

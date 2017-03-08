@@ -117,6 +117,7 @@ Audiogram.prototype.drawFrames = function(cb) {
       frameDir: self.frameDir,
       caption: self.settings.caption,
       waveform: self.waveform,
+      backgroundImageSize: JSON.parse(self.settings.backgroundImageSize),
       tick: function() {
         transports.incrementField(self.id, "framesComplete");
       }

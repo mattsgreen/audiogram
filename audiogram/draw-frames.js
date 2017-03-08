@@ -26,6 +26,7 @@ function drawFrames(renderer, options, cb) {
     renderer.drawFrame(context, {
       caption: options.caption,
       waveform: options.waveform[frameNumber],
+      backgroundImageSize: options.backgroundImageSize,
       frame: frameNumber
     });
 

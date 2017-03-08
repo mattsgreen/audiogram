@@ -44,6 +44,7 @@ function submitted() {
   var theme = preview.theme(),
       caption = preview.caption(),
       selection = preview.selection(),
+      backgroundImageSize = preview.backgroundImageSize(),
       audioFile = preview.file()
 
   if (!audioFile) {
@@ -72,6 +73,7 @@ function submitted() {
   }
   formData.append("theme", JSON.stringify($.extend({}, theme, { backgroundImageFile: null })));
   formData.append("caption", caption);
+  formData.append("backgroundImageSize", JSON.stringify(backgroundImageSize));
 
   setClass("loading");
   d3.select("#loading-message").text("Uploading audio...");
@@ -246,7 +248,11 @@ function updateBackground() {
     }
 
     backgroundFile = this.files[0]
-    preview.background(getImage(backgroundFile));
+    backgroundImage = getImage(backgroundFile);
+    preview.background(backgroundImage);
+    backgroundImage.onload = function() {
+      preview.backgroundImageSize({height: this.height, width: this.width});
+    }
 
 }
 

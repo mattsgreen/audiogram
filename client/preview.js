@@ -13,6 +13,7 @@ var theme,
     caption,
     file,
     background,
+    backgroundImageSize,
     selection;
 
 function _file(_) {
@@ -20,7 +21,11 @@ function _file(_) {
 }
 
 function _background(_) {
-  return arguments.length ? (background = _, redraw()) : background;
+  return arguments.length ? background = _ : background;
+}
+
+function _backgroundImageSize(_) {
+  return arguments.length ? (backgroundImageSize = _, redraw()) : backgroundImageSize;
 }
 
 function _theme(_) {
@@ -91,6 +96,7 @@ function redraw() {
   renderer.drawFrame(context, {
     caption: caption,
     waveform: sampleWave,
+    backgroundImageSize: backgroundImageSize,
     frame: 0
   });
 
@@ -121,6 +127,7 @@ module.exports = {
   theme: _theme,
   file: _file,
   background: _background,
+  backgroundImageSize: _backgroundImageSize,
   loadAudio: loadAudio,
   selection: _selection
 };

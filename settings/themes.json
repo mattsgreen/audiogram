@@ -31,10 +31,14 @@
   },
   "Custom Image - Instagram (640 x 640)": {
     "width": 640,
-    "height": 640
+    "height": 640,
+    "waveTop": 373,
+    "waveBottom": 600
   },
   "Custom Image - Desktop 16:9 (1920 x 1080)": {
     "width": 1920,
-    "height": 1080
+    "height": 1080,
+    "waveTop": 630,
+    "waveBottom": 1013
   }
 }

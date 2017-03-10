@@ -2,7 +2,8 @@ var minimap = require("./minimap.js"),
     d3 = require("d3");
 
 var audio = document.querySelector("audio"),
-    extent = [0, 1];
+    extent = [0, 1],
+    stopAt = null;
 
 // timeupdate is too low-res
 d3.timer(update);
@@ -26,10 +27,13 @@ function pause(time) {
 
 }
 
-function play(time) {
+function play(time,end) {
 
   if (arguments.length) {
     audio.currentTime = time;
+    stopAt = end || null;
+  } else {
+    stopAt = null;
   }
 
   audio.play();
@@ -48,9 +52,19 @@ function update() {
 
     var pos = audio.currentTime / audio.duration;
 
-    // Need some allowance at the beginning because of frame imprecision (esp. FF)
-    if (audio.ended || pos >= extent[1] || audio.duration * extent[0] - audio.currentTime > 0.2) {
-      pause(extent[0] * audio.duration);
+    if (stopAt && pos >= stopAt/audio.duration) {
+      pause();
+      if (pos >= extent[1]) {
+        audio.currentTime = extent[1] * audio.duration;
+      } else {
+        audio.currentTime = extent[0] * audio.duration;
+      }
+    } else if (audio.ended || pos >= extent[1] || audio.duration * extent[0] - audio.currentTime > 0.2) {
+      // Need some allowance at the beginning because of frame imprecision (esp. FF)
+      if (isPlaying()) {
+        play(extent[0] * audio.duration);
+      }
+      // pause(extent[0] * audio.duration);
     }
 
     minimap.time(pos);
@@ -114,11 +128,18 @@ function _duration() {
   return audio.duration;
 }
 
+function _currentTime(_) {
+  return arguments.length ? audio.currentTime = _ : audio.currentTime;
+}
+
 module.exports = {
   play: play,
   pause: pause,
   toggle: toggle,
   src: src,
   restart: restart,
+  isPlaying: isPlaying,
+  extent: _extent,
+  currentTime: _currentTime,
   duration: _duration
 };

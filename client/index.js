@@ -141,6 +141,15 @@ function error(msg) {
 
 }
 
+function stopIt(e) {
+  if (e.preventDefault) {
+      e.preventDefault();
+  }
+  if (e.stopPropagation) {
+      e.stopPropagation();
+  }
+}
+
 // Once images are downloaded, set up listeners
 function initialize(err, themesWithImages) {
 
@@ -163,13 +172,67 @@ function initialize(err, themesWithImages) {
   // Get initial caption (e.g. back button)
   d3.select("#input-caption").on("change keyup", updateCaption).each(updateCaption);
 
-  // Space bar listener for audio play/pause
-  d3.select(document).on("keypress", function(){
-    if (!d3.select("body").classed("rendered") && d3.event.key === " " && !d3.matcher("input, textarea, button, select").call(d3.event.target)) {
-      audio.toggle();
   // Trim input listeners
   d3.selectAll("#start, #end").on("change", updateTrim).each(updateTrim);
 
+  // Key listeners
+  d3.select(document).on("keydown", function(){
+    if (!d3.select("body").classed("rendered") && !d3.matcher("input, textarea, button, select").call(d3.event.target)) {
+      let start = audio.extent()[0]*audio.duration(),
+          end = audio.extent()[1]*audio.duration(),
+          duration = audio.duration();
+          current = audio.currentTime();
+      switch (d3.event.key) {
+        case " ":
+          audio.toggle();
+          stopIt(d3.event);
+          break;
+        case "ArrowLeft":
+          if (d3.event.shiftKey) {
+            audio.currentTime(current-10);
+          } else if (d3.event.ctrlKey || d3.event.metaKey) {
+            audio.currentTime(current-1);
+          } else {
+            audio.currentTime(current-0.1);
+          }
+          stopIt(d3.event);
+          break;
+        case "ArrowRight":
+          if (d3.event.shiftKey) {
+            audio.currentTime(current+10);
+          } else if (d3.event.ctrlKey || d3.event.metaKey) {
+            audio.currentTime(current+1);
+          } else {
+            audio.currentTime(current+0.1);
+          }
+          stopIt(d3.event);
+          break;
+        case "q":
+          audio.currentTime(start);
+          stopIt(d3.event);
+          break;
+        case "w":
+          audio.pause();
+          audio.currentTime(end);
+          stopIt(d3.event);
+          break;
+        case "i":
+          updateTrim([current,null]);
+          stopIt(d3.event);
+          break;
+        case "o":
+          updateTrim([null,current]);
+          stopIt(d3.event);
+          break;
+        case "5":
+          audio.play(start,start+1,start);
+          stopIt(d3.event);
+          break;
+        case "6":
+          audio.play(end-1,end);
+          stopIt(d3.event);
+          break;
+      }
     }
   });
 

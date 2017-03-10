@@ -50,7 +50,7 @@ minimap.onBrush(function(extent){
   selection = {
     duration: duration * (extent[1] - extent[0]),
     start: extent[0] ? extent[0] * duration : null,
-    end: extent[1] < 1 ? extent[1] * duration : null
+    end: extent[1] <= 1 ? extent[1] * duration : null
   };
 
   var x1 = Math.min(Math.max(extent[0]*640 - 38, 0), 490),

@@ -66,12 +66,13 @@ function brushed() {
     start = 0;
     end = 1;
   } else {
-    if (start <= 0.01) {
-      start = 0;
-    }
-    if (end >= 0.99) {
-      end = 1;
-    }
+    // XXX Not sure why this was here originally, but it breaks things now
+      // if (start <= 0.01) {
+      //   start = 0;
+      // }
+      // if (end >= 0.99) {
+      //   end = 1;
+      // }
   }
 
   d3.select("clipPath rect")

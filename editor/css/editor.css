@@ -83,6 +83,18 @@ input[type='submit']:active {
   margin-bottom: 5px;
 }
 
+#duration .red{
+  background: #c00;
+  color: white;
+  padding: 0 4px;
+}
+
+#duration .red:before {
+   font-family: FontAwesome;
+   content: "\f071";
+   padding-right: 3px;
+}
+
 #shortcuts {
   text-align: left;
 }

@@ -24,6 +24,7 @@ function pause(time) {
   }
 
   toggled(true);
+  stopAt = null;
 
 }
 

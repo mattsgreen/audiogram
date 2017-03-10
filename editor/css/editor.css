@@ -1,5 +1,6 @@
 div.container {
   width: 640px;
+  padding: 0;
   margin-bottom: 60px;
 }
 
@@ -95,6 +96,27 @@ input[type='submit']:active {
 
 #controls {
   text-align: right;
+}
+
+#controls #timecodes {
+  position: relative;
+  text-align: left;
+  margin: 10px 0;
+}
+
+#controls #timecodes input{
+  width: 75px;
+  font-size: 13px;
+  text-align: center;
+}
+
+#start {
+  position: relative;
+  left: 0;
+}
+#end {
+  position: absolute;
+  left: 565px;
 }
 
 #controls i.fa {

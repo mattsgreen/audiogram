@@ -82,11 +82,24 @@
               </g>
             </svg>
             <div id="controls">
-              <span id="tip">Click and drag over the waveform to clip audio<br />Use space bar to play/pause</span>
-              <span id="duration"><strong></strong> seconds selected</span>
-              <button id="play"><i class="fa fa-play"></i>Play</button>
-              <button id="pause" class="hidden"><i class="fa fa-pause"></i>Pause</button>
-              <button id="restart"><i class="fa fa-step-backward"></i>Restart</button>
+              <div id="timecodes">
+                <input id="start" type="text">
+                <input id="end" type="text">
+              </div>
+              <hr/>
+              <div style="float: left;">
+                <div id="tip">
+                  Click and drag over the waveform to clip audio, enter<br>
+                  timecodes above, or use the <a href="#">advanced keyboard shortcuts</a>.
+                </div>
+              </div>
+              <div style="float: right;">
+                <div id="duration"><strong></strong> seconds selected</div>
+                <button id="play"><i class="fa fa-play"></i>Play</button>
+                <button id="pause" class="hidden"><i class="fa fa-pause"></i>Pause</button>
+                <button id="restart"><i class="fa fa-step-backward"></i>Restart</button>
+              </div>
+              <div class="clear"></div>
             </div>
           </div>
         </div>

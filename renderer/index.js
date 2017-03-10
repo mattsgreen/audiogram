@@ -76,7 +76,7 @@ module.exports = function(t) {
 
     // Overlay BBC watermark
     let A, h, w, o;
-    A = 0.0035 * (theme.width*theme.height);
+    A = 0.0075 * (theme.width*theme.height);
     h = Math.sqrt(A/3.5);
     w = h*3.5;
     o = h/1.5;

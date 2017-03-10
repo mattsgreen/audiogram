@@ -235,6 +235,12 @@ function initialize(err, themesWithImages) {
       }
     }
   });
+  d3.select("#tip a").on("click", function(){
+    d3.select("#shortcuts").style("display", null);
+    d3.select("#tip").insert("span","a").text(d3.select("#tip a").text());
+    d3.select("#tip a").remove();
+    stopIt(d3.event);
+  });
 
   // Button listeners
   d3.selectAll("#play, #pause").on("click", function(){

@@ -100,6 +100,46 @@
                 <button id="restart"><i class="fa fa-step-backward"></i>Restart</button>
               </div>
               <div class="clear"></div>
+              <div id="shortcuts" style="display: none;">
+                <hr>
+                <div class="col">
+                  <div>
+                    <kbd>space</kbd> &nbsp; - &nbsp;
+                    toggle playback
+                  </div>
+                  <div>
+                    <kbd>&#8594;</kbd> / <kbd>&#8592;</kbd> &nbsp; - &nbsp;
+                    move 0.1s
+                  </div>
+                  <div>
+                    <kbd>ctrl</kbd> / <kbd>&#8984;</kbd> + <kbd>&#8594;</kbd> / <kbd>&#8592;</kbd> &nbsp; - &nbsp;
+                    move 1s
+                  </div>
+                  <div>
+                    <kbd>shift</kbd> + <kbd>&#8594;</kbd> / <kbd>&#8592;</kbd> &nbsp; - &nbsp;
+                    move 10s
+                  </div>
+                </div>
+                <div class="col">
+                  <div>
+                    <kbd>q</kbd> / <kbd>w</kbd> &nbsp; - &nbsp;
+                    go to IN/OUT
+                  </div>
+                  <div>
+                    <kbd>i</kbd> / <kbd>o</kbd> &nbsp; - &nbsp;
+                    mark IN/OUT
+                  </div>
+                  <div>
+                    <kbd>5</kbd> &nbsp; - &nbsp;
+                    play from IN for 1s
+                  </div>
+                  <div>
+                    <kbd>7</kbd> &nbsp; - &nbsp;
+                    play from 1s before OUT
+                  </div>
+                </div>
+                <div class="clear"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -113,6 +153,7 @@
             <source type="video/mp4" />
           </video>
         </div>
+        <hr/>
         <div class="row" id="row-submit">
           <button type="button" id="return" class="left"><i class="fa fa-edit"></i>Return to editor</button>
           <button type="button" id="submit" class="right hidden"><i class="fa fa-cloud-upload"></i>Generate</button>

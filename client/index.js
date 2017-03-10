@@ -1,6 +1,7 @@
 var d3 = require("d3"),
     $ = require("jquery"),
     preview = require("./preview.js"),
+    minimap = require("./minimap.js"),
     video = require("./video.js"),
     audio = require("./audio.js");
 
@@ -166,6 +167,9 @@ function initialize(err, themesWithImages) {
   d3.select(document).on("keypress", function(){
     if (!d3.select("body").classed("rendered") && d3.event.key === " " && !d3.matcher("input, textarea, button, select").call(d3.event.target)) {
       audio.toggle();
+  // Trim input listeners
+  d3.selectAll("#start, #end").on("change", updateTrim).each(updateTrim);
+
     }
   });
 
@@ -258,6 +262,19 @@ function updateBackground() {
 
 function updateCaption() {
   preview.caption(this.value);
+}
+
+function updateTrim(extent) {
+  extent = extent || [];
+  var start = extent[0] || parseFloat(d3.select("#start").property("value"));
+  var end = extent[1] || parseFloat(d3.select("#end").property("value"));
+  if (!isNaN(start) && !isNaN(end)) {
+    if (start>end) [start, end] = [end, start];
+    var duration = Math.round(100*audio.duration())/100;
+    start = start/duration;
+    end = end/duration;
+    minimap.drawBrush({start: start, end: end});
+  }
 }
 
 function updateTheme() {

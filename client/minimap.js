@@ -16,7 +16,7 @@ var y = d3.scaleLinear()
 var line = d3.line();
 
 var brush = d3.brushX()
-  .on("brush end", brushed)
+  .on("brush end", brushed);
 
 minimap.select(".brush").call(brush)
   .selectAll("rect")
@@ -51,6 +51,10 @@ function redraw(data) {
 function time(t) {
   d3.select("g.time")
     .attr("transform","translate(" + (t * 640) + ")");
+}
+
+function drawBrush(extent) {
+  brush.move(d3.select(".brush"), [t.invert(extent.start), t.invert(extent.end)]);
 }
 
 function brushed() {
@@ -93,6 +97,7 @@ function _onBrushEnd(_) {
 module.exports = {
   time: time,
   redraw: redraw,
+  drawBrush: drawBrush,
   onBrush: _onBrush,
   onBrushEnd: _onBrushEnd
 };

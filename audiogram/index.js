@@ -173,7 +173,8 @@ Audiogram.prototype.render = function(cb) {
   q.defer(transports.uploadVideo, this.videoPath, "video/" + this.id + ".mp4");
 
   // Delete working directory
-  q.defer(rimraf, this.dir);
+  q.defer(rimraf, serverSettings.workingDirectory);
+  q.defer(mkdirp, serverSettings.workingDirectory);
 
   // Final callback, results in a URL where the finished video is accessible
   q.await(function(err){

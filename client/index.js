@@ -44,6 +44,7 @@ function submitted() {
   var theme = preview.theme(),
       caption = preview.caption(),
       selection = preview.selection(),
+      backgroundType = preview.backgroundType(),
       backgroundImageSize = preview.backgroundImageSize(),
       audioFile = preview.file()
 
@@ -73,6 +74,7 @@ function submitted() {
   }
   formData.append("theme", JSON.stringify($.extend({}, theme, { backgroundImageFile: null })));
   formData.append("caption", caption);
+  formData.append("backgroundType", backgroundType);
   formData.append("backgroundImageSize", JSON.stringify(backgroundImageSize));
 
   setClass("loading");
@@ -241,17 +243,40 @@ function updateBackground() {
         return true;
     }
 
-    function getImage(file) {
-       var backgroundImageFile = new Image();
-       backgroundImageFile.src = window.URL.createObjectURL( file );
-       return backgroundImageFile
-    }
+    backgroundFile = this.files[0];
+    preview.backgroundType(backgroundFile.type);
 
-    backgroundFile = this.files[0]
-    backgroundImage = getImage(backgroundFile);
-    preview.background(backgroundImage);
-    backgroundImage.onload = function() {
-      preview.backgroundImageSize({height: this.height, width: this.width});
+    if (backgroundFile.type.startsWith("video")) {
+
+      var vid = document.createElement("video");
+      vid.autoplay = false;
+      vid.loop = false;
+      vid.style.display = "none";
+      vid.addEventListener("loadeddata", function(){
+          setTimeout(function(){
+            preview.background(vid);
+            preview.backgroundImageSize({height: vid.videoHeight, width: vid.videoWidth});
+          });
+      }, false);
+      var source = document.createElement("source");
+      source.type = backgroundFile.type;
+      source.src = window.URL.createObjectURL( backgroundFile );
+      vid.appendChild(source);
+
+    } else {
+
+      function getImage(file) {
+        var backgroundImageFile = new Image();
+        backgroundImageFile.src = window.URL.createObjectURL( file );
+        return backgroundImageFile;
+      }
+
+      backgroundImage = getImage(backgroundFile);
+      preview.background(backgroundImage);
+      backgroundImage.onload = function() {
+        preview.backgroundImageSize({height: this.height, width: this.width});
+      }
+
     }
 
 }

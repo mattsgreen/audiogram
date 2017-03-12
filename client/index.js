@@ -266,7 +266,7 @@ function updateBackground() {
       source.src = window.URL.createObjectURL( backgroundFile );
       vid.appendChild(source);
 
-    } else {
+    } else if (backgroundFile.type.startsWith("image")) {
 
       function getImage(file) {
         var backgroundImageFile = new Image();
@@ -280,7 +280,13 @@ function updateBackground() {
         preview.backgroundImageSize({height: this.height, width: this.width});
       }
 
+    } else {
+
+      setClass("error", "That file type can't be used in the background.");
+      return true;
+
     }
+    setClass(null);
 
 }
 

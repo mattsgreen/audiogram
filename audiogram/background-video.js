@@ -4,7 +4,6 @@ function backgroundVideo(options, cb) {
   var q = queue(1);
 
   function run(args, callback) {
-    console.log("BACKGROUND VIDEO RUN <<<");
     var stderr = "";
     var spawn = require("child_process").spawn;
     var command = spawn("ffmpeg", args);

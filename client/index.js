@@ -71,6 +71,9 @@ function submitted() {
   if (selection.start || selection.end) {
     formData.append("start", selection.start);
     formData.append("end", selection.end);
+    formData.append("duration", selection.end - selection.start);
+  } else {
+    formData.append("duration", audio.duration());
   }
   formData.append("theme", JSON.stringify($.extend({}, theme, { backgroundImageFile: null })));
   formData.append("caption", caption);
@@ -343,6 +346,8 @@ function statusMessage(result) {
       return "Downloading audio for processing";
     case "trim":
       return "Trimming audio";
+    case "video":
+      return "Processing background video";
     case "probing":
       return "Probing audio file";
     case "waveform":

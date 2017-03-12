@@ -67,7 +67,7 @@ module.exports = function(t) {
       // Draw
       if (r===R) {
         context.drawImage(backgroundImage, 0, 0, W, H);
-      } else if ( (R>r && r>1) || (R<r && r<=1) ) {
+      } else if ( (R>1 && r<1) || (R<1 && r>1) || (R==1 && r<1) ) {
         context.drawImage(backgroundImage, 0, (h-(w/R))/2, w, (w/R), 0, 0, W, H); // Crop & vertical align
       } else {
         context.drawImage(backgroundImage, (w-(h*R))/2, 0, (h*R), h, 0, 0, W, H); // Crop & horizontal align

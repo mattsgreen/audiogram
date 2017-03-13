@@ -112,6 +112,7 @@ Audiogram.prototype.backgroundVideo = function(cb) {
     if (err) {
       return cb(err);
     }
+    self.settings.backgroundInfo.frames = Math.ceil(fps * self.settings.backgroundInfo.duration);
     self.settings.theme.framesPerSecond = fps;
     return cb(null);
   });

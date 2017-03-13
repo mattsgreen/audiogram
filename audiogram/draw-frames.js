@@ -24,8 +24,9 @@ function drawFrames(renderer, options, cb) {
         context = canvas.getContext("2d");
 
     if (options.backgroundInfo.type.startsWith("video")) {
+      var bgFrame = (frameNumber + 1) % options.backgroundInfo.frames || options.backgroundInfo.frames;
       var bg = new Canvas.Image;
-      bg.src = path.join(options.backgroundFrameDir, "/out" + zeropad(frameNumber + 1, 6) + ".png");
+      bg.src = path.join(options.backgroundFrameDir, "/" + zeropad(bgFrame, 6) + ".png");
       renderer.backgroundImage(bg);
     }
 

@@ -30,7 +30,7 @@ function backgroundVideo(options, cb) {
       '-loglevel', 'error',
       '-i', options.origin,
       '-vf', "select='gt(t,0)*lt(t," + options.duration + ")'",
-      options.destination + '/out%06d.png'
+      options.destination + '/%06d.png'
     ];
     run(arguments, callback(null));
   }

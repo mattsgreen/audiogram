@@ -255,7 +255,7 @@ function updateBackground() {
       vid.addEventListener("loadeddata", function(){
           setTimeout(function(){
             preview.background(vid);
-            preview.backgroundInfo({type: backgroundFile.type, height: vid.videoHeight, width: vid.videoWidth});
+            preview.backgroundInfo({type: backgroundFile.type, height: vid.videoHeight, width: vid.videoWidth, duration: vid.duration});
           });
       }, false);
       var source = document.createElement("source");

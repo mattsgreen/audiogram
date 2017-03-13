@@ -57,8 +57,8 @@ module.exports = function(t) {
       let h, w, r,
           H, W, R;
       // Source dimensions
-      h = options.backgroundImageSize.height;
-      w = options.backgroundImageSize.width;
+      h = options.backgroundInfo.height;
+      w = options.backgroundInfo.width;
       r = w/h;
       // Target dimensions
       H = theme.height;

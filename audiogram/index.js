@@ -141,8 +141,7 @@ Audiogram.prototype.drawFrames = function(cb) {
       backgroundFrameDir: self.backgroundFrameDir,
       caption: self.settings.caption,
       waveform: self.waveform,
-      backgroundType: self.settings.backgroundType,
-      backgroundImageSize: JSON.parse(self.settings.backgroundImageSize),
+      backgroundInfo: self.settings.backgroundInfo,
       tick: function() {
         transports.incrementField(self.id, "framesComplete");
       }
@@ -186,7 +185,8 @@ Audiogram.prototype.render = function(cb) {
   }
 
   // Process background video
-  if (this.settings.backgroundType.startsWith("video")) {
+  this.settings.backgroundInfo = JSON.parse(this.settings.backgroundInfo);
+  if (this.settings.backgroundInfo.type.startsWith("video")) {
     q.defer(mkdirp, this.backgroundFrameDir);
     q.defer(this.backgroundVideo.bind(this));
   }

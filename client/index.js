@@ -44,8 +44,7 @@ function submitted() {
   var theme = preview.theme(),
       caption = preview.caption(),
       selection = preview.selection(),
-      backgroundType = preview.backgroundType(),
-      backgroundImageSize = preview.backgroundImageSize(),
+      backgroundInfo = preview.backgroundInfo(),
       audioFile = preview.file()
 
   if (!audioFile) {
@@ -68,6 +67,7 @@ function submitted() {
 
   formData.append("audio", audioFile);
   formData.append("background", backgroundFile);
+  formData.append("backgroundInfo", JSON.stringify(backgroundInfo));
   if (selection.start || selection.end) {
     formData.append("start", selection.start);
     formData.append("end", selection.end);
@@ -77,8 +77,6 @@ function submitted() {
   }
   formData.append("theme", JSON.stringify($.extend({}, theme, { backgroundImageFile: null })));
   formData.append("caption", caption);
-  formData.append("backgroundType", backgroundType);
-  formData.append("backgroundImageSize", JSON.stringify(backgroundImageSize));
 
   setClass("loading");
   d3.select("#loading-message").text("Uploading audio...");
@@ -247,7 +245,6 @@ function updateBackground() {
     }
 
     backgroundFile = this.files[0];
-    preview.backgroundType(backgroundFile.type);
 
     if (backgroundFile.type.startsWith("video")) {
 
@@ -258,7 +255,7 @@ function updateBackground() {
       vid.addEventListener("loadeddata", function(){
           setTimeout(function(){
             preview.background(vid);
-            preview.backgroundImageSize({height: vid.videoHeight, width: vid.videoWidth});
+            preview.backgroundInfo({type: backgroundFile.type, height: vid.videoHeight, width: vid.videoWidth});
           });
       }, false);
       var source = document.createElement("source");
@@ -277,7 +274,7 @@ function updateBackground() {
       backgroundImage = getImage(backgroundFile);
       preview.background(backgroundImage);
       backgroundImage.onload = function() {
-        preview.backgroundImageSize({height: this.height, width: this.width});
+        preview.backgroundInfo({type: backgroundFile.type, height: this.height, width: this.width});
       }
 
     } else {

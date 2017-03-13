@@ -23,7 +23,7 @@ function drawFrames(renderer, options, cb) {
     var canvas = canvases.pop(),
         context = canvas.getContext("2d");
 
-    if (options.backgroundType.startsWith("video")) {
+    if (options.backgroundInfo.type.startsWith("video")) {
       var bg = new Canvas.Image;
       bg.src = path.join(options.backgroundFrameDir, "/out" + zeropad(frameNumber + 1, 6) + ".png");
       renderer.backgroundImage(bg);
@@ -32,7 +32,7 @@ function drawFrames(renderer, options, cb) {
     renderer.drawFrame(context, {
       caption: options.caption,
       waveform: options.waveform[frameNumber],
-      backgroundImageSize: options.backgroundImageSize,
+      backgroundInfo: options.backgroundInfo,
       frame: frameNumber
     });
 

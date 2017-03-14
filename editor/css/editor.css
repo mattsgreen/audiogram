@@ -1,5 +1,6 @@
 div.container {
   width: 640px;
+  padding: 0;
   margin-bottom: 60px;
 }
 
@@ -68,20 +69,43 @@ input[type='submit']:active {
 #tip {
   color: #333;
   font-size: 13px;
+  line-height: 13px;
   text-align: left;
-  float: left;
-  margin-top: 3px;
+}
+
+#tip a {
+  text-decoration: underline;
 }
 
 #duration {
-  display: inline-block;
-  padding-top: 6px;
-  margin-bottom: 0;
-  font-weight: 400;
-  vertical-align: middle;
-  color: #333;
   font-size: 13px;
-  margin-right: 3px;
+  line-height: 13px;
+  margin-bottom: 5px;
+}
+
+#duration .red{
+  background: #c00;
+  color: white;
+  padding: 0 4px;
+}
+
+#duration .red:before {
+   font-family: FontAwesome;
+   content: "\f071";
+   padding-right: 3px;
+}
+
+#shortcuts {
+  text-align: left;
+}
+
+#shortcuts .col {
+  width: 50%;
+  float: left;
+}
+
+#shortcuts .col div {
+  margin: 3px 0;
 }
 
 .note {
@@ -95,6 +119,27 @@ input[type='submit']:active {
 
 #controls {
   text-align: right;
+}
+
+#controls #timecodes {
+  position: relative;
+  text-align: left;
+  margin: 10px 0;
+}
+
+#controls #timecodes input{
+  width: 75px;
+  font-size: 13px;
+  text-align: center;
+}
+
+#start {
+  position: relative;
+  left: 0;
+}
+#end {
+  position: absolute;
+  left: 565px;
 }
 
 #controls i.fa {
@@ -118,6 +163,10 @@ i.fa-play {
 #error {
   color: #c00;
   font-weight: 600;
+}
+
+#row-submit{
+  margin-top: 10px;
 }
 
 .row.error input,

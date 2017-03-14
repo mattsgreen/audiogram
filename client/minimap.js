@@ -16,7 +16,7 @@ var y = d3.scaleLinear()
 var line = d3.line();
 
 var brush = d3.brushX()
-  .on("brush end", brushed)
+  .on("brush end", brushed);
 
 minimap.select(".brush").call(brush)
   .selectAll("rect")
@@ -53,6 +53,10 @@ function time(t) {
     .attr("transform","translate(" + (t * 640) + ")");
 }
 
+function drawBrush(extent) {
+  brush.move(d3.select(".brush"), [t.invert(extent.start), t.invert(extent.end)]);
+}
+
 function brushed() {
 
   var start = d3.event.selection ? t(d3.event.selection[0]) : 0,
@@ -62,12 +66,13 @@ function brushed() {
     start = 0;
     end = 1;
   } else {
-    if (start <= 0.01) {
-      start = 0;
-    }
-    if (end >= 0.99) {
-      end = 1;
-    }
+    // XXX Not sure why this was here originally, but it breaks things now
+      // if (start <= 0.01) {
+      //   start = 0;
+      // }
+      // if (end >= 0.99) {
+      //   end = 1;
+      // }
   }
 
   d3.select("clipPath rect")
@@ -93,6 +98,7 @@ function _onBrushEnd(_) {
 module.exports = {
   time: time,
   redraw: redraw,
+  drawBrush: drawBrush,
   onBrush: _onBrush,
   onBrushEnd: _onBrushEnd
 };

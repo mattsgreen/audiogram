@@ -11,6 +11,7 @@ var path = require("path"),
     initializeCanvas = require("./initialize-canvas.js"),
     drawFrames = require("./draw-frames.js"),
     combineFrames = require("./combine-frames.js"),
+    backgroundVideo = require("./background-video.js"),
     trimAudio = require("./trim.js");
 
 function Audiogram(id) {
@@ -23,6 +24,7 @@ function Audiogram(id) {
 
   this.audioPath = path.join(this.dir, "audio");
   this.backgroundPath = path.join(this.dir, "background");
+  this.backgroundFrameDir = path.join(this.dir, "backgroundFrames");
   this.videoPath = path.join(this.dir, "video.mp4");
   this.frameDir = path.join(this.dir, "frames");
 
@@ -95,6 +97,28 @@ Audiogram.prototype.trimAudio = function(start, end, cb) {
 
 };
 
+// Process background video
+Audiogram.prototype.backgroundVideo = function(cb) {
+
+  var self = this;
+
+  this.status("video");
+
+  backgroundVideo({
+    origin: path.join(serverSettings.storagePath, this.settings.theme.customBackgroundPath),
+    destination: this.backgroundFrameDir,
+    duration: this.settings.duration
+  }, function(err,fps){
+    if (err) {
+      return cb(err);
+    }
+    self.settings.backgroundInfo.frames = Math.ceil(fps * self.settings.backgroundInfo.duration);
+    self.settings.theme.framesPerSecond = fps;
+    return cb(null);
+  });
+
+};
+
 // Initialize the canvas and draw all the frames
 Audiogram.prototype.drawFrames = function(cb) {
 
@@ -115,9 +139,10 @@ Audiogram.prototype.drawFrames = function(cb) {
       height: self.settings.theme.height,
       numFrames: self.numFrames,
       frameDir: self.frameDir,
+      backgroundFrameDir: self.backgroundFrameDir,
       caption: self.settings.caption,
       waveform: self.waveform,
-      backgroundImageSize: JSON.parse(self.settings.backgroundImageSize),
+      backgroundInfo: self.settings.backgroundInfo,
       tick: function() {
         transports.incrementField(self.id, "framesComplete");
       }
@@ -158,6 +183,13 @@ Audiogram.prototype.render = function(cb) {
   // If the audio needs to be clipped, clip it first and update the path
   if (this.settings.start || this.settings.end) {
     q.defer(this.trimAudio.bind(this), this.settings.start || 0, this.settings.end || null);
+  }
+
+  // Process background video
+  this.settings.backgroundInfo = JSON.parse(this.settings.backgroundInfo);
+  if (this.settings.backgroundInfo.type.startsWith("video")) {
+    q.defer(mkdirp, this.backgroundFrameDir);
+    q.defer(this.backgroundVideo.bind(this));
   }
 
   // Get the audio waveform data

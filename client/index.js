@@ -45,7 +45,7 @@ function submitted() {
   var theme = preview.theme(),
       caption = preview.caption(),
       selection = preview.selection(),
-      backgroundImageSize = preview.backgroundImageSize(),
+      backgroundInfo = preview.backgroundInfo(),
       audioFile = preview.file()
 
   if (!audioFile) {
@@ -68,13 +68,16 @@ function submitted() {
 
   formData.append("audio", audioFile);
   formData.append("background", backgroundFile);
+  formData.append("backgroundInfo", JSON.stringify(backgroundInfo));
   if (selection.start || selection.end) {
     formData.append("start", selection.start);
     formData.append("end", selection.end);
+    formData.append("duration", selection.end - selection.start);
+  } else {
+    formData.append("duration", audio.duration());
   }
   formData.append("theme", JSON.stringify($.extend({}, theme, { backgroundImageFile: null })));
   formData.append("caption", caption);
-  formData.append("backgroundImageSize", JSON.stringify(backgroundImageSize));
 
   setClass("loading");
   d3.select("#loading-message").text("Uploading audio...");
@@ -314,18 +317,46 @@ function updateBackground() {
         return true;
     }
 
-    function getImage(file) {
-       var backgroundImageFile = new Image();
-       backgroundImageFile.src = window.URL.createObjectURL( file );
-       return backgroundImageFile
-    }
+    backgroundFile = this.files[0];
 
-    backgroundFile = this.files[0]
-    backgroundImage = getImage(backgroundFile);
-    preview.background(backgroundImage);
-    backgroundImage.onload = function() {
-      preview.backgroundImageSize({height: this.height, width: this.width});
+    if (backgroundFile.type.startsWith("video")) {
+
+      var vid = document.createElement("video");
+      vid.autoplay = false;
+      vid.loop = false;
+      vid.style.display = "none";
+      vid.addEventListener("loadeddata", function(){
+          setTimeout(function(){
+            preview.background(vid);
+            preview.backgroundInfo({type: backgroundFile.type, height: vid.videoHeight, width: vid.videoWidth, duration: vid.duration});
+          });
+      }, false);
+      var source = document.createElement("source");
+      source.type = backgroundFile.type;
+      source.src = window.URL.createObjectURL( backgroundFile );
+      vid.appendChild(source);
+
+    } else if (backgroundFile.type.startsWith("image")) {
+
+      function getImage(file) {
+        var backgroundImageFile = new Image();
+        backgroundImageFile.src = window.URL.createObjectURL( file );
+        return backgroundImageFile;
+      }
+
+      backgroundImage = getImage(backgroundFile);
+      preview.background(backgroundImage);
+      backgroundImage.onload = function() {
+        preview.backgroundInfo({type: backgroundFile.type, height: this.height, width: this.width});
+      }
+
+    } else {
+
+      setClass("error", "That file type can't be used in the background.");
+      return true;
+
     }
+    setClass(null);
 
 }
 
@@ -404,6 +435,8 @@ function statusMessage(result) {
       return "Downloading audio for processing";
     case "trim":
       return "Trimming audio";
+    case "video":
+      return "Processing background video";
     case "probing":
       return "Probing audio file";
     case "waveform":

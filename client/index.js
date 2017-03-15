@@ -269,24 +269,23 @@ function initialize(err, themesWithImages) {
     audio.restart();
   });
 
+  // If there's an initial background image (e.g. back button) load it
+  d3.select("#input-background").on("change", updateBackground).each(updateBackground); //try deleting the each and see if it all still works. claim biscuit prize from squio
+
   // If there's an initial piece of audio (e.g. back button) load it
   d3.select("#input-audio").on("change", updateAudioFile).each(updateAudioFile);
   if (params.vcs && params.vcs.startsWith("https://vcsio.newslabs.co")) {
+    d3.select("#loading-message").text("Loading VCS Audio...");
+    setClass("loading");
     var blob = null;
     var xhr = new XMLHttpRequest(); 
-    // https://vcsio.newslabs.co/vcs/media/Traffic-30764-01018741
     xhr.open("GET", params.vcs); 
-    xhr.responseType = "blob";//force the HTTP response, response-type header to be blob
-    xhr.onload = function() 
-    {
-        blob = xhr.response;//xhr.response is now a blob object
-        updateAudioFile(blob);
+    xhr.responseType = "blob";
+    xhr.onload = function() {
+        updateAudioFile(xhr.response);
     }
     xhr.send();
   }
-
-  // If there's an initial background image (e.g. back button) load it
-  d3.select("#input-background").on("change", updateBackground).each(updateBackground); //try deleting the each and see if it all still works. claim biscuit prize from squio
 
   d3.select("#return").on("click", function(){
     d3.event.preventDefault();

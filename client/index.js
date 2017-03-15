@@ -38,6 +38,18 @@ d3.json("/settings/themes.json", function(err, themes){
 
 });
 
+function getURLParams(qs) {
+    qs = qs.split('+').join(' ');
+    var params = {},
+        tokens,
+        re = /[?&]?([^=]+)=([^&]*)/g;
+    while (tokens = re.exec(qs)) {
+        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+    }
+    return params;
+}
+var params = getURLParams(document.location.search);
+
 function submitted() {
 
   d3.event.preventDefault();
@@ -258,6 +270,19 @@ function initialize(err, themesWithImages) {
 
   // If there's an initial piece of audio (e.g. back button) load it
   d3.select("#input-audio").on("change", updateAudioFile).each(updateAudioFile);
+  if (params.vcs && params.vcs.startsWith("https://vcsio.newslabs.co")) {
+    var blob = null;
+    var xhr = new XMLHttpRequest(); 
+    // https://vcsio.newslabs.co/vcs/media/Traffic-30764-01018741
+    xhr.open("GET", params.vcs); 
+    xhr.responseType = "blob";//force the HTTP response, response-type header to be blob
+    xhr.onload = function() 
+    {
+        blob = xhr.response;//xhr.response is now a blob object
+        updateAudioFile(blob);
+    }
+    xhr.send();
+  }
 
   // If there's an initial background image (e.g. back button) load it
   d3.select("#input-background").on("change", updateBackground).each(updateBackground); //try deleting the each and see if it all still works. claim biscuit prize from squio
@@ -272,7 +297,7 @@ function initialize(err, themesWithImages) {
 
 }
 
-function updateAudioFile() {
+function updateAudioFile(blob) {
 
   d3.select("#row-audio").classed("error", false);
 
@@ -280,7 +305,7 @@ function updateAudioFile() {
   video.kill();
 
   // Skip if empty
-  if (!this.files || !this.files[0]) {
+  if (!blob && (!this.files || !this.files[0])) {
     d3.select("#minimap").classed("hidden", true);
     preview.file(null);
     setClass(null);
@@ -291,7 +316,9 @@ function updateAudioFile() {
 
   setClass("loading");
 
-  preview.loadAudio(this.files[0], function(err){
+  var audioFile = blob || this.files[0];
+
+  preview.loadAudio(audioFile, function(err){
 
     if (err) {
       d3.select("#row-audio").classed("error", true);

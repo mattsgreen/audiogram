@@ -54,7 +54,7 @@ module.exports = function(t) {
     context.fillRect(0, 0, theme.width, theme.height);
 
     if (backgroundImage) {
-      let h, w, r,
+      var h, w, r,
           H, W, R;
       // Source dimensions
       h = options.backgroundInfo.height;
@@ -75,7 +75,7 @@ module.exports = function(t) {
     }
 
     // Overlay BBC watermark
-    let A, h, w, o;
+    var A, h, w, o;
     A = 0.0075 * (theme.width*theme.height);
     h = Math.sqrt(A/3.5);
     w = h*3.5;

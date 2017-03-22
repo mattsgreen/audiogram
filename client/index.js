@@ -4,6 +4,7 @@ var d3 = require("d3"),
     minimap = require("./minimap.js"),
     video = require("./video.js"),
     audio = require("./audio.js");
+    global.jQuery = $;
 
 var backgroundFile;
 
@@ -270,6 +271,11 @@ function initialize(err, themesWithImages) {
 
   d3.select("#submit").on("click", submitted);
 
+  d3.select("#input-background-type").on("change", updateBackgroundType).each(updateBackgroundType);
+
+  d3.select(window).on("resize", function(){preview.redraw()});
+  preview.redraw();
+
 }
 
 function updateAudioFile() {
@@ -304,6 +310,11 @@ function updateAudioFile() {
 
   });
 
+}
+
+function updateBackgroundType() {
+  d3.selectAll(".input-background-type").classed("hidden", true);
+  d3.selectAll("#input-background-type-" + this.value).classed("hidden", false);
 }
 
 function updateBackground() {

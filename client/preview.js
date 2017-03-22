@@ -77,16 +77,16 @@ minimap.onBrush(function(extent){
 // Resize video and preview canvas to maintain aspect ratio
 function resize(width, height) {
 
-  var widthFactor = 640 / width,
-      heightFactor = 360 / height,
+  var wrapperWidth = d3.select("#canvas").node().getBoundingClientRect().width;
+  if (!wrapperWidth) return;
+
+  var widthFactor = wrapperWidth / width,
+      heightFactor = (wrapperWidth*9/16) / height,
       factor = Math.min(widthFactor, heightFactor);
 
   d3.select("canvas")
-    .attr("width", factor * width)
-    .attr("height", factor * height);
-
-  d3.select("#canvas")
-    .style("width", (factor * width) + "px");
+    .attr("width", wrapperWidth)
+    .attr("height", wrapperWidth*(height/width));
 
   d3.select("video")
     .attr("height", widthFactor * height);
@@ -94,7 +94,7 @@ function resize(width, height) {
   d3.select("#video")
     .attr("height", (widthFactor * height) + "px");
 
-  context.setTransform(factor, 0, 0, factor, 0, 0);
+  context.setTransform(widthFactor, 0, 0, widthFactor, 0, 0);
 
 }
 
@@ -145,5 +145,6 @@ module.exports = {
   background: _background,
   backgroundInfo: _backgroundInfo,
   loadAudio: loadAudio,
+  redraw: redraw,
   selection: _selection
 };

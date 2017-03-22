@@ -29,10 +29,10 @@
         <image class="labs-logo-image" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="images/labs-logo.svg" src="images/labs-logo.png" width="62" height="80"></image>
       </svg>
 
-      <h1>Audiogram<span class="title-superscript">ALPHA</span></h1>
+      <h1 class="page-title">Audiogram<span class="title-superscript">ALPHA</span></h1>
       <a class="about-link" href="about.html">About</a>
     </header>
-    <div class="container">
+    <div class="wrapper">
       <h1>Audiogram</h1>
       <div id="loading">
         <div id="loading-bars">
@@ -40,107 +40,216 @@
         </div>
         <div id="loading-message">Loading...</div>
       </div><!-- #loading -->
-      <div id="loaded">
-        <div id="error"></div>
-        <div class="row form-row" id="row-audio">
-          <label for="input-audio">Audio</label>
-          <input id="input-audio" name="audio" type="file" />
+      <div id="loaded" class="intGEL">
+        <div id="error" class="alert alert-danger" role="alert">
+          <strong>Oh snap!</strong> Change a few things up and try submitting again.
         </div>
-        <div class="row form-row" id="row-background">
-          <label for="input-background">Background Image/Video</label>
-          <input id="input-background" name="background" type="file" />
-        </div>
-        <div class="row form-row" id="row-theme">
-          <label for="input-theme">Theme</label>
-          <select id="input-theme" name="theme"></select>
-        </div>
-        <div id="preview">
-          <div>
-            <div id="canvas">
+
+
+        <div class="row">
+
+
+
+          <div class="col-md-7">
+
+
+            <ul class="nav nav-tabs">
+              <li class="active">
+                <a href="#1" data-toggle="tab">VCS Item</a>
+              </li>
+              <li><a href="#2" data-toggle="tab">File Upload</a>
+              </li>
+              </li>
+            </ul>
+
+            <div class="tab-content ">
+              <div class="tab-pane active" id="1">
+
+                <div class="row">
+                  <div class="col-md-2">
+                    <label class="settings" for="input-vcs">VCS Item ID:</label>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane" id="2">
+                  <input id="input-audio" name="audio" type="file" />
+              </div>
+            </div>
+
+            <section id="minimap" class="well" style="border: none;">
+              <svg width="640" height="80" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <clipPath id="clip">
+                    <rect height="80" width="640" x="0" y="0"></rect>
+                  </clipPath>
+                </defs>
+                <g class="waveform background">
+                  <line x1="0" x2="640" y1="40" y2="40"></line>
+                  <path></path>
+                </g>
+                <g class="waveform foreground" clip-path="url(#clip)">
+                  <line x1="0" x2="640" y1="40" y2="40"></line>
+                  <path></path>
+                </g>
+                <g class="brush"></g>
+                <g class="time">
+                  <line x1="0" x2="0" y1="0" y2="80"></line>
+                </g>
+              </svg>
+              <div id="controls">
+                <div id="timecodes">
+                  <input id="start" type="text">
+                  <input id="end" type="text">
+                </div>
+                <hr/>
+                <div style="float: left;">
+                  <div id="tip">
+                    Click and drag over the waveform to clip audio, enter<br>
+                    timecodes above, or use the <a href="#">advanced keyboard shortcuts</a>.
+                  </div>
+                </div>
+                <div style="float: right;">
+                  <div id="duration"><strong></strong> seconds selected</div>
+                  <button id="play"><i class="fa fa-play"></i>Play</button>
+                  <button id="pause" class="hidden"><i class="fa fa-pause"></i>Pause</button>
+                  <button id="restart"><i class="fa fa-step-backward"></i>Restart</button>
+                </div>
+                <div class="clear"></div>
+                <div id="shortcuts" style="display: none;">
+                  <hr>
+                  <div class="col">
+                    <div>
+                      <kbd>space</kbd> &nbsp; - &nbsp;
+                      toggle playback
+                    </div>
+                    <div>
+                      <kbd>&#8594;</kbd> / <kbd>&#8592;</kbd> &nbsp; - &nbsp;
+                      move 0.1s
+                    </div>
+                    <div>
+                      <kbd>ctrl</kbd> / <kbd>&#8984;</kbd> + <kbd>&#8594;</kbd> / <kbd>&#8592;</kbd> &nbsp; - &nbsp;
+                      move 1s
+                    </div>
+                    <div>
+                      <kbd>shift</kbd> + <kbd>&#8594;</kbd> / <kbd>&#8592;</kbd> &nbsp; - &nbsp;
+                      move 10s
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div>
+                      <kbd>q</kbd> / <kbd>w</kbd> &nbsp; - &nbsp;
+                      go to IN/OUT
+                    </div>
+                    <div>
+                      <kbd>i</kbd> / <kbd>o</kbd> &nbsp; - &nbsp;
+                      mark IN/OUT
+                    </div>
+                    <div>
+                      <kbd>5</kbd> &nbsp; - &nbsp;
+                      play from IN for 1s
+                    </div>
+                    <div>
+                      <kbd>6</kbd> &nbsp; - &nbsp;
+                      play from 1s before OUT
+                    </div>
+                  </div>
+                  <div class="clear"></div>
+                </div>
+              </div>
+            </section>
+
+
+
+
+          <section class="well" style="border: none;">
+            <div class="row">
+              <div class="col-md-2">
+                <label class="settings" for="input-background">Background:</label>
+              </div>
+              <div class="col-md-10">
+                <label class="intGEL-arrow" for="myselectTwo">
+                  <select id="input-background-type" name="background-type" class="form-control">
+                    <option disabled>Select design type:</option>
+                    <option>Generic</option>
+                    <option value="file">Upload image/video</option>
+                    <option value="slideshow">Image slideshow</option>
+                    <option value="interview">Two-person interview</option>
+                  </select>
+                </label>
+                <div id="input-background-type-file" class="input-background-type" style="margin-top: 10px;">
+                  <input id="input-background" name="background" type="file" />
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-md-2">
+                <label class="settings" for="input-background">Size:</label>
+              </div>
+              <div class="col-md-10">
+                <label class="intGEL-arrow" for="myselectTwo">
+                  <select id="input-theme" name="theme" class="form-control"></select>
+                </label>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-md-2">
+                <label class="settings" for="input-subs">Subtitles:</label>
+              </div>
+              <div class="col-md-10">
+                <label class="intGEL-arrow" for="myselectTwo">
+                  <select id="input-subs" name="format" class="form-control">
+                    <option>None</option>
+                    <option disabled></option>
+                    <option disabled>Select style:</option>
+                    <optgroup>
+                      <option>BBC News</option>
+                      <option>Radio 4</option>
+                      <option>Newsbeat</option>
+                    </optgroup>
+                    <option disabled></option>
+                  </select>
+                </label>
+              </div>
+            </div>
+
+
+
+          </section>
+
+
+
+          <section class="well">
+            <div class="page-header">
+              <h1>Editable Transcription</h1>
+            </div>
+            <label><input id="warningsoth2" value="RFI" class="form-control-option" name="warnings[tier1][oth]" type="checkbox"> burn subtitles onto video</label>
+            <hr>
+
+          </section>
+
+          </div>
+          <div class="col-md-5">
+
+          <section class="well">
+            <div class="page-header">
+              <h1>Preview</h1>
+            </div>
+            <div id="canvas" style="width: 100%">
               <canvas width="640" height="360"></canvas>
               <div id="preview-label">Preview</div>
             </div>
-          </div>
-          <div id="minimap" class="hidden">
-            <svg width="640" height="80" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <clipPath id="clip">
-                  <rect height="80" width="640" x="0" y="0"></rect>
-                </clipPath>
-              </defs>
-              <g class="waveform background">
-                <line x1="0" x2="640" y1="40" y2="40"></line>
-                <path></path>
-              </g>
-              <g class="waveform foreground" clip-path="url(#clip)">
-                <line x1="0" x2="640" y1="40" y2="40"></line>
-                <path></path>
-              </g>
-              <g class="brush"></g>
-              <g class="time">
-                <line x1="0" x2="0" y1="0" y2="80"></line>
-              </g>
-            </svg>
-            <div id="controls">
-              <div id="timecodes">
-                <input id="start" type="text">
-                <input id="end" type="text">
-              </div>
-              <hr/>
-              <div style="float: left;">
-                <div id="tip">
-                  Click and drag over the waveform to clip audio, enter<br>
-                  timecodes above, or use the <a href="#">advanced keyboard shortcuts</a>.
-                </div>
-              </div>
-              <div style="float: right;">
-                <div id="duration"><strong></strong> seconds selected</div>
-                <button id="play"><i class="fa fa-play"></i>Play</button>
-                <button id="pause" class="hidden"><i class="fa fa-pause"></i>Pause</button>
-                <button id="restart"><i class="fa fa-step-backward"></i>Restart</button>
-              </div>
-              <div class="clear"></div>
-              <div id="shortcuts" style="display: none;">
-                <hr>
-                <div class="col">
-                  <div>
-                    <kbd>space</kbd> &nbsp; - &nbsp;
-                    toggle playback
-                  </div>
-                  <div>
-                    <kbd>&#8594;</kbd> / <kbd>&#8592;</kbd> &nbsp; - &nbsp;
-                    move 0.1s
-                  </div>
-                  <div>
-                    <kbd>ctrl</kbd> / <kbd>&#8984;</kbd> + <kbd>&#8594;</kbd> / <kbd>&#8592;</kbd> &nbsp; - &nbsp;
-                    move 1s
-                  </div>
-                  <div>
-                    <kbd>shift</kbd> + <kbd>&#8594;</kbd> / <kbd>&#8592;</kbd> &nbsp; - &nbsp;
-                    move 10s
-                  </div>
-                </div>
-                <div class="col">
-                  <div>
-                    <kbd>q</kbd> / <kbd>w</kbd> &nbsp; - &nbsp;
-                    go to IN/OUT
-                  </div>
-                  <div>
-                    <kbd>i</kbd> / <kbd>o</kbd> &nbsp; - &nbsp;
-                    mark IN/OUT
-                  </div>
-                  <div>
-                    <kbd>5</kbd> &nbsp; - &nbsp;
-                    play from IN for 1s
-                  </div>
-                  <div>
-                    <kbd>6</kbd> &nbsp; - &nbsp;
-                    play from 1s before OUT
-                  </div>
-                </div>
-                <div class="clear"></div>
-              </div>
-            </div>
+          </section>
+
+          <section class="well">
+            <div class="btn-group">
+              <button type="button" id="submit" class="btn btn-primary"><i class="fa fa-cloud-upload"></i>Generate</button>
+            </div> 
+          </section>
+
+        <div id="preview">
+          <div>
           </div>
         </div>
         <div id="audio">
@@ -156,12 +265,16 @@
         <hr/>
         <div class="row" id="row-submit">
           <button type="button" id="return" class="left"><i class="fa fa-edit"></i>Return to editor</button>
+
           <button type="button" id="submit" class="right hidden"><i class="fa fa-cloud-upload"></i>Generate</button>
           <a id="download" class="button right" href="#" target="_blank"><i class="fa fa-download"></i>Download</a>
           <div class="clear"></div>
         </div>
+
+          </div><!-- .col -->
+        </div><!-- .row -->
       </div><!-- #loaded -->
-    </div><!-- .container -->
+    </div><!-- .wrapper -->
 
     <footer class="site-footer-wrap">
         <div class="message-box-wrap">
@@ -172,6 +285,7 @@
     </footer>
 
     <script src="/js/bundle.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
     <!-- Force load custom fonts -->
     <script src="/fonts/fonts.js"></script>
   </body>

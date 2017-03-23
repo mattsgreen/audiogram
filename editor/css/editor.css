@@ -40,6 +40,25 @@ label.settings {
     font-size: 12px;
 }
 
+
+.btn-group {
+  width: 100%;
+}
+.btn.right {
+  float: right !important;
+}
+
+#vcs-results {
+  border-top: 1px solid #eeeeee;
+  margin-top: 10px;
+  padding-top: 5px;
+}
+
+.form-check-label {
+  text-indent: -20px;
+  margin-left: 20px;
+}
+
 /* Buttons/controls */
 button,
 .button {
@@ -68,10 +87,10 @@ button,
 }
 
 #download {
-  padding: 9px 12px 6px 12px;
-  color: #fff;
-  background-color: #5bc0de;
-  border-color: #46b8da;
+  /*padding: 9px 12px 6px 12px;*/
+  /*color: #fff;*/
+  /*background-color: #5bc0de;*/
+  /*border-color: #46b8da;*/
 }
 
 #download:hover {
@@ -289,28 +308,29 @@ g.time line {
   display: none;
 }
 
+#generated {
+  width: 664px;
+  margin: auto;
+}
+
 #loading,
 #error,
-#video,
-#download,
-#return,
+#generated,
 .loading #loaded,
-.rendered #preview,
-.rendered #submit,
-.rendered .form-row {
+.rendered #loaded {
   display: none;
 }
 
 .loading #loading,
 .error #error,
-.rendered #video {
+.rendered #generated {
   display: block;
 }
 
-.rendered #download,
+/*.rendered #download,
 .rendered #return {
   display: inline-block;
-}
+}*/
 
 /* Loading styles */
 #loading-message {

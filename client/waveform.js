@@ -1,7 +1,6 @@
 var extractPeaks = require("webaudio-peaks"),
+    minimap = require("./minimap.js"),
     d3 = require("d3");
-
-var width = 640;
 
 function decoded(cb) {
 
@@ -9,7 +8,7 @@ function decoded(cb) {
 
     var duration = decodedData.duration;
 
-    var samplesPerPixel = Math.floor(decodedData.length / width);
+    var samplesPerPixel = Math.floor(decodedData.length / minimap.width());
 
     var peaks = extractPeaks(decodedData, samplesPerPixel, true);
 

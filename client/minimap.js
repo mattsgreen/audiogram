@@ -4,11 +4,6 @@ var minimap = d3.select("#minimap"),
     svg = minimap.select("svg"),
     onBrush = onBrushEnd = function(){};
 
-var t = d3.scaleLinear()
-  .domain([0, 640])
-  .range([0,1])
-  .clamp(true);
-
 var y = d3.scaleLinear()
   .domain([0, 1])
   .range([40, 0]);
@@ -18,9 +13,12 @@ var line = d3.line();
 var brush = d3.brushX()
   .on("brush end", brushed);
 
-minimap.select(".brush").call(brush)
-  .selectAll("rect")
-  .attr("height", 80);
+function brushInit() {
+  minimap.select(".brush").call(brush)
+    .selectAll("rect")
+    .attr("height", 80);
+  brush.move(d3.select(".brush"), [0, 0]);
+}
 
 minimap.selectAll(".brush .resize")
   .append("line")
@@ -29,9 +27,24 @@ minimap.selectAll(".brush .resize")
   .attr("y1",0)
   .attr("y2", 80);
 
+var t, minimapWidth;
+function _width(_) {
+  if (arguments.length) {
+    minimapWidth = _;
+    t = d3.scaleLinear()
+        .domain([0, _])
+        .range([0,1])
+        .clamp(true);
+    d3.selectAll("#minimap svg, #minimap clipPath rect").attr("width", _);
+    d3.selectAll("#minimap g.waveform line").attr("x2", _);
+  } else {
+    return minimapWidth;
+  }
+}
+
 function redraw(data) {
 
-  brush.move(d3.select(".brush"), [0, 0]);
+  brushInit();
 
   var top = data.map(function(d,i){
     return [i, y(d)];
@@ -50,7 +63,7 @@ function redraw(data) {
 
 function time(t) {
   d3.select("g.time")
-    .attr("transform","translate(" + (t * 640) + ")");
+    .attr("transform","translate(" + (t * minimapWidth) + ")");
 }
 
 function drawBrush(extent) {
@@ -58,7 +71,7 @@ function drawBrush(extent) {
 }
 
 function brushed() {
-
+  // brush.extent([0,1]);
   var start = d3.event.selection ? t(d3.event.selection[0]) : 0,
       end = d3.event.selection ? t(d3.event.selection[1]) : 1;
 
@@ -99,6 +112,7 @@ module.exports = {
   time: time,
   redraw: redraw,
   drawBrush: drawBrush,
+  width: _width,
   onBrush: _onBrush,
   onBrushEnd: _onBrushEnd
 };

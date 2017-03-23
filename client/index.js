@@ -273,8 +273,14 @@ function initialize(err, themesWithImages) {
 
   d3.select("#input-background-type").on("change", updateBackgroundType).each(updateBackgroundType);
 
-  d3.select(window).on("resize", function(){preview.redraw()});
+  d3.select(window).on("resize", windowResize).each(windowResize);;
+
+}
+
+function windowResize() {
   preview.redraw();
+  minimap.width(jQuery("#sourceWrapper .tab-content").width());
+}
 
 }
 

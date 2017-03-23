@@ -46,6 +46,8 @@ bbcDog.src = "/images/bbc.png";
 minimap.onBrush(function(extent){
 
   var duration = audio.duration();
+  // var minimapWidth = d3.select("#minimap svg").node().getBoundingClientRect().width;
+  var minimapWidth = jQuery("#minimap svg").width();
 
   selection = {
     duration: duration * (extent[1] - extent[0]),
@@ -53,8 +55,8 @@ minimap.onBrush(function(extent){
     end: extent[1] <= 1 ? extent[1] * duration : null
   };
 
-  var x1 = Math.min(Math.max(extent[0]*640 - 38, 0), 490),
-      x2 = Math.min(Math.max(extent[1]*640 - 38, 75), 565),
+  var x1 = Math.min(Math.max(extent[0]*minimapWidth - 38, 0), minimapWidth - 150),
+      x2 = Math.min(Math.max(extent[1]*minimapWidth - 38, 75), minimapWidth - 75),
       diff = x2 - x1 - 75;
 
   if (diff<0) {
@@ -119,7 +121,6 @@ function redraw() {
 }
 
 function loadAudio(audioFile, cb) {
-
   d3.queue()
     .defer(getWaveform, audioFile)
     .defer(audio.src, audioFile)

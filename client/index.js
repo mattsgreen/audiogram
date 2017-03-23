@@ -287,8 +287,6 @@ function initialize(err, themesWithImages) {
   // If there's an initial background image (e.g. back button) load it
   d3.select("#input-background").on("change", updateBackground).each(updateBackground); //try deleting the each and see if it all still works. claim biscuit prize from squio
 
-  // If there's an initial piece of audio (e.g. back button) load it
-  d3.select("#input-audio").on("change", updateAudioFile).each(updateAudioFile);
   if (params.vcs) {
     fetchAudioFile(parms.vcs);
   }

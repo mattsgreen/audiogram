@@ -4,7 +4,7 @@ var d3 = require("d3"),
     minimap = require("./minimap.js"),
     video = require("./video.js"),
     audio = require("./audio.js");
-    global.jQuery = $;
+global.jQuery = $;
 
 var backgroundFile;
 
@@ -38,6 +38,18 @@ d3.json("/settings/themes.json", function(err, themes){
   preloadImages(themes);
 
 });
+
+function getURLParams(qs) {
+    qs = qs.split('+').join(' ');
+    var params = {},
+        tokens,
+        re = /[?&]?([^=]+)=([^&]*)/g;
+    while (tokens = re.exec(qs)) {
+        params[decodeURIComponent(tokens[1])] = decodeURIComponent(tokens[2]);
+    }
+    return params;
+}
+var params = getURLParams(document.location.search);
 
 function submitted() {
 
@@ -257,11 +269,27 @@ function initialize(err, themesWithImages) {
     audio.restart();
   });
 
+  d3.selectAll("a[href^='#source-tab-']").on("click", sourceUpdate);
+
   // If there's an initial piece of audio (e.g. back button) load it
   d3.select("#input-audio").on("change", updateAudioFile).each(updateAudioFile);
 
+  // Search for VCS audio
+  d3.select("#vcs-search").on("click", vcsSearch);
+  d3.select("#input-vcs").on("keydown", function(){
+    if (d3.event.key == "Enter") vcsSearch();
+  });
+  // Select VCS audio
+  jQuery("#vcs-results").on('change','input:radio',function () {
+    fetchAudioFile(this.value);
+  });
+
   // If there's an initial background image (e.g. back button) load it
   d3.select("#input-background").on("change", updateBackground).each(updateBackground); //try deleting the each and see if it all still works. claim biscuit prize from squio
+
+  if (params.vcs) {
+    fetchAudioFile(parms.vcs);
+  }
 
   d3.select("#return").on("click", function(){
     d3.event.preventDefault();
@@ -282,9 +310,36 @@ function windowResize() {
   minimap.width(jQuery("#sourceWrapper .tab-content").width());
 }
 
+function sourceUpdate() {
+  if (this.href.endsWith("vcs")) {
+    if (jQuery("#vcs-results input:radio").length) {
+      fetchAudioFile(jQuery("#vcs-results input:radio").val());
+    } else {
+      updateAudioFile(false);
+    }
+  } else if (this.href.endsWith("upload")) {
+    updateAudioFile();
+  } 
 }
 
-function updateAudioFile() {
+function fetchAudioFile(url) {
+  if ( url.startsWith("https://vcsio.newslabs.co") ) {
+    d3.select("#loading-message").text("Fetching Audio...");
+    setClass("loading");
+    var blob = null;
+    var xhr = new XMLHttpRequest(); 
+    xhr.open("GET", url); 
+    xhr.responseType = "blob";
+    xhr.onload = function() {
+        updateAudioFile(xhr.response);
+    }
+    xhr.send();
+  }
+}
+
+function updateAudioFile(blob) {
+
+  var input = jQuery('#input-audio').get(0);
 
   d3.select("#row-audio").classed("error", false);
 
@@ -292,7 +347,7 @@ function updateAudioFile() {
   video.kill();
 
   // Skip if empty
-  if (!this.files || !this.files[0]) {
+  if ( blob===false || (blob===undefined && (!input.files || !input.files[0])) ) {
     d3.select("#minimap").classed("hidden", true);
     preview.file(null);
     setClass(null);
@@ -303,7 +358,9 @@ function updateAudioFile() {
 
   setClass("loading");
 
-  preview.loadAudio(this.files[0], function(err){
+  var audioFile = blob || input.files[0];
+
+  preview.loadAudio(audioFile, function(err){
 
     if (err) {
       d3.select("#row-audio").classed("error", true);
@@ -317,6 +374,33 @@ function updateAudioFile() {
   });
 
 }
+
+function vcsSearch() {
+  var item = d3.select("#input-vcs").property("value");
+  d3.select("#loading-message").text("Searching VCS...");
+  setClass("loading");
+  $.getJSON( "https://vcsio.newslabs.co/vcs/search/" + item, function( data ) {
+    var file = data[0].mediaurl;
+    // LOAD AUDIO
+    d3.select("#vcs-results").html("");
+    for (var i = data.length - 1; i >= 0; i--) {
+      var disp = data[i].file.split("#").pop() + " [" + data[i].vcsinfo.take.GENERIC.GENE_LOGSTORE.split("$").pop() + "]";
+      var option = "<div class='form-check'> <label class='form-check-label'> <input class='form-check-input' type='radio' name='vcs-item' value='" + data[i].mediaurl + "' checked> " + disp + " </label> </div>";
+      d3.select("#vcs-results").insert("div").html(option);
+      if (i==0) fetchAudioFile(data[i].mediaurl);
+    }
+  }).fail(function(jqXHR, textStatus, errorThrown) {
+    if (jqXHR.status==404) {
+      d3.select("#vcs-results").html("<b>That item wasn't found.</b><br/>Make sure your item is saved in a logstore that auto-exports to the S-drive.");
+    } else {
+      d3.select("#vcs-results").html("<b>There was an error searching for that item.</b><br/>Check it was correctly formated, or try again.");
+    }
+    setClass(null);
+  }).complete(function(){
+    d3.select("#vcs-results").classed("hidden", false);
+  });
+}
+
 
 function updateBackgroundType() {
   d3.selectAll(".input-background-type").classed("hidden", true);

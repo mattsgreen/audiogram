@@ -59,6 +59,14 @@ label.settings {
   margin-left: 20px;
 }
 
+#splash h1{
+  line-height: 50px;
+  text-align: center;
+}
+#splash h1 svg{
+  margin-left: 20px;
+}
+
 /* Buttons/controls */
 button,
 .button {

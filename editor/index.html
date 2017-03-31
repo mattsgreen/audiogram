@@ -56,7 +56,8 @@
                 <li class="active">
                   <a href="#source-tab-vcs" data-toggle="tab">VCS Item</a>
                 </li>
-                <li><a href="#source-tab-upload" data-toggle="tab">File Upload</a>
+                <li>
+                  <a href="#source-tab-upload" data-toggle="tab">File Upload</a>
                 </li>
                 </li>
               </ul>
@@ -167,44 +168,36 @@
 
 
 
+          <section id="splash" class="well" style="border: none;">
+            <h1>
+              Welcome to Audiogram
+              <svg width="50" height="50">
+                <image xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="images/wave.svg" src="images/wave.png" width="50" height="50"></image>
+              </svg>
+            </h1>
+            <hr>
+            <p>
+              Audiogram is a <a href="http://bbcnewslabs.co.uk/" target="_blank">BBC News Labs</a> prototype, based on <a href="https://medium.com/@WNYC/socialaudio-e648e8a5f2e9#.7se6rlrt8" target="_blank">original work by NPR's WNYC</a> in New York, which <b>converts audio into shareable video</b>.
+            </p>
+            <p>
+              It's currently experimetal, and may (probably will) break at some point. Please tell us when it does, so we can make it better. Similarly, <b>we want your suggestions and feature requests</b>! Tell us what you like and don't like about the tool, and how we could make it better, or a more seamless component of your existing workflows.
+            </p>
+            <p>
+              Please email <b><a href="mailto:jonty.usborne@bbc.co.uk">Jonty.Usborne@bbc.co.uk</a></b>, the BBC developer on this project, with issues, suggestions, feedback, insights into your team's workflow, and offers of free cake.
+            </p>
+            <hr>
+            <p>
+              <b>To get started, select an audio source above.</b>
+            </p>
+          </section>
 
-          <section class="well" style="border: none;">
+
+          <section id="subtitles" class="well hidden" style="border: none;">
             <div class="row">
-              <div class="col-md-2">
-                <label class="settings" for="input-background">Background:</label>
+              <div class="col-md-3">
+                <label class="settings" for="input-subs">Subtitle Style:</label>
               </div>
-              <div class="col-md-10">
-                <label class="intGEL-arrow" for="myselectTwo">
-                  <select id="input-background-type" name="background-type" class="form-control">
-                    <option disabled>Select design type:</option>
-                    <option>Generic</option>
-                    <option value="file" selected>Upload image/video</option>
-                    <option value="slideshow">Image slideshow</option>
-                    <option value="interview">Two-person interview</option>
-                  </select>
-                </label>
-                <div id="input-background-type-file" class="input-background-type" style="margin-top: 10px;">
-                  <input id="input-background" name="background" type="file" />
-                </div>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-md-2">
-                <label class="settings" for="input-background">Size:</label>
-              </div>
-              <div class="col-md-10">
-                <label class="intGEL-arrow" for="myselectTwo">
-                  <select id="input-theme" name="theme" class="form-control"></select>
-                </label>
-              </div>
-            </div>
-            <hr>
-            <div class="row">
-              <div class="col-md-2">
-                <label class="settings" for="input-subs">Subtitles:</label>
-              </div>
-              <div class="col-md-10">
+              <div class="col-md-9">
                 <label class="intGEL-arrow" for="myselectTwo">
                   <select id="input-subs" name="format" class="form-control">
                     <option>None</option>
@@ -249,9 +242,46 @@
             </div>
           </section>
 
+
+
+          <section class="well" style="border: none;">
+            <div class="row">
+              <div class="col-md-3">
+                <label class="settings" for="input-background">Background:</label>
+              </div>
+              <div class="col-md-9">
+                <label class="intGEL-arrow" for="myselectTwo">
+                  <select id="input-background-type" name="background-type" class="form-control">
+                    <option disabled>Select design type:</option>
+                    <option>Generic</option>
+                    <option value="file" selected>Upload image/video</option>
+                    <option value="slideshow">Image slideshow</option>
+                    <option value="interview">Two-person interview</option>
+                  </select>
+                </label>
+                <div id="input-background-type-file" class="input-background-type" style="margin-top: 10px;">
+                  <input id="input-background" name="background" type="file" />
+                </div>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-md-3">
+                <label class="settings" for="input-background">Size:</label>
+              </div>
+              <div class="col-md-9">
+                <label class="intGEL-arrow" for="myselectTwo">
+                  <select id="input-theme" name="theme" class="form-control"></select>
+                </label>
+              </div>
+            </div>
+
+
+          </section>
+
           <section class="well">
             <div class="btn-group">
-              <button type="button" id="submit" class="btn btn-primary right"><i class="fa fa-cloud-upload"></i>Generate</button>
+              <button type="button" id="submit" class="btn btn-primary right"><i class="fa fa-film"></i>Generate Audiogram</button>
             </div> 
           </section>
 
@@ -302,5 +332,6 @@
     <script src="/js/bootstrap.min.js"></script>
     <!-- Force load custom fonts -->
     <script src="/fonts/fonts.js"></script>
+
   </body>
 </html>

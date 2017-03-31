@@ -30,11 +30,17 @@ module.exports = function(t) {
     theme.waveColor = theme.waveColor || theme.foregroundColor || "#000";
     theme.captionColor = theme.captionColor || theme.foregroundColor || "#000";
 
-    // Default wave dimensions
-    if (typeof theme.waveTop !== "number") theme.waveTop = 0;
-    if (typeof theme.waveBottom !== "number") theme.waveBottom = theme.height;
-    if (typeof theme.waveLeft !== "number") theme.waveLeft = 0;
-    if (typeof theme.waveRight !== "number") theme.waveRight = theme.width;
+    // Default wave position/size
+    if (typeof theme.wave.height !== "number") theme.wave.height = 0.25;
+    if (typeof theme.wave.width !== "number") theme.wave.width = 1;
+    if (typeof theme.wave.x !== "number") theme.wave.x = 0.5;
+    if (typeof theme.wave.y !== "number") theme.wave.y = 0.5;
+
+    // Convert wave to px
+    theme.waveTop = (theme.wave.y * theme.height) - ((theme.wave.height * theme.height)/2);
+    theme.waveBottom = theme.waveTop + (theme.wave.height * theme.height);
+    theme.waveLeft = (theme.wave.x * theme.width) - ((theme.wave.width * theme.width)/2);
+    theme.waveRight = theme.waveLeft + (theme.wave.width * theme.width);
 
     return this;
   };

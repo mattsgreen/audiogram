@@ -6,8 +6,12 @@
     "maxDuration": 300,
     "samplesPerFrame": 128,
     "pattern": "wave",
-    "waveTop": 200,
-    "waveBottom": 400,
+    "wave" : {
+      "height": 0.28,
+      "width": 1,
+      "y": 0.5,
+      "x": 0.5
+    },
     "foregroundColor": "#942924",
     "subtitles" : {
       "bottom": 650,
@@ -40,14 +44,10 @@
   },
   "Custom Image - Instagram (640 x 640)": {
     "width": 640,
-    "height": 640,
-    "waveTop": 373,
-    "waveBottom": 600
+    "height": 640
   },
   "Custom Image - Desktop 16:9 (1920 x 1080)": {
     "width": 1920,
     "height": 1080,
-    "waveTop": 630,
-    "waveBottom": 1013
   }
 }

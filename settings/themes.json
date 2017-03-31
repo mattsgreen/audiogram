@@ -6,15 +6,24 @@
     "maxDuration": 300,
     "samplesPerFrame": 128,
     "pattern": "wave",
-    "waveTop": 420,
-    "waveBottom": 675,
+    "waveTop": 200,
+    "waveBottom": 400,
     "foregroundColor": "#942924",
-    "captionTop": 470,
-    "captionFont": "300 52px 'Source Sans Pro'",
-    "captionLineHeight": 52,
-    "captionLineSpacing": 7,
-    "captionLeft": 200,
-    "captionRight": 1080,
+    "subtitles" : {
+      "bottom": 650,
+      "left": 0,
+      "right": 1280,
+      "align": "center",
+      "font": "'Source Sans Pro'",
+      "fontSize": 60,
+      "fontWeight" : 300,
+      "color": "white",
+      "stroke": {
+        "color": "black",
+        "width": 10
+      },
+      "lineSpacing": 10
+    },
     "backgroundColor": "#eee"
   },
   "Select social media destination": {

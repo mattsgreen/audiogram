@@ -1,12 +1,15 @@
 var d3 = require("d3"),
     $ = require("jquery"),
+    transcript = require("./transcript.js"),
     preview = require("./preview.js"),
     minimap = require("./minimap.js"),
     video = require("./video.js"),
     audio = require("./audio.js");
 global.jQuery = $;
 
-var backgroundFile;
+var backgroundFile,
+    vcsTranscriptTimeout,
+    audioSource = "vcs";
 
 d3.json("/settings/themes.json", function(err, themes){
 
@@ -91,6 +94,7 @@ function submitted() {
   }
   formData.append("theme", JSON.stringify($.extend({}, theme, { backgroundImageFile: null })));
   formData.append("caption", caption);
+  formData.append("transcript", JSON.stringify(transcript.toJSON()));
 
   setClass("loading");
   d3.select("#loading-message").text("Uploading audio...");
@@ -193,7 +197,7 @@ function initialize(err, themesWithImages) {
 
   // Key listeners
   d3.select(document).on("keydown", function(){
-    if (!d3.select("body").classed("rendered") && !d3.matcher("input, textarea, button, select").call(d3.event.target)) {
+    if (!d3.select("body").classed("rendered") && !d3.matcher("input, textarea, button, select, [contenteditable='true']").call(d3.event.target)) {
       let start = audio.extent()[0]*audio.duration(),
           end = audio.extent()[1]*audio.duration(),
           duration = audio.duration();
@@ -251,10 +255,10 @@ function initialize(err, themesWithImages) {
       }
     }
   });
-  d3.select("#tip a").on("click", function(){
+  d3.select("#controls .tip a").on("click", function(){
     d3.select("#shortcuts").style("display", null);
-    d3.select("#tip").insert("span","a").text(d3.select("#tip a").text());
-    d3.select("#tip a").remove();
+    d3.select("#controls .tip").insert("span","a").text(d3.select("#tip a").text());
+    d3.select("#controls .tip a").remove();
     stopIt(d3.event);
   });
 
@@ -311,21 +315,27 @@ function windowResize() {
 }
 
 function sourceUpdate() {
-  if (this.href.endsWith("vcs")) {
+  audioSource = this.href.split("-").pop();
+  console.log("audioSource: " + audioSource);
+  if (audioSource == "vcs") {
     if (jQuery("#vcs-results input:radio").length) {
       fetchAudioFile(jQuery("#vcs-results input:radio").val());
     } else {
       updateAudioFile(false);
     }
-  } else if (this.href.endsWith("upload")) {
+  } else if (audioSource == "upload") {
     updateAudioFile();
   } 
 }
 
 function fetchAudioFile(url) {
+
   if ( url.startsWith("https://vcsio.newslabs.co") ) {
+
     d3.select("#loading-message").text("Fetching Audio...");
     setClass("loading");
+
+    // Get aduio
     var blob = null;
     var xhr = new XMLHttpRequest(); 
     xhr.open("GET", url); 
@@ -334,31 +344,57 @@ function fetchAudioFile(url) {
         updateAudioFile(xhr.response);
     }
     xhr.send();
+
+    // Get transcript
+    clearTimeout(vcsTranscriptTimeout);
+    vcsTranscript(url.split("/").pop());
+
   }
+
+}
+
+function generateTranscript(blob) {
+
+  var upload = jQuery('#input-audio').get(0);
+  var audioFile = blob || upload.files[0];
+
+  d3.select("#transcript").classed("loading", true);
+  transcript.generate(audioFile);
+
 }
 
 function updateAudioFile(blob) {
 
-  var input = jQuery('#input-audio').get(0);
-
   d3.select("#row-audio").classed("error", false);
-
   audio.pause();
   video.kill();
 
+  var upload = jQuery('#input-audio').get(0);
+
   // Skip if empty
-  if ( blob===false || (blob===undefined && (!input.files || !input.files[0])) ) {
+  if ( blob===false || (blob===undefined && (!upload.files || !upload.files[0])) ) {
     d3.select("#minimap").classed("hidden", true);
     preview.file(null);
     setClass(null);
     return true;
   }
 
+  var audioFile = blob || upload.files[0];
+
+  console.log("updateAudioFile: " + audioSource);
+
+  if (audioSource!="vcs") {
+    clearTimeout(vcsTranscriptTimeout);
+    generateTranscript(audioFile);
+  }
+
+  d3.select("#splash").classed("hidden", true);
+  d3.selectAll("#subtitles, #transcript").classed("hidden", false);
+
   d3.select("#loading-message").text("Analyzing...");
 
   setClass("loading");
 
-  var audioFile = blob || input.files[0];
 
   preview.loadAudio(audioFile, function(err){
 
@@ -375,30 +411,52 @@ function updateAudioFile(blob) {
 
 }
 
+function vcsTranscript(id) {
+  $.getJSON( "https://vcsio.newslabs.co/vcs/transcript/" + id, function( data ) {
+    var loaded = data.hasOwnProperty("commaSegments");
+    if (loaded) {
+      transcript.load(data);
+      d3.select("#transcript").classed("loading", false);
+    } else {
+      vcsTranscriptTimeout = setTimeout(function(){vcsTranscript(id)},10000);
+    }
+  });
+}
+
 function vcsSearch() {
+
   var item = d3.select("#input-vcs").property("value");
   d3.select("#loading-message").text("Searching VCS...");
   setClass("loading");
+
   $.getJSON( "https://vcsio.newslabs.co/vcs/search/" + item, function( data ) {
-    var file = data[0].mediaurl;
-    // LOAD AUDIO
+
+    // Load audio
+    fetchAudioFile(data[data.length - 1].mediaurl);
+
     d3.select("#vcs-results").html("");
     for (var i = data.length - 1; i >= 0; i--) {
+      var checked = (i == data.length - 1) ? "checked" : null;
       var disp = data[i].file.split("#").pop() + " [" + data[i].vcsinfo.take.GENERIC.GENE_LOGSTORE.split("$").pop() + "]";
-      var option = "<div class='form-check'> <label class='form-check-label'> <input class='form-check-input' type='radio' name='vcs-item' value='" + data[i].mediaurl + "' checked> " + disp + " </label> </div>";
-      d3.select("#vcs-results").insert("div").html(option);
-      if (i==0) fetchAudioFile(data[i].mediaurl);
+      var option = "<div class='form-check'> <label class='form-check-label'> <input class='form-check-input' type='radio' name='vcs-item' value='" + data[i].mediaurl + "' " + checked + "> " + disp + " </label> </div>";
+      d3.select("#vcs-results").insert("div").html(option).classed("error", false);
     }
+
   }).fail(function(jqXHR, textStatus, errorThrown) {
+
     if (jqXHR.status==404) {
-      d3.select("#vcs-results").html("<b>That item wasn't found.</b><br/>Make sure your item is saved in a logstore that auto-exports to the S-drive.");
+      d3.select("#vcs-results").html("<b>That item wasn't found.</b><br/>Make sure your item is saved in a logstore that auto-exports to the S-drive.").classed("error", true);
     } else {
-      d3.select("#vcs-results").html("<b>There was an error searching for that item.</b><br/>Check it was correctly formated, or try again.");
+      d3.select("#vcs-results").html("<b>There was an error searching for that item.</b><br/>Check it was correctly formated, or try again.").classed("error", true);
     }
     setClass(null);
+
   }).complete(function(){
+
     d3.select("#vcs-results").classed("hidden", false);
+
   });
+
 }
 
 
@@ -552,6 +610,8 @@ function statusMessage(result) {
       return msg;
     case "combine":
       return "Combining frames with audio";
+    case "subtitles":
+      return "Overlaying subtitles";
     case "ready":
       return "Cleaning up";
     default:

@@ -352,28 +352,48 @@ function fetchAudioFile(url) {
 
 }
 
+function generateTranscript(blob) {
+
+  var upload = jQuery('#input-audio').get(0);
+  var audioFile = blob || upload.files[0];
+
+  d3.select("#transcript").classed("loading", true);
+  transcript.generate(audioFile);
+
+}
+
 function updateAudioFile(blob) {
 
-  var input = jQuery('#input-audio').get(0);
-
   d3.select("#row-audio").classed("error", false);
-
   audio.pause();
   video.kill();
 
+  var upload = jQuery('#input-audio').get(0);
+
   // Skip if empty
-  if ( blob===false || (blob===undefined && (!input.files || !input.files[0])) ) {
+  if ( blob===false || (blob===undefined && (!upload.files || !upload.files[0])) ) {
     d3.select("#minimap").classed("hidden", true);
     preview.file(null);
     setClass(null);
     return true;
   }
 
+  var audioFile = blob || upload.files[0];
+
+  console.log("updateAudioFile: " + audioSource);
+
+  if (audioSource!="vcs") {
+    clearTimeout(vcsTranscriptTimeout);
+    generateTranscript(audioFile);
+  }
+
+  d3.select("#splash").classed("hidden", true);
+  d3.selectAll("#subtitles, #transcript").classed("hidden", false);
+
   d3.select("#loading-message").text("Analyzing...");
 
   setClass("loading");
 
-  var audioFile = blob || input.files[0];
 
   preview.loadAudio(audioFile, function(err){
 

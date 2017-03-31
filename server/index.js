@@ -12,6 +12,7 @@ var logger = require("../lib/logger/"),
     render = require("./render.js"),
     status = require("./status.js"),
     fonts = require("./fonts.js"),
+    kaldi = require("./kaldi.js"),
     errorHandlers = require("./error.js");
 
 // Settings
@@ -71,6 +72,9 @@ if (serverSettings.fonts) {
 // Check the status of a current video
 app.get("/status/:id/", status);
 
+// Handle kaldi transcripts
+app.post("/kaldi/", [multer(fileOptions).fields([{ name: 'audio', maxCount: 1 }]), kaldi.post]);
+app.get("/kaldi/:job/", kaldi.get);
 
 // Serve background images and themes JSON statically
 app.use("/settings/", function(req, res, next) {

@@ -5,7 +5,8 @@ var d3 = require("d3"),
     sampleWave = require("./sample-wave.js"),
     logger = require("../lib/logger/"),
     getRenderer = require("../renderer/"),
-    getWaveform = require("./waveform.js");
+    getWaveform = require("./waveform.js"),
+    transcript = require("./transcript.js");
 
 var context = d3.select("canvas").node().getContext("2d");
 
@@ -113,8 +114,10 @@ function redraw() {
 
   renderer.drawFrame(context, {
     caption: caption,
+    transcript: transcript.toJSON(),
     waveform: sampleWave,
     backgroundInfo: backgroundInfo,
+    preview: true,
     frame: 0
   });
 

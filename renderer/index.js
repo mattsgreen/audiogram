@@ -1,13 +1,12 @@
 var d3 = require("d3"),
     patterns = require("./patterns.js"),
-    textWrapper = require("./text-wrapper.js");
+    subtitles = require("./subtitles.js");
 
 module.exports = function(t) {
 
   var renderer = {},
       backgroundImage,
       bbcDog,
-      wrapText,
       theme;
 
   renderer.backgroundImage = function(_) {
@@ -36,8 +35,6 @@ module.exports = function(t) {
     if (typeof theme.waveBottom !== "number") theme.waveBottom = theme.height;
     if (typeof theme.waveLeft !== "number") theme.waveLeft = 0;
     if (typeof theme.waveRight !== "number") theme.waveRight = theme.width;
-
-    wrapText = textWrapper(theme);
 
     return this;
   };
@@ -84,9 +81,17 @@ module.exports = function(t) {
 
     patterns[theme.pattern || "wave"](context, options.waveform, theme);
 
-    // Write the caption
-    if (options.caption) {
-      wrapText(context, options.caption === "undefined" ? "" : options.caption);
+    // Write subtitles
+    if (options.transcript) {
+      var currenTime = options.frame / options.fps;
+      subtitles.transcript(options.transcript);
+      subtitles.draw(context, {
+        theme: theme,
+        time: currenTime,
+        offset: options.start,
+        end: options.end,
+        preview: options.preview
+      });
     }
 
     return this;

@@ -94,6 +94,7 @@ function submitted() {
   }
   formData.append("theme", JSON.stringify($.extend({}, theme, { backgroundImageFile: null })));
   formData.append("caption", caption);
+  formData.append("transcript", JSON.stringify(transcript.toJSON()));
 
   setClass("loading");
   d3.select("#loading-message").text("Uploading audio...");
@@ -609,6 +610,8 @@ function statusMessage(result) {
       return msg;
     case "combine":
       return "Combining frames with audio";
+    case "subtitles":
+      return "Overlaying subtitles";
     case "ready":
       return "Cleaning up";
     default:

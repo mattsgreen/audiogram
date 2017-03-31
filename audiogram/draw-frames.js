@@ -32,8 +32,12 @@ function drawFrames(renderer, options, cb) {
 
     renderer.drawFrame(context, {
       caption: options.caption,
+      transcript: options.transcript,
       waveform: options.waveform[frameNumber],
       backgroundInfo: options.backgroundInfo,
+      start: options.start,
+      end: options.end,
+      fps: options.fps,
       frame: frameNumber
     });
 

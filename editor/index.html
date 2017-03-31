@@ -220,20 +220,20 @@
                 </label>
               </div>
             </div>
-
-
-
           </section>
 
 
 
-          <section class="well">
+          <section id="transcript" class="well hidden">
             <div class="page-header">
-              <h1>Editable Transcription</h1>
+              <h1 style="display: inline-block">Transcript</h1>
+              <span class="right">Edit typos/punctuation manually below</span>
             </div>
-            <label><input id="warningsoth2" value="RFI" class="form-control-option" name="warnings[tier1][oth]" type="checkbox"> burn subtitles onto video</label>
-            <hr>
-
+            <transcript></transcript>
+            <div class="loading">
+              The transcript for this clip is waiting in a queue to be processed.<br/>
+              It will appear here automatically when ready.
+            </div>
           </section>
 
           </div>

@@ -1,3 +1,76 @@
+
+.transcript-editor {
+  border: 1px solid #ddd;
+  padding: 15px;
+  cursor: text;
+}
+
+.transcript-editor-block {
+  display: flex;
+  margin-bottom: 10px;
+}
+
+.transcript-editor-block__speaker {
+  width: 100px;
+}
+
+.transcript-editor-block__text {
+  flex: 1;
+  line-height: 1.7;
+}
+
+.transcript-editor-block__word {
+  background-color: #d4eaff;
+  border: 1px solid #ddd;
+  padding: 0 2px;
+}
+
+.transcript-editor-block__word.unused {
+  opacity: 0.5;
+  background-color: #eee;
+}
+
+.transcript-editor-block__word.played:not(.unused) {
+  background-color: #aad4ff;
+}
+
+.transcript-editor-block__word::-moz-selection{
+  background-color: #b63838;
+}
+.transcript-editor-block__word::selection{
+  background-color: #b63838;
+}
+
+#transcript .transcript-editor-block__space,
+#transcript .transcript-editor-block__space *{
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+#transcript.loading transcript,
+#transcript:not(.loading) .loading{
+  display: none;
+}
+
+#transcript .loading,
+#transcript .new  {
+  text-align: center;
+  color: #999;
+  padding: 50px 0;
+}
+
+#transcript .new button{
+  margin-top: 10px;
+}
+
+
+
+
+
+
+
 div.wrapper {
   width: 100%;
   padding: 20px;

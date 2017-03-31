@@ -10,7 +10,6 @@
     "start": "bin/server",
     "debug": "DEBUG=1 bin/server",
     "worker": "bin/worker",
-
     "build": "mkdir -p editor/js && browserify client/index.js > editor/js/bundle.js",
     "watch": "mkdir -p editor/js && watchify client/index.js -o editor/js/bundle.js",
     "test": "rm -rf test/tmp && tape 'test/**/*-test.js'"
@@ -39,9 +38,14 @@
     "multer": "1.3.0",
     "node-ffprobe": "1.2.2",
     "node-uuid": "1.4.7",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
     "redis": "2.6.5",
+    "request": "^2.81.0",
     "rimraf": "2.5.4",
     "smartquotes": "1.0.0",
+    "transcript-editor": "^0.2.0",
+    "transcript-model": "^0.2.1",
     "underscore": "1.8.3",
     "webaudio-peaks": "0.0.5",
     "winston": "2.3.1"

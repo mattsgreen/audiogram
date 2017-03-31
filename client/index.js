@@ -7,7 +7,9 @@ var d3 = require("d3"),
     audio = require("./audio.js");
 global.jQuery = $;
 
-var backgroundFile;
+var backgroundFile,
+    vcsTranscriptTimeout,
+    audioSource = "vcs";
 
 d3.json("/settings/themes.json", function(err, themes){
 
@@ -312,21 +314,27 @@ function windowResize() {
 }
 
 function sourceUpdate() {
-  if (this.href.endsWith("vcs")) {
+  audioSource = this.href.split("-").pop();
+  console.log("audioSource: " + audioSource);
+  if (audioSource == "vcs") {
     if (jQuery("#vcs-results input:radio").length) {
       fetchAudioFile(jQuery("#vcs-results input:radio").val());
     } else {
       updateAudioFile(false);
     }
-  } else if (this.href.endsWith("upload")) {
+  } else if (audioSource == "upload") {
     updateAudioFile();
   } 
 }
 
 function fetchAudioFile(url) {
+
   if ( url.startsWith("https://vcsio.newslabs.co") ) {
+
     d3.select("#loading-message").text("Fetching Audio...");
     setClass("loading");
+
+    // Get aduio
     var blob = null;
     var xhr = new XMLHttpRequest(); 
     xhr.open("GET", url); 
@@ -335,7 +343,13 @@ function fetchAudioFile(url) {
         updateAudioFile(xhr.response);
     }
     xhr.send();
+
+    // Get transcript
+    clearTimeout(vcsTranscriptTimeout);
+    vcsTranscript(url.split("/").pop());
+
   }
+
 }
 
 function updateAudioFile(blob) {
@@ -376,30 +390,52 @@ function updateAudioFile(blob) {
 
 }
 
+function vcsTranscript(id) {
+  $.getJSON( "https://vcsio.newslabs.co/vcs/transcript/" + id, function( data ) {
+    var loaded = data.hasOwnProperty("commaSegments");
+    if (loaded) {
+      transcript.load(data);
+      d3.select("#transcript").classed("loading", false);
+    } else {
+      vcsTranscriptTimeout = setTimeout(function(){vcsTranscript(id)},10000);
+    }
+  });
+}
+
 function vcsSearch() {
+
   var item = d3.select("#input-vcs").property("value");
   d3.select("#loading-message").text("Searching VCS...");
   setClass("loading");
+
   $.getJSON( "https://vcsio.newslabs.co/vcs/search/" + item, function( data ) {
-    var file = data[0].mediaurl;
-    // LOAD AUDIO
+
+    // Load audio
+    fetchAudioFile(data[data.length - 1].mediaurl);
+
     d3.select("#vcs-results").html("");
     for (var i = data.length - 1; i >= 0; i--) {
+      var checked = (i == data.length - 1) ? "checked" : null;
       var disp = data[i].file.split("#").pop() + " [" + data[i].vcsinfo.take.GENERIC.GENE_LOGSTORE.split("$").pop() + "]";
-      var option = "<div class='form-check'> <label class='form-check-label'> <input class='form-check-input' type='radio' name='vcs-item' value='" + data[i].mediaurl + "' checked> " + disp + " </label> </div>";
-      d3.select("#vcs-results").insert("div").html(option);
-      if (i==0) fetchAudioFile(data[i].mediaurl);
+      var option = "<div class='form-check'> <label class='form-check-label'> <input class='form-check-input' type='radio' name='vcs-item' value='" + data[i].mediaurl + "' " + checked + "> " + disp + " </label> </div>";
+      d3.select("#vcs-results").insert("div").html(option).classed("error", false);
     }
+
   }).fail(function(jqXHR, textStatus, errorThrown) {
+
     if (jqXHR.status==404) {
-      d3.select("#vcs-results").html("<b>That item wasn't found.</b><br/>Make sure your item is saved in a logstore that auto-exports to the S-drive.");
+      d3.select("#vcs-results").html("<b>That item wasn't found.</b><br/>Make sure your item is saved in a logstore that auto-exports to the S-drive.").classed("error", true);
     } else {
-      d3.select("#vcs-results").html("<b>There was an error searching for that item.</b><br/>Check it was correctly formated, or try again.");
+      d3.select("#vcs-results").html("<b>There was an error searching for that item.</b><br/>Check it was correctly formated, or try again.").classed("error", true);
     }
     setClass(null);
+
   }).complete(function(){
+
     d3.select("#vcs-results").classed("hidden", false);
+
   });
+
 }
 
 

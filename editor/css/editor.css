@@ -184,14 +184,14 @@ input[type='submit']:active {
   box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
 }
 
-#tip {
+.tip {
   color: #333;
   font-size: 13px;
   line-height: 13px;
   text-align: left;
 }
 
-#tip a {
+.tip a {
   text-decoration: underline;
 }
 
@@ -278,8 +278,12 @@ i.fa-play {
   font-size: 13px;
 }
 
-#error {
+#error,
+#vcs-results.error {
   color: #c00;
+}
+
+#error {
   font-weight: 600;
 }
 

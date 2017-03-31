@@ -65,6 +65,8 @@ minimap.onBrush(function(extent){
     x2 -= diff/2;
   }
 
+  transcript.highlight((selection.start || 0),(selection.end || selection.duration));
+
   d3.select("#start")
     .property("value", Math.round(100 * (selection.start || 0) ) / 100 )
     .style("left", x1+"px");

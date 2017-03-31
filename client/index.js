@@ -197,7 +197,7 @@ function initialize(err, themesWithImages) {
 
   // Key listeners
   d3.select(document).on("keydown", function(){
-    if (!d3.select("body").classed("rendered") && !d3.matcher("input, textarea, button, select").call(d3.event.target)) {
+    if (!d3.select("body").classed("rendered") && !d3.matcher("input, textarea, button, select, [contenteditable='true']").call(d3.event.target)) {
       let start = audio.extent()[0]*audio.duration(),
           end = audio.extent()[1]*audio.duration(),
           duration = audio.duration();
@@ -255,10 +255,10 @@ function initialize(err, themesWithImages) {
       }
     }
   });
-  d3.select("#tip a").on("click", function(){
+  d3.select("#controls .tip a").on("click", function(){
     d3.select("#shortcuts").style("display", null);
-    d3.select("#tip").insert("span","a").text(d3.select("#tip a").text());
-    d3.select("#tip a").remove();
+    d3.select("#controls .tip").insert("span","a").text(d3.select("#tip a").text());
+    d3.select("#controls .tip a").remove();
     stopIt(d3.event);
   });
 

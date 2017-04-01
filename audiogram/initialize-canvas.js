@@ -11,10 +11,12 @@ function initializeCanvas(theme, cb) {
   // Fonts pre-registered in bin/worker
   var renderer = getRenderer(theme);
 
-  // TODO if a theme has a background image (perhaps a default) use that one in preference
-  // if (!(theme.customBackgroundPath || theme.backgroundImage)) {
-  //   return cb(null, renderer);
-  // }
+  var bgPath;
+  if (!theme.customBackgroundPath && theme.backgroundImage) {
+    bgPath = path.join(__dirname, "..", "settings", "backgrounds", theme.backgroundImage);
+  } else {
+    bgPath = path.join(serverSettings.storagePath, theme.customBackgroundPath);
+  }
 
   // Load BBC watermark
   var dog = new Canvas.Image;
@@ -22,7 +24,7 @@ function initializeCanvas(theme, cb) {
   renderer.bbcDog(dog);
 
   // Load background image from file (done separately so renderer code can work in browser too)
-  fs.readFile(path.join(serverSettings.storagePath, theme.customBackgroundPath), function(err, raw){
+  fs.readFile(bgPath, function(err, raw){
     if (err) {
       return cb(err);
     }

@@ -41,19 +41,20 @@ function route(req, res) {
 
   console.log("RLW routing");
 
-  var audioFile = req.files['audio'][0];
-  var audioId = audioFile.destination.split(path.sep).pop();
 
-  var backgroundFile = req.files['background'][0];
-  var backgroundId = backgroundFile.destination.split(path.sep).pop();
-  var backgroundImagePath = "background/" + backgroundId
+  if (req.files['background']) {
+    var backgroundFile = req.files['background'][0],
+        backgroundId = backgroundFile.destination.split(path.sep).pop(),
+        backgroundImagePath = "background/" + backgroundId;
+    transports.uploadBackground(path.join(backgroundFile.destination, "background"), backgroundImagePath, function(err) {
+      if (err) {
+        throw err;
+      }
+    });
+  }
 
-  transports.uploadBackground(path.join(backgroundFile.destination, "background"), backgroundImagePath, function(err) {
-    if (err) {
-      throw err;
-    }
-  });
-
+  var audioFile = req.files['audio'][0],
+      audioId = audioFile.destination.split(path.sep).pop();
   transports.uploadAudio(path.join(audioFile.destination, "audio"), "audio/" + audioId, function(err) {
 
     if (err) {

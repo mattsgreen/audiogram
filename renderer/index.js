@@ -56,7 +56,7 @@ module.exports = function(t) {
     context.fillStyle = theme.backgroundColor;
     context.fillRect(0, 0, theme.width, theme.height);
 
-    if (backgroundImage) {
+    if (backgroundImage && options.backgroundInfo) {
       var h, w, r,
           H, W, R;
       // Source dimensions

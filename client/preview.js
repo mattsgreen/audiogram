@@ -22,7 +22,11 @@ function _file(_) {
 }
 
 function _background(_) {
-  return arguments.length ? background = _ : background;
+  if (arguments.length) {
+    background = _;
+    if (background==null) redraw();
+  }
+  return background;
 }
 
 function _backgroundInfo(_) {
@@ -112,13 +116,14 @@ function redraw() {
   var renderer = getRenderer(theme);
 
   renderer.bbcDog(bbcDog || null);
-  renderer.backgroundImage(background || null);
+
+  renderer.backgroundImage(background || theme.backgroundImageFile);
 
   renderer.drawFrame(context, {
     caption: caption,
     transcript: transcript.toJSON(),
     waveform: sampleWave,
-    backgroundInfo: backgroundInfo,
+    backgroundInfo: backgroundInfo || theme.backgroundImageInfo,
     preview: true,
     frame: 0
   });

@@ -62,7 +62,7 @@ function submitted() {
       caption = preview.caption(),
       selection = preview.selection(),
       backgroundInfo = preview.backgroundInfo(),
-      audioFile = preview.file()
+      audioFile = preview.file();
 
   if (!audioFile) {
     d3.select("#row-audio").classed("error", true);
@@ -84,7 +84,7 @@ function submitted() {
 
   formData.append("audio", audioFile);
   formData.append("background", backgroundFile);
-  formData.append("backgroundInfo", JSON.stringify(backgroundInfo));
+  formData.append("backgroundInfo", JSON.stringify(backgroundInfo || theme.backgroundImageInfo));
   if (selection.start || selection.end) {
     formData.append("start", selection.start);
     formData.append("end", selection.end);
@@ -567,6 +567,7 @@ function preloadImages(themes) {
 
     theme.backgroundImageFile = new Image();
     theme.backgroundImageFile.onload = function(){
+      theme.backgroundImageInfo = {type: "image", height: this.height, width: this.width};
       return cb(null, theme);
     };
     theme.backgroundImageFile.onerror = function(e){

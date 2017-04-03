@@ -35,6 +35,7 @@ d3.json("/settings/themes.json", function(err, themes){
   }
 
   for (var key in themes) {
+    if (key!="default") themes[key]["raw"] = themes[key];
     themes[key] = $.extend({}, themes.default, themes[key]);
   }
 
@@ -559,7 +560,8 @@ function updateTheme() {
       }
     }
   });
-  d3.select("#row-background").classed("hidden", theme.backgroundImage);
+  d3.select("#row-background").classed("hidden", theme.raw.backgroundImage);
+  d3.select("#row-wave").classed("hidden", theme.raw.wave);
 }
 
 function updateThemeConfig() {

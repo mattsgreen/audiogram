@@ -292,7 +292,7 @@ function initialize(err, themesWithImages) {
   });
 
   // If there's an initial background image (e.g. back button) load it
-  d3.select("#input-background").on("change", updateBackground).each(updateBackground); //try deleting the each and see if it all still works. claim biscuit prize from squio
+  jQuery(document).on('change', '#input-background', updateBackground);
 
   if (params.vcs) {
     fetchAudioFile(parms.vcs);
@@ -408,6 +408,14 @@ function updateAudioFile(blob) {
 
     d3.selectAll("#minimap, #submit").classed("hidden", !!err);
 
+    if (audioFile.type.startsWith("video")) {
+      setTimeout(function(){
+        if (confirm("\nThe audio from this video has been extracted.\n\nIf you would also like to use the video as the Audiogram background, click OK.\n")) {
+          jQuery("#input-background")[0].files = jQuery("#input-audio")[0].files;
+        }
+      },250);
+    }
+
   });
 
 }
@@ -467,6 +475,8 @@ function updateBackground() {
     // Skip if empty
     if (!this.files || !this.files[0]) {
         preview.background(null);
+        var input = jQuery("#input-background");
+        input.replaceWith(input.val('').clone(true));
         setClass(null);
         return true;
     }
@@ -533,8 +543,8 @@ function updateTrim(extent) {
 
 function updateTheme() {
   var theme = d3.select(this.options[this.selectedIndex]).datum();
-  console.log(theme);
   preview.theme(theme);
+  updateBackground();
   // Reset custom config fields
   jQuery(".themeConfig").each(function() {
     if (this.name!="size") {

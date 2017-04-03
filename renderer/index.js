@@ -70,10 +70,25 @@ module.exports = function(t) {
       // Draw
       if (r===R) {
         context.drawImage(backgroundImage, 0, 0, W, H);
-      } else if ( (R>1 && r<1) || (R<1 && r>1) || (R==1 && r<1) ) {
-        context.drawImage(backgroundImage, 0, (h-(w/R))/2, w, (w/R), 0, 0, W, H); // Crop & vertical align
+      // } else if ( (R>1 && r<1) || (R<1 && r>1) || (R==1 && r<1) ) {
+      } else if ( (R>1 && r<1) || (R>1 && r>1 && R>r) || (R==1 && r<1) ) {
+        // Vertical align
+        if (theme.cropAnchor.y=="top") {
+          context.drawImage(backgroundImage, 0, 0, w, (w/R), 0, 0, W, H);
+        } else if (theme.cropAnchor.y=="bottom") {
+          context.drawImage(backgroundImage, 0, (h-(w/R))/2, w, (w/R), 0, 0, W, H);
+        } else {
+          context.drawImage(backgroundImage, 0, (h-(w/R)), w, (w/R), 0, 0, W, H);
+        }
       } else {
-        context.drawImage(backgroundImage, (w-(h*R))/2, 0, (h*R), h, 0, 0, W, H); // Crop & horizontal align
+        // Horizontal align
+        if (theme.cropAnchor.x=="left") {
+          context.drawImage(backgroundImage, 0, 0, (h*R), h, 0, 0, W, H);
+        } else if (theme.cropAnchor.x=="right") {
+          context.drawImage(backgroundImage, (w-(h*R)), 0, (h*R), h, 0, 0, W, H);
+        } else {
+          context.drawImage(backgroundImage, (w-(h*R))/2, 0, (h*R), h, 0, 0, W, H);
+        }
       }
     }
 

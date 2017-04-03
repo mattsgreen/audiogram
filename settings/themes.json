@@ -29,6 +29,10 @@
       },
       "lineSpacing": 10
     },
+    "cropAnchor": {
+      "y": "middle",
+      "x": "center"
+    },
     "backgroundColor": "#eee"
   },
   "Custom" :{

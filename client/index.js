@@ -189,6 +189,9 @@ function initialize(err, themesWithImages) {
   // Get initial theme
   d3.select("#input-theme").each(updateTheme);
 
+  // Edit theme config
+  d3.selectAll(".themeConfig").on("change", updateThemeConfig).each(updateThemeConfig);
+
   // Get initial caption (e.g. back button)
   d3.select("#input-caption").on("change keyup", updateCaption).each(updateCaption);
 
@@ -302,8 +305,6 @@ function initialize(err, themesWithImages) {
   });
 
   d3.select("#submit").on("click", submitted);
-
-  d3.select("#input-background-type").on("change", updateBackgroundType).each(updateBackgroundType);
 
   d3.select(window).on("resize", windowResize).each(windowResize);;
 
@@ -459,12 +460,6 @@ function vcsSearch() {
 
 }
 
-
-function updateBackgroundType() {
-  d3.selectAll(".input-background-type").classed("hidden", true);
-  d3.selectAll("#input-background-type-" + this.value).classed("hidden", false);
-}
-
 function updateBackground() {
 
     d3.select("#row-background").classed("error", false);
@@ -537,7 +532,18 @@ function updateTrim(extent) {
 }
 
 function updateTheme() {
-  preview.theme(d3.select(this.options[this.selectedIndex]).datum());
+  var theme = d3.select(this.options[this.selectedIndex]).datum();
+  console.log(theme);
+  preview.theme(theme);
+  // Reset custom config fields
+  jQuery(".themeConfig").each(function() {
+    if (this.name!="size") this.value = theme[this.name];
+  });
+  d3.select("#row-background").classed("hidden", theme.backgroundImage);
+}
+
+function updateThemeConfig() {
+  preview.themeConfig(this.name,this.value);
 }
 
 function preloadImages(themes) {

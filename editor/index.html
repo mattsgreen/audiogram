@@ -247,35 +247,64 @@
           <section class="well" style="border: none;">
             <div class="row">
               <div class="col-md-3">
+                <label class="settings" for="input-background">Theme:</label>
+              </div>
+              <div class="col-md-9">
+                <label class="intGEL-arrow" for="input-theme">
+                  <select id="input-theme" name="theme" class="form-control"></select>
+                </label>
+              </div>
+            </div>
+            <div id="row-background" class="row">
+              <hr>
+              <div class="col-md-3">
                 <label class="settings" for="input-background">Background:</label>
               </div>
               <div class="col-md-9">
-                <label class="intGEL-arrow" for="myselectTwo">
-                  <select id="input-background-type" name="background-type" class="form-control">
-                    <option disabled>Select design type:</option>
-                    <option>Generic</option>
-                    <option value="file" selected>Upload image/video</option>
-                    <option value="slideshow">Image slideshow</option>
-                    <option value="interview">Two-person interview</option>
-                  </select>
-                </label>
                 <div id="input-background-type-file" class="input-background-type" style="margin-top: 10px;">
                   <input id="input-background" name="background" type="file" />
                 </div>
               </div>
             </div>
-            <hr>
             <div class="row">
+              <hr>
               <div class="col-md-3">
-                <label class="settings" for="input-background">Size:</label>
+                <label class="settings" for="input-size">Audio Wave:</label>
+              </div>
+              <div class="col-md-7">
+                <label class="intGEL-arrow" for="input-size">
+                  <select id="input-pattern" name="pattern" class="themeConfig form-control">
+                    <option value="wave" selected>Wave</option>
+                    <option value="line">Line</option>
+                    <option value="curve">Curved Line</option>
+                    <option value="bars">Bars</option>
+                    <option value="pixel">Pixels</option>
+                    <option value="bricks">Bricks</option>
+                  </select>
+                </label>
+              </div>
+              <div class="col-md-2">
+                <input type="color" id="input-color" class="themeConfig" name="waveColor" value="#942924">
+              </div>
+            </div>
+            <div class="row">
+              <hr>
+              <div class="col-md-3">
+                <label class="settings" for="input-size">Size:</label>
               </div>
               <div class="col-md-9">
-                <label class="intGEL-arrow" for="myselectTwo">
-                  <select id="input-theme" name="theme" class="form-control"></select>
+                <label class="intGEL-arrow" for="input-size">
+                  <select id="input-size" name="size" class="themeConfig form-control">
+                    <option value="1920x1080" selected>Landscape 16:9 (1920x1080)</option>
+                    <option value="1280x720">Landscape 16:9 (1280x720)</option>
+                    <option value="1080x1080">Square 1:1 (1080x1080)</option>
+                    <option value="640x640">Square 1:1 (640x640)</option>
+                    <option value="1080x1920">Portrait 9:16 (1080x1920)</option>
+                    <option value="720x1280">Portrait 9:16 (720x1280)</option>
+                  </select>
                 </label>
               </div>
             </div>
-
 
           </section>
 

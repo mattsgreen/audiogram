@@ -113,6 +113,11 @@ label.settings {
     font-size: 12px;
 }
 
+input[type='color']{
+  height: 33px;
+  width: 100%;
+}
+
 
 .btn-group {
   width: 100%;

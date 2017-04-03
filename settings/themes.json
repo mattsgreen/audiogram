@@ -13,6 +13,7 @@
       "x": 0.5
     },
     "foregroundColor": "#942924",
+    "waveColor": "#942924",
     "subtitles" : {
       "bottom": 650,
       "left": 0,
@@ -30,24 +31,12 @@
     },
     "backgroundColor": "#eee"
   },
-  "Select social media destination": {
-    "width": 1280,
-    "height": 720
+  "Custom" :{
+
   },
-  "Custom Image - Facebook (1280x720)": {
-    "width": 1280,
-    "height": 720
-  },
-  "Custom Image - Twitter (1280 x 720)": {
-    "width": 1280,
-    "height": 720
-  },
-  "Custom Image - Instagram (640 x 640)": {
-    "width": 640,
-    "height": 640
-  },
-  "Custom Image - Desktop 16:9 (1920 x 1080)": {
-    "width": 1920,
-    "height": 1080,
+  "Radio 4 - Today - Default": {
+    "pattern": "bars",
+    "backgroundImage": "R4Today_landscape.png",
+    "waveColor": "#dcac2a"
   }
 }

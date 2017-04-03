@@ -37,6 +37,18 @@ function _theme(_) {
   return arguments.length ? (theme = _, redraw()) : theme;
 }
 
+function _themeConfig(prop,val) {
+  if (arguments.length>1) {
+    if (prop=="size") {
+      [theme.width, theme.height] = val.split("x");
+    } else {
+      theme[prop] = val;
+    }
+    redraw();
+  }
+  return theme[prop];
+}
+
 function _caption(_) {
   return arguments.length ? (caption = _, redraw()) : caption;
 }
@@ -152,6 +164,7 @@ function loadAudio(audioFile, cb) {
 module.exports = {
   caption: _caption,
   theme: _theme,
+  themeConfig: _themeConfig,
   file: _file,
   background: _background,
   backgroundInfo: _backgroundInfo,

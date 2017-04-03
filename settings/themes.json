@@ -7,13 +7,13 @@
     "samplesPerFrame": 128,
     "pattern": "wave",
     "wave" : {
+      "color" : "#942924",
       "height": 0.28,
       "width": 1,
       "y": 0.5,
       "x": 0.5
     },
     "foregroundColor": "#942924",
-    "waveColor": "#942924",
     "subtitles" : {
       "enabled": true,
       "bottom": 650,
@@ -42,6 +42,8 @@
   "Radio 4 - Today - Default": {
     "pattern": "bars",
     "backgroundImage": "R4Today_landscape.png",
-    "waveColor": "#dcac2a"
+    "wave": {
+      "color": "#dcac2a"
+    }
   }
 }

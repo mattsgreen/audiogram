@@ -27,7 +27,7 @@ module.exports = function(t) {
 
     // Default colors
     theme.backgroundColor = theme.backgroundColor || "#fff";
-    theme.waveColor = theme.waveColor || theme.foregroundColor || "#000";
+    theme.waveColor = theme.wave.color || theme.foregroundColor || "#000";
     theme.captionColor = theme.captionColor || theme.foregroundColor || "#000";
 
     // Default wave position/size

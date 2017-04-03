@@ -543,7 +543,7 @@ function updateTheme() {
 }
 
 function updateThemeConfig() {
-  preview.themeConfig(this.name,this.value);
+  preview.themeConfig( this.name, (this.type=="checkbox" ? this.checked : this.value) );
 }
 
 function preloadImages(themes) {

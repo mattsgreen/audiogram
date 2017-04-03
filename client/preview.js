@@ -42,7 +42,17 @@ function _themeConfig(prop,val) {
     if (prop=="size") {
       [theme.width, theme.height] = val.split("x");
     } else {
-      theme[prop] = val;
+      // XXX hack to set subproperties (eg: theme.prop.subprob) without the use of `eval`. Need a nicer wary of doing it.
+      prop = prop.split(".");
+      if (prop.length==1) {
+        theme[prop[0]] = val;
+      } else if (prop.length==2) {
+        theme[prop[0]][prop[1]] = val;
+      } else if (prop.length==3) {
+        theme[prop[0]][prop[1]][prop[2]] = val;
+      } else {
+        return false;
+      }
     }
     redraw();
   }

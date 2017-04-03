@@ -219,13 +219,22 @@
 
           <section id="transcript" class="well hidden">
             <div class="page-header">
-              <h1 style="display: inline-block">Transcript</h1>
-              <span class="right">Edit typos/punctuation manually below</span>
+              <input id="input-subtitles" class="themeConfig" type="checkbox" name="subtitles.enabled" value="true" checked> 
+              <h1 style="display: inline-block">
+                <label for="input-subtitles">
+                  Overlay Subtitles
+                </label>
+              </h1>
             </div>
-            <transcript></transcript>
-            <div class="loading">
-              The transcript for this clip is waiting in a queue to be processed.<br/>
-              It will appear here automatically when ready.
+            <div id="transcript-pane">
+              <div class="tip" style="margin: -5px 0 10px 0;">
+                You can edit the transcription manually below. Highlight text to select the corresponding audio clip.
+              </div>
+              <transcript></transcript>
+              <div class="loading">
+                The transcript for this clip is waiting in a queue to be processed.<br/>
+                It will appear here automatically when ready.
+              </div>
             </div>
           </section>
 

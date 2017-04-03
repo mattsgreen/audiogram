@@ -15,6 +15,7 @@
     "foregroundColor": "#942924",
     "waveColor": "#942924",
     "subtitles" : {
+      "enabled": true,
       "bottom": 650,
       "left": 0,
       "right": 1280,

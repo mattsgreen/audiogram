@@ -190,7 +190,7 @@ function initialize(err, themesWithImages) {
   d3.select("#input-theme").each(updateTheme);
 
   // Edit theme config
-  d3.selectAll(".themeConfig").on("change", updateThemeConfig).each(updateThemeConfig);
+  d3.selectAll(".themeConfig").on("change", updateThemeConfig);
 
   // Get initial caption (e.g. back button)
   d3.select("#input-caption").on("change keyup", updateCaption).each(updateCaption);
@@ -537,13 +537,24 @@ function updateTheme() {
   preview.theme(theme);
   // Reset custom config fields
   jQuery(".themeConfig").each(function() {
-    if (this.name!="size") this.value = theme[this.name];
+    if (this.name!="size") {
+      // XXX hack to set subproperties (eg: theme.prop.subprob) without the use of `eval`. Need a nicer wary of doing it.
+      prop = this.name.split(".");
+      if (prop.length==1) {
+        this.value = theme[prop[0]];
+      } else if (prop.length==2) {
+        this.value = theme[prop[0]][prop[1]];
+      } else if (prop.length==3) {
+        this.value = theme[prop[0]][prop[1]][prop[2]];
+      }
+    }
   });
   d3.select("#row-background").classed("hidden", theme.backgroundImage);
 }
 
 function updateThemeConfig() {
   preview.themeConfig( this.name, (this.type=="checkbox" ? this.checked : this.value) );
+  if (this.name=="subtitles.enabled") d3.select("#transcript-pane").classed("hidden", !this.checked);
 }
 
 function preloadImages(themes) {

@@ -43,7 +43,7 @@ function draw(context, options) {
               if (transcript.segments[i].words[j].end > options.end) {
                 break loopSegments;
               }
-              if (transcript.segments[i].words[j].start > offset) {
+              if (transcript.segments[i].words[j].start >= offset) {
                 wordLength = transcript.segments[i].words[j].text.length;
                 lineLength += wordLength;
                 if ( lineLength>lineWidth && (line+2)>linesMax ) {

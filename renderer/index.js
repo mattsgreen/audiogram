@@ -103,7 +103,7 @@ module.exports = function(t) {
     patterns[theme.pattern || "wave"](context, options.waveform, theme);
 
     // Write subtitles
-    if (options.transcript) {
+    if (theme.subtitles.enabled && options.transcript) {
       var currenTime = options.frame / options.fps;
       subtitles.transcript(options.transcript);
       subtitles.draw(context, {

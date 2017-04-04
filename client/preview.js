@@ -141,13 +141,13 @@ function redraw() {
 
   renderer.bbcDog(bbcDog || null);
 
-  renderer.backgroundImage(background || theme.backgroundImageFile ? theme.backgroundImageFile[theme.orientation] : null);
+  renderer.backgroundImage(background ? background : theme.backgroundImageFile ? theme.backgroundImageFile[theme.orientation] : null);
 
   renderer.drawFrame(context, {
     caption: caption,
     transcript: transcript.toJSON(),
     waveform: sampleWave,
-    backgroundInfo: backgroundInfo || theme.backgroundImageInfo ? theme.backgroundImageInfo[theme.orientation] : null,
+    backgroundInfo: (backgroundInfo ? backgroundInfo : theme.backgroundImageInfo ? theme.backgroundImageInfo[theme.orientation] : null),
     preview: true,
     frame: 0
   });

@@ -86,7 +86,7 @@ function submitted() {
 
   formData.append("audio", audioFile);
   formData.append("background", backgroundFile);
-  formData.append("backgroundInfo", JSON.stringify(backgroundInfo || theme.backgroundImageInfo));
+  formData.append("backgroundInfo", JSON.stringify(backgroundInfo || theme.backgroundImageInfo[theme.orientation]));
   if (selection.start || selection.end) {
     formData.append("start", selection.start);
     formData.append("end", selection.end);
@@ -94,7 +94,7 @@ function submitted() {
   } else {
     formData.append("duration", audio.duration());
   }
-  formData.append("theme", JSON.stringify($.extend({}, theme, { backgroundImageFile: null })));
+  formData.append("theme", JSON.stringify($.extend({}, theme, { backgroundImage: theme.backgroundImage[theme.orientation], backgroundImageFile: null })));
   formData.append("caption", caption);
   formData.append("transcript", JSON.stringify(transcript.toJSON()));
 
@@ -573,7 +573,7 @@ function updateThemeConfig() {
 function preloadImages(themes) {
 
   // preload images
-  var imageQueue = d3.queue();
+  var themeQueue = d3.queue();
 
   d3.entries(themes).forEach(function(theme){
 
@@ -582,30 +582,44 @@ function preloadImages(themes) {
     }
 
     if (theme.key !== "default") {
-      imageQueue.defer(getImage, theme.value);
+      themeQueue.defer(getImages, theme.value);
     }
 
   });
 
-  imageQueue.awaitAll(initialize);
+  themeQueue.awaitAll(initialize);
 
-  function getImage(theme, cb) { //Q. where does this cb get passed in??
+  function getImages(theme, cb) { //Q. where does this cb get passed in??
 
     if (!theme.backgroundImage) {
       return cb(null, theme);
     }
 
-    theme.backgroundImageFile = new Image();
-    theme.backgroundImageFile.onload = function(){
-      theme.backgroundImageInfo = {type: "image", height: this.height, width: this.width};
-      return cb(null, theme);
-    };
-    theme.backgroundImageFile.onerror = function(e){
-      console.warn(e);
-      return cb(null, theme);
-    };
+    var imageQueue = d3.queue();
 
-    theme.backgroundImageFile.src = "/settings/backgrounds/" + theme.backgroundImage;  //Q.  i thought there needs to be an explicit return statement.  or is this all side-effect making?
+    // Load background images
+    theme.backgroundImageFile = theme.backgroundImageFile || {};
+    theme.backgroundImageInfo = theme.backgroundImageInfo || {};
+    for(orientation in theme.backgroundImage){
+      // Load each image
+      imageQueue.defer(function(orientation, imgCb){
+        theme.backgroundImageFile[orientation] = new Image();
+        theme.backgroundImageFile[orientation].onload = function(){
+          theme.backgroundImageInfo[orientation] = {type: "image", height: this.height, width: this.width};
+          return imgCb(null);
+        };
+        theme.backgroundImageFile[orientation].onerror = function(e){
+          console.warn(e);
+          return imgCb(e);
+        };
+        theme.backgroundImageFile[orientation].src = "/settings/backgrounds/" + theme.backgroundImage[orientation];  //Q.  i thought there needs to be an explicit return statement.  or is this all side-effect making?
+      }, orientation);
+    }
+    // Finished loading this theme
+    imageQueue.await(function(err){
+      console.log("await");
+      return cb(err, theme);
+    });
 
   }
 

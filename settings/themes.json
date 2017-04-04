@@ -41,7 +41,11 @@
   },
   "Radio 4 - Today - Default": {
     "pattern": "bars",
-    "backgroundImage": "R4Today_landscape.png",
+    "backgroundImage": {
+      "landscape": "R4Today_landscape.png",
+      "portrait": "R4Today_portrait.png",
+      "square": "R4Today_square.png"
+    },
     "wave": {
       "color": "#dcac2a"
     }

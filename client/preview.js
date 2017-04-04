@@ -41,6 +41,7 @@ function _themeConfig(prop,val) {
   if (arguments.length>1) {
     if (prop=="size") {
       [theme.width, theme.height] = val.split("x");
+      [theme.width, theme.height] = [+theme.width, +theme.height];
     } else {
       // XXX hack to set subproperties (eg: theme.prop.subprob) without the use of `eval`. Need a nicer wary of doing it.
       prop = prop.split(".");
@@ -132,6 +133,7 @@ function resize(width, height) {
 function redraw() {
 
   resize(theme.width, theme.height);
+  theme.orientation = (theme.width==theme.height) ? "square" : (theme.width>theme.height) ? "landscape" : "portrait";
 
   video.kill(); //'ed the radio star...
 
@@ -139,13 +141,13 @@ function redraw() {
 
   renderer.bbcDog(bbcDog || null);
 
-  renderer.backgroundImage(background || theme.backgroundImageFile);
+  renderer.backgroundImage(background || theme.backgroundImageFile ? theme.backgroundImageFile[theme.orientation] : null);
 
   renderer.drawFrame(context, {
     caption: caption,
     transcript: transcript.toJSON(),
     waveform: sampleWave,
-    backgroundInfo: backgroundInfo || theme.backgroundImageInfo,
+    backgroundInfo: backgroundInfo || theme.backgroundImageInfo ? theme.backgroundImageInfo[theme.orientation] : null,
     preview: true,
     frame: 0
   });

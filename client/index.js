@@ -312,22 +312,8 @@ function initialize(err, themesWithImages) {
   // If there's an initial piece of audio (e.g. back button) load it
   d3.select("#input-audio").on("change", updateAudioFile).each(updateAudioFile);
 
-  // Search for VCS audio
-  d3.select("#vcs-search").on("click", vcsSearch);
-  d3.select("#input-vcs").on("keydown", function(){
-    if (d3.event.key == "Enter") vcsSearch();
-  });
-  // Select VCS audio
-  jQuery("#vcs-results").on('change','input:radio',function () {
-    vcsAudio(this.value);
-  });
-
   // If there's an initial background image (e.g. back button) load it
   jQuery(document).on('change', '#input-background', updateBackground);
-
-  if (params.vcs) {
-    fetchAudioFile(parms.vcs);
-  }
 
   d3.select("#return").on("click", function(){
     d3.event.preventDefault();
@@ -337,7 +323,20 @@ function initialize(err, themesWithImages) {
 
   d3.select("#submit").on("click", submitted);
 
-  d3.select(window).on("resize", windowResize).each(windowResize);;
+  d3.select(window).on("resize", windowResize).each(windowResize);
+
+  // Search for VCS audio
+  d3.select("#vcs-search").on("click", vcsSearch);
+  d3.select("#input-vcs").on("keydown", function(){
+    if (d3.event.key == "Enter") vcsSearch();
+  });
+  // Select VCS audio
+  jQuery("#vcs-results").on('change','input:radio',function () {
+    vcsAudio(this.value);
+  });
+  if (params.vcsid) {
+    vcsSearch(params.vcsid,params.vcs);
+  }
 
 }
 
@@ -468,9 +467,11 @@ function vcsAudio(url) {
 
 }
 
-function vcsSearch() {
+function vcsSearch(id, media) {
 
-  var item = d3.select("#input-vcs").property("value");
+  var item = id || d3.select("#input-vcs").property("value");
+  if (id) d3.select("#input-vcs").property("value", id);
+
   d3.select("#loading-message").text("Searching VCS...");
   setClass("loading");
 
@@ -480,11 +481,15 @@ function vcsSearch() {
     if (statusCode==200) {
       var items = JSON.parse(data.body);
       // Load audio
-      vcsAudio(items[items.length - 1].mediaurl);
+      vcsAudio(media || items[items.length - 1].mediaurl);
       // Write results
       d3.select("#vcs-results").html("");
       for (var i = items.length - 1; i >= 0; i--) {
-        var checked = (i == items.length - 1) ? "checked" : null;
+        if (media) {
+          var checked = (items[i].mediaurl.split("/").pop == media.split("/").pop) ? "checked" : null;
+        } else {
+          var checked = (i == items.length - 1) ? "checked" : null;
+        }
         var disp = items[i].file.split("#").pop() + " [" + items[i].vcsinfo.take.GENERIC.GENE_LOGSTORE.split("$").pop() + "]";
         var option = "<div class='form-check'> <label class='form-check-label'> <input class='form-check-input' type='radio' name='vcs-item' value='" + items[i].mediaurl + "' " + checked + "> " + disp + " </label> </div>";
         d3.select("#vcs-results").insert("div").html(option).classed("error", false);

@@ -13,6 +13,7 @@ var logger = require("../lib/logger/"),
     status = require("./status.js"),
     fonts = require("./fonts.js"),
     kaldi = require("./kaldi.js"),
+    vcs = require("./vcs.js"),
     errorHandlers = require("./error.js");
 
 // Settings
@@ -75,6 +76,11 @@ app.get("/status/:id/", status);
 // Handle kaldi transcripts
 app.post("/kaldi/", [multer(fileOptions).fields([{ name: 'audio', maxCount: 1 }]), kaldi.post]);
 app.get("/kaldi/:job/", kaldi.get);
+
+// VCS
+app.get("/vcs/search/:id/", vcs.search);
+app.get("/vcs/transcript/:id/", vcs.transcript);
+app.get("/vcs/media/:id/", vcs.media);
 
 // Serve background images and themes JSON statically
 app.use("/settings/", function(req, res, next) {

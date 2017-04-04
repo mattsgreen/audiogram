@@ -35,7 +35,8 @@ d3.json("/settings/themes.json", function(err, themes){
   }
 
   for (var key in themes) {
-    if (key!="default") themes[key]["raw"] = themes[key];
+    var raw = JSON.stringify(themes[key]);
+    if (key!="default") themes[key]["raw"] = JSON.parse(raw);
     themes[key] = $.extend({}, themes.default, themes[key]);
   }
 

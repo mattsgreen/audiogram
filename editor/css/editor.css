@@ -75,7 +75,20 @@
 }
 
 
+#row-theme:not(.config) #group-config {
+  display: none;
+}
 
+#row-theme.config #group-config {
+  width: 20%;
+  float: right;
+}
+#row-theme.config #group-theme {
+  width: 80%;
+}
+#row-theme #group-config i.fa {
+    margin: 0;
+}
 
 
 

@@ -194,6 +194,12 @@ function initialize(err, themesWithImages) {
   // Edit theme config
   d3.selectAll(".themeConfig").on("change", updateThemeConfig);
 
+  // Expand all theme config options
+  d3.select("#group-config button").on("click", function(){
+    jQuery("#section-theme .row:not(:visible)").removeClass("hidden");
+    d3.select("#row-theme").classed("config", false);
+  });
+
   // Get initial caption (e.g. back button)
   d3.select("#input-caption").on("change keyup", updateCaption).each(updateCaption);
 
@@ -561,8 +567,12 @@ function updateTheme() {
       }
     }
   });
+  // Show options for settings not specified in theme
   d3.select("#row-background").classed("hidden", theme.raw.backgroundImage);
   d3.select("#row-wave").classed("hidden", theme.raw.wave);
+  // Show all config options, if some are hidden
+  d3.select("#row-theme").classed("config", jQuery("#section-theme .row:not(:visible)").length);
+
 }
 
 function updateThemeConfig() {

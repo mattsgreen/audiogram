@@ -4,6 +4,7 @@
     <title>Audiogram</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://bbc.github.io/internalGEL/dist/internalgel-bootstrap.css">
     <!--<link rel="stylesheet" href="https://bbc.github.io/internalGEL/dist/internalgel-fonts.css">-->
@@ -237,7 +238,7 @@
                 <label id="group-theme" class="intGEL-arrow" for="input-theme">
                   <select id="input-theme" name="theme" class="form-control"></select>
                 </label>
-                <div id="group-config" class="btn-group">
+                <div id="group-theme-advanced" class="btn-group">
                   <button type="button" class="btn btn-secondary right"><i class="fa fa-cog"></i></button>
                 </div> 
               </div>
@@ -258,20 +259,44 @@
               <div class="col-md-3">
                 <label class="settings" for="input-size">Audio Wave:</label>
               </div>
-              <div class="col-md-7">
-                <label class="intGEL-arrow" for="input-size">
-                  <select id="input-pattern" name="pattern" class="themeConfig form-control">
-                    <option value="wave" selected>Wave</option>
-                    <option value="line">Line</option>
-                    <option value="curve">Curved Line</option>
-                    <option value="bars">Bars</option>
-                    <option value="pixel">Pixels</option>
-                    <option value="bricks">Bricks</option>
-                  </select>
-                </label>
-              </div>
-              <div class="col-md-2">
-                <input type="color" id="input-color" class="themeConfig" name="wave.color" value="#942924">
+              <div class="col-md-9">
+                <div class="row">
+                  <div id="group-pattern" class="col-md-10">
+                    <label class="intGEL-arrow" for="input-size">
+                      <select id="input-pattern" name="pattern" class="themeConfig form-control">
+                        <option value="wave" selected>Wave</option>
+                        <option value="line">Line</option>
+                        <option value="curve">Curved Line</option>
+                        <option value="bars">Bars</option>
+                        <option value="pixel">Pixels</option>
+                        <option value="bricks">Bricks</option>
+                      </select>
+                    </label>
+                  </div>
+                  <div id="group-color" class="col-md-2">
+                    <input type="color" id="input-color" class="themeConfig" name="wave.color" value="#942924">
+                  </div>
+                  <div id="group-wave-advanced" class="col-md-2">
+                    <button type="button" class="btn btn-secondary right"><i class="fa fa-arrows"></i></button>
+                  </div>
+                </div>
+                <div id="row-wave-sliders" class="row">
+                  <div class="col-md-12">
+                    <hr>
+                  </div>
+                  <div class="col-md-3 tip">
+                    Vertical:
+                  </div>
+                  <div class="col-md-9">
+                    <div class="wave-slider" name="vertical" style="margin: 10px 0;"></div>
+                  </div>
+                  <div class="col-md-3 tip">
+                    Horizontal:
+                  </div>
+                  <div class="col-md-9">
+                    <div class="wave-slider" name="horizontal" style="margin: 10px 0;"></div>
+                  </div>
+                </div>
               </div>
             </div>
             <div class="row">
@@ -348,6 +373,7 @@
     <script src="/js/bootstrap.min.js"></script>
     <!-- Force load custom fonts -->
     <script src="/fonts/fonts.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
 
   </body>
 </html>

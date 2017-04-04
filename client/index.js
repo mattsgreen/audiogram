@@ -188,16 +188,39 @@ function initialize(err, themesWithImages) {
         return d.name;
       });
 
+  // Initialize wave sliders
+    $(".wave-slider").slider({
+      range: true,
+      min: 0,
+      max: 100,
+      values: [ 25, 75 ],
+      slide: function( event, ui ) {
+        var size = ui.values[1] - ui.values[0],
+            pos = ui.values[0] + (size/2);
+        if (jQuery(this).attr("name")=="vertical") {
+          preview.themeConfig("wave.height",size/100);
+          preview.themeConfig("wave.y",pos/100);
+        } else {
+          preview.themeConfig("wave.width",size/100);
+          preview.themeConfig("wave.x",pos/100);
+        }
+        console.log(ui);
+      }
+    });
+
   // Get initial theme
   d3.select("#input-theme").each(updateTheme);
 
   // Edit theme config
   d3.selectAll(".themeConfig").on("change", updateThemeConfig);
 
-  // Expand all theme config options
-  d3.select("#group-config button").on("click", function(){
+  // Expand advanced configs
+  d3.select("#group-theme-advanced button").on("click", function(){
     jQuery("#section-theme .row:not(:visible)").removeClass("hidden");
-    d3.select("#row-theme").classed("config", false);
+    d3.select("#row-theme").classed("advanced", false);
+  });
+  d3.select("#group-wave-advanced button").on("click", function(){
+    jQuery("#row-wave").addClass("advanced");
   });
 
   // Get initial caption (e.g. back button)
@@ -567,11 +590,14 @@ function updateTheme() {
       }
     }
   });
+  // Reset wave sliders
+  jQuery(".wave-slider[name=vertical]").slider("values", [ (theme.wave.y-(theme.wave.height/2))*100, (theme.wave.y+(theme.wave.height/2))*100 ]);
+  jQuery(".wave-slider[name=horizontal]").slider("values", [ (theme.wave.x-(theme.wave.width/2))*100, (theme.wave.x+(theme.wave.width/2))*100 ]);
   // Show options for settings not specified in theme
   d3.select("#row-background").classed("hidden", theme.raw.backgroundImage);
   d3.select("#row-wave").classed("hidden", theme.raw.wave);
   // Show all config options, if some are hidden
-  d3.select("#row-theme").classed("config", jQuery("#section-theme .row:not(:visible)").length);
+  d3.select("#row-theme").classed("advanced", jQuery("#section-theme > .row:not(:visible)").length);
 
 }
 

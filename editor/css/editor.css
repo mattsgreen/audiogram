@@ -75,22 +75,40 @@
 }
 
 
-#row-theme:not(.config) #group-config {
+#row-theme:not(.advanced) #group-theme-advanced {
   display: none;
 }
 
-#row-theme.config #group-config {
+#row-theme.advanced #group-theme-advanced {
   width: 20%;
   float: right;
 }
-#row-theme.config #group-theme {
+#row-theme.advanced #group-theme {
   width: 80%;
 }
-#row-theme #group-config i.fa {
+#row-theme #group-theme-advanced i.fa {
     margin: 0;
 }
 
+#row-wave:not(.advanced) #row-wave-sliders,
+#row-wave.advanced #group-wave-advanced{
+  display: none;
+}
+#row-wave #group-wave-advanced i.fa {
+    margin: 0;
+}
 
+#row-wave:not(.advanced) #group-pattern{
+  width: 66.66667%
+}
+
+#row-wave-sliders .tip {
+  line-height: 30px;
+}
+
+#row-wave-sliders hr {
+    margin: 7px 0 3px 0;
+}
 
 div.wrapper {
   width: 100%;

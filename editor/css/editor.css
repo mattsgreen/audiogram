@@ -99,7 +99,7 @@
 }
 
 #row-wave:not(.advanced) #group-pattern{
-  width: 66.66667%
+  width: 50%
 }
 
 #row-wave-sliders .tip {
@@ -155,6 +155,8 @@ label.settings {
 input[type='color']{
   height: 33px;
   width: 100%;
+  padding: 0;
+  text-align: center;
 }
 
 

@@ -12,6 +12,7 @@ var logger = require("../lib/logger/"),
     render = require("./render.js"),
     status = require("./status.js"),
     fonts = require("./fonts.js"),
+    whoami = require("./whoami.js"),
     kaldi = require("./kaldi.js"),
     vcs = require("./vcs.js"),
     errorHandlers = require("./error.js");
@@ -69,6 +70,9 @@ app.get("/fonts/fonts.js", fonts.js);
 if (serverSettings.fonts) {
   app.get("/fonts/:font", fonts.font);
 }
+
+// Get user info
+app.get("/whoami/", whoami);
 
 // Check the status of a current video
 app.get("/status/:id/", status);

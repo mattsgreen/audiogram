@@ -1,4 +1,14 @@
 
+
+#unauth {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+#unauth .alert {
+  margin: 0;
+}
+
 #input-subtitles {
   position: relative;
   top: -1px;

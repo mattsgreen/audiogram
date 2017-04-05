@@ -40,8 +40,9 @@ function _theme(_) {
 function _themeConfig(prop,val) {
   if (arguments.length>1) {
     if (prop=="size") {
-      [theme.width, theme.height] = val.split("x");
-      [theme.width, theme.height] = [+theme.width, +theme.height];
+      var size = val.split("x");
+      theme.width = +size[0];
+      theme.height = +size[1];
     } else {
       // XXX hack to set subproperties (eg: theme.prop.subprob) without the use of `eval`. Need a nicer wary of doing it.
       prop = prop.split(".");

@@ -347,10 +347,9 @@ function windowResize() {
 
 function sourceUpdate() {
   audioSource = this.href.split("-").pop();
-  console.log("audioSource: " + audioSource);
   if (audioSource == "vcs") {
     if (jQuery("#vcs-results input:radio").length) {
-      fetchAudioFile(jQuery("#vcs-results input:radio").val());
+      vcsAudio(jQuery("#vcs-results input:radio").val());
     } else {
       updateAudioFile(false);
     }
@@ -426,6 +425,8 @@ function updateAudioFile(blob) {
 }
 
 function vcsTranscript(id) {
+  d3.select("#transcript").classed("loading", true);
+  transcript.clear();
   $.getJSON( "/vcs/transcript/" + id, function( data ) {
     var statusCode = data.statusCode;
     if (statusCode==200) {

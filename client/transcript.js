@@ -3,7 +3,8 @@ var jQuery = require("jquery"),
     React = require('react'),
     TranscriptEditor = require('transcript-editor').default,
     { Transcript } = require('transcript-model'),
-    currentTranscript;
+    currentTranscript,
+    kaldiPoll;
 
 
 
@@ -103,6 +104,10 @@ function toJSON() {
 
 function load(json) {
 
+  if (!json) {
+    return clear();
+  }
+
   if (json.hasOwnProperty("commaSegments")) {
     currentTranscript = Transcript.fromComma(json);
   } else if (json.hasOwnProperty("kaldi")) {
@@ -129,9 +134,16 @@ function load(json) {
 
 }
 
+function clear() {
+  jQuery("transcript").text("");
+  currentTranscript = null;
+  clearTimeout(kaldiPoll);
+  return currentTranscript;
+}
+
 function poll(job) {
 
-  setTimeout(function(){
+  kaldiPoll = setTimeout(function(){
     jQuery.getJSON( "/kaldi/" + job, function( data ) {
       if (data.status=="SUCCESS") {
         console.log(data);
@@ -176,6 +188,7 @@ function generate(blob) {
 module.exports = {
   generate: generate,
   load: load,
+  clear: clear,
   toJSON: toJSON,
   highlight: highlight
 }

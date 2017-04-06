@@ -105,6 +105,8 @@ minimap.onBrush(function(extent){
   d3.select("#duration strong").text(Math.round(10 * selection.duration) / 10)
     .classed("red", theme && theme.maxDuration && theme.maxDuration < selection.duration);
 
+  redraw();
+
 });
 
 // Resize video and preview canvas to maintain aspect ratio
@@ -150,6 +152,7 @@ function redraw() {
     waveform: sampleWave,
     backgroundInfo: (backgroundInfo ? backgroundInfo : theme.backgroundImageInfo ? theme.backgroundImageInfo[theme.orientation] : null),
     preview: true,
+    start: selection ? selection.start : 0,
     frame: 0
   });
 

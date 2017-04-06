@@ -18,8 +18,8 @@ function ifNumeric(val, alt, ratio) {
 
 function draw(context, options) {
 
-  var theme = options.theme
-      offset = options.preview ? 0 : options.offset,
+  var theme = options.theme,
+      offset = options.offset,
       time = options.time + offset;
 
   nextStart.time = options.preview ? 0 : nextStart.time || offset;
@@ -43,7 +43,10 @@ function draw(context, options) {
               if (transcript.segments[i].words[j].end > options.end) {
                 break loopSegments;
               }
-              if (transcript.segments[i].words[j].start >= offset) {
+              var wordStart = transcript.segments[i].words[j].start,
+                  wordEnd = transcript.segments[i].words[j].end,
+                  wordMid = wordStart + (wordEnd - wordStart)/2;
+              if (wordMid >= offset) {
                 wordLength = transcript.segments[i].words[j].text.length;
                 lineLength += wordLength;
                 if ( lineLength>lineWidth && (line+2)>linesMax ) {

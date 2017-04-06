@@ -150,7 +150,7 @@ function redraw() {
     caption: caption,
     transcript: transcript.toJSON(),
     waveform: sampleWave,
-    backgroundInfo: (backgroundInfo ? backgroundInfo : theme.backgroundImageInfo ? theme.backgroundImageInfo[theme.orientation] : null),
+    backgroundInfo: (background && backgroundInfo ? backgroundInfo : theme.backgroundImageInfo ? theme.backgroundImageInfo[theme.orientation] : null),
     preview: true,
     start: selection ? selection.start : 0,
     frame: 0

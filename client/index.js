@@ -177,7 +177,7 @@ function stopIt(e) {
 // Once images are downloaded, set up listeners
 function initialize(err, themesWithImages) {
 
-  console.log("RLW initializing");
+  console.log("Audiogram initializing...");
 
   // Populate dropdown menu
   d3.select("#input-theme")
@@ -206,7 +206,6 @@ function initialize(err, themesWithImages) {
           preview.themeConfig("wave.width",size/100);
           preview.themeConfig("wave.x",pos/100);
         }
-        console.log(ui);
       }
     });
 
@@ -292,9 +291,7 @@ function initialize(err, themesWithImages) {
     }
   });
   d3.select("#controls .tip a").on("click", function(){
-    d3.select("#shortcuts").style("display", null);
-    d3.select("#controls .tip").insert("span","a").text(d3.select("#tip a").text());
-    d3.select("#controls .tip a").remove();
+    jQuery("#shortcuts").toggleClass("hideen");
     stopIt(d3.event);
   });
 
@@ -388,8 +385,6 @@ function updateAudioFile(blob) {
   }
 
   var audioFile = blob || upload.files[0];
-
-  console.log("updateAudioFile: " + audioSource);
 
   if (audioSource!="vcs") {
     clearTimeout(vcsTranscriptTimeout);
@@ -692,7 +687,6 @@ function preloadImages(themes) {
 
     // Finished loading this theme
     imageQueue.await(function(err){
-      console.log("await");
       return cb(err, theme);
     });
 

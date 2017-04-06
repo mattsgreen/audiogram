@@ -24,7 +24,6 @@ jQuery("audio").on("timeupdate", function(){
 jQuery(document).on('click', '.transcript-editor-block__word', function(){
   var time = jQuery(this).attr("data-start");
   jQuery("audio").get(0).currentTime = time;
-  console.log("transcript click: " + time);
 });
 
 // Make clip selection when highlighting transcript segments
@@ -33,28 +32,23 @@ jQuery(document).on('mousedown', '.public-DraftStyleDefault-block', function(){
                 // Start selection on block whitespace
                 if (!selectionStart){
                   selectionStart = jQuery(this).parents("[data-block]").next().find(".transcript-editor-block__word:first");
-                  console.log("mousedown block");
                 }
               }).on('mousedown', '.transcript-editor-block__space', function(){
                 // Start selection on space between words
                 if (!selectionStart){
                   selectionStart = jQuery(this).prev();
-                  console.log("mousedown space");
                 }
               }).on('mousedown', '.transcript-editor-block__word', function(){
                 // Start selection on a word
                 selectionStart = jQuery(this);
-                console.log("mousedown word");
               }).on('mouseup', 'body *', function(){
                 if (selectionStart) {
                   var selectionEnd = null;
                   if (jQuery(this).is(".transcript-editor-block__word *")) {
                     // Finish selection on a word
-                    console.log("mouseup word");
                     selectionEnd = jQuery(this).parents(".transcript-editor-block__word");
                   } else if (jQuery(this).is(".transcript-editor-block__space *")){
                     // Finish selection on a space
-                    console.log("mouseup space");
                     selectionEnd = jQuery(this).parents(".transcript-editor-block__space").prev();
                   } else if (jQuery(this).is(".public-DraftStyleDefault-block")) {
                     // Finish selection on block whitespace
@@ -67,7 +61,6 @@ jQuery(document).on('mousedown', '.public-DraftStyleDefault-block', function(){
                         duration = Math.round(100*audio.duration())/100,
                         start = +jQuery(selectionStart).attr("data-start"),
                         end = +jQuery(selectionEnd).attr("data-end");
-                    console.log("transcript select: " + start + " - " + end);
                     if (start>end) [start, end] = [end, start];
                     if (!jQuery(this).is(".public-DraftStyleDefault-block") || end-start>1) {
                       start = (start)/duration;
@@ -121,7 +114,6 @@ function load(json) {
       currentTranscript = data;
       var preview = require("./preview.js");
       preview.redraw();
-      console.log(toJSON());
     }
   };
   var TS = React.createClass({
@@ -146,16 +138,13 @@ function poll(job) {
   kaldiPoll = setTimeout(function(){
     jQuery.getJSON( "/kaldi/" + job, function( data ) {
       if (data.status=="SUCCESS") {
-        console.log(data);
         if (!data.error) {
           var transcript = JSON.parse(data.transcript),
               segments = JSON.parse(data.segments);
           load({transcript: transcript, segments: segments, kaldi: transcript.metadata.version});
         }
-        console.log("TRANSCRIPTION FINISHED: " + window.performance.now());
         jQuery("#transcript").removeClass("loading");
       } else {
-        console.log("not yet");
         poll(job);
       }
     });
@@ -165,7 +154,6 @@ function poll(job) {
 
 function generate(blob) {
 
-  console.log("TRANSCRIPTION START: " + window.performance.now());
 
   var formData = new FormData();
   formData.append("audio",blob);
@@ -178,7 +166,6 @@ function generate(blob) {
     processData: false,
     type: 'POST',
     success: function(data){
-      console.log(data);
       poll(data.job);
     }
   });

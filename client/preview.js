@@ -135,15 +135,20 @@ function resize(width, height) {
 
 function redraw() {
 
+  video.kill(); //'ed the radio star...
+
   resize(theme.width, theme.height);
   theme.orientation = (theme.width==theme.height) ? "square" : (theme.width>theme.height) ? "landscape" : "portrait";
 
-  video.kill(); //'ed the radio star...
-
   var renderer = getRenderer(theme);
 
+  // BBC watermark
   renderer.bbcDog(bbcDog || null);
 
+  // Foregroung image
+  renderer.foregroundImage(theme.foregroundImageFile ? theme.foregroundImageFile[theme.orientation] : null);
+
+  // Background image
   renderer.backgroundImage(background ? background : theme.backgroundImageFile ? theme.backgroundImageFile[theme.orientation] : null);
 
   renderer.drawFrame(context, {

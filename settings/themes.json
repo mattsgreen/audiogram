@@ -36,9 +36,6 @@
     },
     "backgroundColor": "#eee"
   },
-  "Custom" :{
-
-  },
   "Radio 4 - Today - Default": {
     "pattern": "bars",
     "backgroundImage": {
@@ -49,5 +46,19 @@
     "wave": {
       "color": "#dcac2a"
     }
+  },
+  "Radio 4 - Today - Background w/ Overlay": {
+    "pattern": "bars",
+    "foregroundImage" : {
+      "landscape": "R4Today_foreground_landscape.png",
+      "portrait": "R4Today_foreground_portrait.png",
+      "square": "R4Today_foreground_square.png"
+    },
+    "wave": {
+      "color": "#dcac2a"
+    }
+  },
+  "Custom" :{
+
   }
 }

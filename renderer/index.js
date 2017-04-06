@@ -5,10 +5,16 @@ var d3 = require("d3"),
 module.exports = function(t) {
 
   var renderer = {},
+      foregroundImage,
       backgroundImage,
       bbcDog,
       theme;
 
+  renderer.foregroundImage = function(_) {
+    if (!arguments.length) return foregroundImage;
+    foregroundImage = _;
+    return this;
+  };
   renderer.backgroundImage = function(_) {
     if (!arguments.length) return backgroundImage;
     backgroundImage = _;
@@ -90,6 +96,11 @@ module.exports = function(t) {
           context.drawImage(backgroundImage, (w-(h*R))/2, 0, (h*R), h, 0, 0, W, H);
         }
       }
+    }
+
+    // Draw foreground image
+    if (foregroundImage) {
+      context.drawImage(foregroundImage, 0, 0, theme.width, theme.height);
     }
 
     // Overlay BBC watermark

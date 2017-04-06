@@ -94,7 +94,9 @@ function submitted() {
   } else {
     formData.append("duration", audio.duration());
   }
-  formData.append("theme", JSON.stringify($.extend({}, theme, { backgroundImage: theme.backgroundImage ? theme.backgroundImage[theme.orientation] : null, backgroundImageFile: null })));
+  formData.append("theme", JSON.stringify($.extend({}, theme, { backgroundImage: theme.backgroundImage ? theme.backgroundImage[theme.orientation] : null,
+                                                                backgroundImageFile: null,
+                                                                foregroundImage: theme.foregroundImage ? theme.foregroundImage[theme.orientation] : null })));
   formData.append("caption", caption);
   formData.append("transcript", JSON.stringify(transcript.toJSON()));
 
@@ -347,6 +349,7 @@ function windowResize() {
 
 function sourceUpdate() {
   audioSource = this.href.split("-").pop();
+  transcript.clear();
   if (audioSource == "vcs") {
     if (jQuery("#vcs-results input:radio").length) {
       vcsAudio(jQuery("#vcs-results input:radio").val());
@@ -645,7 +648,7 @@ function preloadImages(themes) {
 
   function getImages(theme, cb) { //Q. where does this cb get passed in??
 
-    if (!theme.backgroundImage) {
+    if (!theme.backgroundImage && !theme.foregroundImage) {
       return cb(null, theme);
     }
 
@@ -669,6 +672,24 @@ function preloadImages(themes) {
         theme.backgroundImageFile[orientation].src = "/settings/backgrounds/" + theme.backgroundImage[orientation];  //Q.  i thought there needs to be an explicit return statement.  or is this all side-effect making?
       }, orientation);
     }
+
+    // Load foreground images
+    theme.foregroundImageFile = theme.foregroundImageFile || {};
+    for(orientation in theme.foregroundImage){
+      // Load each image
+      imageQueue.defer(function(orientation, imgCb){
+        theme.foregroundImageFile[orientation] = new Image();
+        theme.foregroundImageFile[orientation].onload = function(){
+          return imgCb(null);
+        };
+        theme.foregroundImageFile[orientation].onerror = function(e){
+          console.warn(e);
+          return imgCb(e);
+        };
+        theme.foregroundImageFile[orientation].src = "/settings/backgrounds/" + theme.foregroundImage[orientation];  //Q.  i thought there needs to be an explicit return statement.  or is this all side-effect making?
+      }, orientation);
+    }
+
     // Finished loading this theme
     imageQueue.await(function(err){
       console.log("await");

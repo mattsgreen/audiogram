@@ -1,5 +1,4 @@
-var fs = require("fs"),
-    path = require("path"),
+var path = require("path"),
     Canvas = require("canvas"),
     getRenderer = require("../renderer/");
 
@@ -11,31 +10,29 @@ function initializeCanvas(theme, cb) {
   // Fonts pre-registered in bin/worker
   var renderer = getRenderer(theme);
 
-  var bgPath;
-  if (!theme.customBackgroundPath && theme.backgroundImage) {
-    bgPath = path.join(__dirname, "..", "settings", "backgrounds", theme.backgroundImage);
-  } else {
-    bgPath = path.join(serverSettings.storagePath, theme.customBackgroundPath);
-  }
-
   // Load BBC watermark
   var dog = new Canvas.Image;
   dog.src = path.join(serverSettings.storagePath, "../editor/images/bbc.png");
   renderer.bbcDog(dog);
 
-  // Load background image from file (done separately so renderer code can work in browser too)
-  fs.readFile(bgPath, function(err, raw){
-    if (err) {
-      return cb(err);
-    }
+  // Load foreground image
+  if (theme.foregroundImage) {
+    var fg = new Canvas.Image;
+    fg.src = path.join(__dirname, "..", "settings", "backgrounds", theme.foregroundImage);
+    renderer.foregroundImage(fg);
+  }
 
-    var bg = new Canvas.Image;
-    bg.src = raw;
-    renderer.backgroundImage(bg);
+  // Load background image
+  var bg = new Canvas.Image;
+  if (!theme.customBackgroundPath && theme.backgroundImage) {
+    bg.src = path.join(__dirname, "..", "settings", "backgrounds", theme.backgroundImage);
+  } else {
+    bg.src = path.join(serverSettings.storagePath, theme.customBackgroundPath);
+  }
+  renderer.backgroundImage(bg);
 
-    return cb(null, renderer);
+  return cb(null, renderer);
 
-  });
 
 }
 

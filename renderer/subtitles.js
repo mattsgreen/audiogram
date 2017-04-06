@@ -70,17 +70,17 @@ function draw(context, options) {
     }
 
     // Format
-    var ratio = {
+    var ratio = { // Font sizes/spacing are relative to the default theme size, (1280x720), so scale accordingly
           width: theme.width/1280,
           height: theme.height/720
         },
         fontSize = theme.subtitles.fontSize * ratio.width,
         font = theme.subtitles.fontWeight + " " + fontSize + "px " + theme.subtitles.font,
-        left = ifNumeric(theme.subtitles.left, 0, ratio.width),
-        right = ifNumeric(theme.subtitles.right, theme.width, ratio.width),
+        left = ifNumeric(theme.subtitles.left, 0, theme.width),
+        right = ifNumeric(theme.subtitles.right, 1, theme.width),
         captionWidth = right - left,
-        bottom = ifNumeric(theme.subtitles.bottom, null, ratio.height),
-        top = ifNumeric(theme.subtitles.top, null, ratio.height);
+        bottom = ifNumeric(theme.subtitles.bottom, null, theme.height),
+        top = ifNumeric(theme.subtitles.top, null, theme.height);
     if (bottom === null && top === null) {
       top = 0;
     }
@@ -107,7 +107,7 @@ function draw(context, options) {
       var lineY = y + i * (fontSize + (theme.subtitles.lineSpacing * ratio.width))
       if (theme.subtitles.stroke) {
         context.strokeStyle = theme.subtitles.stroke.color;
-        context.lineWidth = theme.subtitles.stroke.width * (theme.width/1280);
+        context.lineWidth = theme.subtitles.stroke.width * ratio.width;
         context.strokeText(text, x, lineY);
       }
       context.fillStyle = theme.subtitles.color;

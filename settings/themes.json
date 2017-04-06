@@ -16,9 +16,9 @@
     "foregroundColor": "#942924",
     "subtitles" : {
       "enabled": true,
-      "bottom": 650,
+      "bottom": 0.9,
       "left": 0,
-      "right": 1280,
+      "right": 1,
       "align": "center",
       "font": "'Source Sans Pro'",
       "fontSize": 60,
@@ -26,7 +26,7 @@
       "color": "white",
       "stroke": {
         "color": "black",
-        "width": 10
+        "width": 7
       },
       "lineSpacing": 10
     },

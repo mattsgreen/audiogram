@@ -94,7 +94,7 @@ function submitted() {
   } else {
     formData.append("duration", audio.duration());
   }
-  formData.append("theme", JSON.stringify($.extend({}, theme, { backgroundImage: theme.backgroundImage[theme.orientation], backgroundImageFile: null })));
+  formData.append("theme", JSON.stringify($.extend({}, theme, { backgroundImage: theme.backgroundImage ? theme.backgroundImage[theme.orientation] : null, backgroundImageFile: null })));
   formData.append("caption", caption);
   formData.append("transcript", JSON.stringify(transcript.toJSON()));
 

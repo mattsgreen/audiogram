@@ -7202,19 +7202,14 @@ header h1 .title-superscript {
     font-size: 14px
 }
 
-header .about-link {
+header #version {
     display: inline-block;
     position: absolute;
     top: 18px;
-    right: 10px;
-    font-size: 16px;
-    color: #fff;
-    font-weight: 700
-}
-
-header .about-link span {
-    top: 2px;
-    right: 2px
+    right: 20px;
+    font-size: 13px;
+    color: #ddd;
+    opacity: 0.75;
 }
 
 .export-page .timeline {

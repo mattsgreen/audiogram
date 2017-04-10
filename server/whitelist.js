@@ -17,7 +17,7 @@ function set(req, res) {
 		listCurrent = require('../whitelist.json'),
 		listNew = req.body.list.split("\r\n");
 	for (var person in listNew) {
-		if (listNew.hasOwnProperty(person) && !listCurrent.includes(listNew[person])) {
+		if ( listNew.hasOwnProperty(person) && listCurrent.indexOf(listNew[person]) === -1 ) {
 			console.log("New user >>> " + listNew[person]);
 		}
 	}

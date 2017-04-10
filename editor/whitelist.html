@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Audiogram</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://bbc.github.io/internalGEL/dist/internalgel-bootstrap.css">
+    <link rel="stylesheet" href="https://bbc.github.io/internalGEL/dist/internalgel-fonts.css">
+    <link rel="stylesheet" href="https://bbc.github.io/internalGEL/dist/internalgel.css" id="intGEL-stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,300,600" rel="stylesheet" type="text/css">
+    <link href="/css/base.css" rel="stylesheet" type="text/css">
+    <link href="/css/editor.css" rel="stylesheet" type="text/css">
+    <link href="/fonts/fonts.css" rel="stylesheet" type="text/css">
+    <link href="/css/main.css" rel="stylesheet" type="text/css">
+    <!-- Icons -->
+    <!-- 16x16 -->
+    <link rel="shortcut icon" href="/favicon.ico">
+    <!-- 32x32 -->
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <!-- 48x48 -->
+    <link rel="icon" type="image/png" href="/favicon-48x48.png" sizes="48x48">
+    <!-- 96x96 -->
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+  </head>
+  <body class="loading">
+    <header>
+      <svg class="labs-logo" width="62" height="80">
+        <image class="labs-logo-image" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="/images/labs-logo.svg" src="/images/labs-logo.png" width="62" height="80"></image>
+      </svg>
+
+      <h1 class="page-title">Audiogram<span class="title-superscript">ALPHA</span></h1>
+    </header>
+    <div class="wrapper">
+      <div id="whitelist" class="intGEL">
+    
+          <section id="splash" class="well" style="border: none;">
+            <h1>
+              Access Control - Certificate Whitelist
+            </h1>
+            <hr>
+            <div class="alert alert-danger" role="alert" style="margin-bottom: 10px; padding-left: 36px;">
+              <p>
+                <i class="fa fa-warning" style="margin-left: -24px;"></i> <b>Careful!</b> There's no validation on submit, so try not to break anything! One email per line.<br/>
+                <span style="font-size: 0.9em; opacity: 0.8;">
+                  PS: the list of admin users (ie: those with access to this page) is hard-coded in audiogram/server/auth.js
+                </span>
+              </p>
+            </div>
+            <form action="/whitelist" method="post">
+              <textarea id="list" name="list" disabled rows="15" style="width: 100%">Loading...</textarea>
+              <hr>
+              <div class="btn-group">
+                <input type="submit" value="Save" class="btn btn-primary right">
+              </div> 
+            </form>
+
+          </section>
+
+      </div><!-- #loaded -->
+
+    </div><!-- .wrapper -->
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script>
+      $(function() {
+
+        $.getJSON( "/whitelist/get", function( data ) {
+          if (data.list) {
+            var list = $.map(data.list, function(el) { return el });
+            $("#list").val(list.join("\n")).attr("disabled",false);
+          } else {
+            console.log(data);
+          }
+        });
+
+      });
+    </script>
+
+  </body>
+</html>

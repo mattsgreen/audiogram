@@ -5,10 +5,12 @@ var express = require("express"),
     multer = require("multer"),
     uuid = require("node-uuid"),
     mkdirp = require("mkdirp"),
+    bodyParser = require("body-parser"),
     auth = require('./auth.js');
 
 // Routes and middleware
-var logger = require("../lib/logger/"),
+var whitelist = require("./whitelist.js"),
+    logger = require("../lib/logger/"),
     render = require("./render.js"),
     status = require("./status.js"),
     fonts = require("./fonts.js"),
@@ -24,12 +26,20 @@ var app = express();
 
 // whitelist
 const NODE_ENV = process.env.NODE_ENV ? process.env.NODE_ENV : "development" ;
-const whitelist = require('../whitelist.json');
+const WHITELIST = require('../whitelist.json');
 NODE_ENV === 'production' && app.use(auth(whitelist));
+// NODE_ENV === app.use(auth(WHITELIST));
 
 // use middlewares
 app.use(compression());
 app.use(logger.morgan());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+// Edit whitelist
+app.get("/whitelist/get/", whitelist.get);
+app.get("/whitelist/", whitelist.editor);
+app.post("/whitelist/", whitelist.set);
 
 // Options for where to store uploaded audio and max size
 var fileOptions = {

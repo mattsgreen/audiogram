@@ -3,10 +3,10 @@ var smartquotes = require("smartquotes").string;
 module.exports = function(theme) {
 
   // Do some typechecking
-  var left = ifNumeric(theme.captionLeft, 0),
-      right = ifNumeric(theme.captionRight, theme.width),
-      bottom = ifNumeric(theme.captionBottom, null),
-      top = ifNumeric(theme.captionTop, null);
+  var left = ifNumeric(theme.caption.left, 0, theme.width),
+      right = ifNumeric(theme.caption.right, theme.width, theme.width),
+      bottom = ifNumeric(theme.caption.bottom, null, theme.height),
+      top = ifNumeric(theme.caption.top, null, theme.height);
 
   if (bottom === null && top === null) {
     top = 0;
@@ -24,9 +24,9 @@ module.exports = function(theme) {
         maxWidth = 0,
         words = smartquotes(caption + "").trim().replace(/\s\s+/g, " \n").split(/ /g);
 
-    context.font = theme.captionFont;
+    context.font = theme.caption.font;
     context.textBaseline = "top";
-    context.textAlign = theme.captionAlign || "center";
+    context.textAlign = theme.caption.align || "center";
 
     // Check whether each word exceeds the width limit
     // Wrap onto next line as needed
@@ -50,7 +50,7 @@ module.exports = function(theme) {
 
     });
 
-    var totalHeight = lines.length * theme.captionLineHeight + (lines.length - 1) * theme.captionLineSpacing;
+    var totalHeight = lines.length * theme.caption.lineHeight + (lines.length - 1) * theme.caption.lineSpacing;
 
     // horizontal alignment
     var x = theme.captionAlign === "left" ? left : theme.captionAlign === "right" ? right : (left + right) / 2;
@@ -69,9 +69,9 @@ module.exports = function(theme) {
       y = top;
     }
 
-    context.fillStyle = theme.captionColor;
+    context.fillStyle = theme.caption.color;
     lines.forEach(function(line, i){
-      context.fillText(line.join(" "), x, y + i * (theme.captionLineHeight + theme.captionLineSpacing));
+      context.fillText(line.join(" "), x, y + i * (theme.caption.lineHeight + theme.caption.lineSpacing));
     });
 
  };
@@ -79,6 +79,7 @@ module.exports = function(theme) {
 
 }
 
-function ifNumeric(val, alt) {
-  return (typeof val === "number" && !isNaN(val)) ? val : alt;
+function ifNumeric(val, alt, ratio) {
+  ratio = ratio || 1;
+  return (typeof val === "number" && !isNaN(val)) ? val*ratio : alt;
 }

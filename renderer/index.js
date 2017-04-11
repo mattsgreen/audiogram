@@ -1,10 +1,12 @@
 var d3 = require("d3"),
     patterns = require("./patterns.js"),
-    subtitles = require("./subtitles.js");
+    subtitles = require("./subtitles.js"),
+    textWrapper = require("./text-wrapper.js");
 
 module.exports = function(t) {
 
   var renderer = {},
+      wrapText,
       foregroundImage,
       backgroundImage,
       bbcDog,
@@ -47,6 +49,8 @@ module.exports = function(t) {
     theme.waveBottom = theme.waveTop + (theme.wave.height * theme.height);
     theme.waveLeft = (theme.wave.x * theme.width) - ((theme.wave.width * theme.width)/2);
     theme.waveRight = theme.waveLeft + (theme.wave.width * theme.width);
+
+    wrapText = textWrapper(theme);
 
     return this;
   };
@@ -112,6 +116,11 @@ module.exports = function(t) {
     context.drawImage(bbcDog, o, o, w, h);
 
     patterns[theme.pattern || "wave"](context, options.waveform, theme);
+
+    // Write the caption
+    if (options.caption) {
+      wrapText(context, options.caption);
+    }
 
     // Write subtitles
     if (theme.subtitles.enabled && options.transcript) {

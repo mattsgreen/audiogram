@@ -217,6 +217,7 @@ function initialize(err, themesWithImages) {
 
   // Expand advanced configs
   d3.select("#group-theme-advanced button").on("click", function(){
+    jQuery("#input-caption:not(:visible)").val("");
     jQuery("#section-theme .row:not(:visible)").removeClass("hidden");
     d3.select("#row-theme").classed("advanced", false);
   });
@@ -572,7 +573,8 @@ function updateBackground() {
 }
 
 function updateCaption() {
-  preview.caption(this.value);
+  var value = jQuery("#input-caption:visible").length ? jQuery("#input-caption").val() : "";
+  preview.caption(value);
 }
 
 function updateTrim(extent) {
@@ -619,6 +621,8 @@ function updateTheme() {
   // Show options for settings not specified in theme
   d3.select("#row-background").classed("hidden", theme.raw.backgroundImage);
   d3.select("#row-wave").classed("hidden", theme.raw.wave);
+  d3.select("#row-caption").classed("hidden", !theme.raw.caption);
+  updateCaption();
   // Show all config options, if some are hidden
   d3.select("#row-theme").classed("advanced", jQuery("#section-theme > .row:not(:visible)").length);
 

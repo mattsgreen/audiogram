@@ -606,6 +606,13 @@ function updateTheme() {
       }
     }
   });
+  // Force sizes if theme doesn't support all of them
+  jQuery("#input-size [data-orientation='landscape']").attr("disabled", (theme.backgroundImage && !theme.backgroundImage.landscape) || (theme.foregroundImage && !theme.foregroundImage.landscape) ? true : false);
+  jQuery("#input-size [data-orientation='square']").attr("disabled", (theme.backgroundImage && !theme.backgroundImage.square) || (theme.foregroundImage && !theme.foregroundImage.square) ? true : false);
+  jQuery("#input-size [data-orientation='portrait']").attr("disabled", (theme.backgroundImage && !theme.backgroundImage.portrait) || (theme.foregroundImage && !theme.foregroundImage.portrait) ? true : false);
+  if (jQuery("#input-size option:selected").is(":disabled")) {
+    jQuery("#input-size").val(jQuery("#input-size option:not(':disabled'):first").val());
+  }
   // Reset wave sliders
   jQuery(".wave-slider[name=vertical]").slider("values", [ (theme.wave.y-(theme.wave.height/2))*100, (theme.wave.y+(theme.wave.height/2))*100 ]);
   jQuery(".wave-slider[name=horizontal]").slider("values", [ (theme.wave.x-(theme.wave.width/2))*100, (theme.wave.x+(theme.wave.width/2))*100 ]);

@@ -16,6 +16,7 @@
     "foregroundColor": "#942924",
     "subtitles" : {
       "enabled": true,
+      "lineWidth": 30,
       "bottom": 0.9,
       "left": 0,
       "right": 1,
@@ -28,7 +29,18 @@
         "color": "black",
         "width": 7
       },
+      "linesMax": 2,
       "lineSpacing": 10
+    },
+    "caption" : {
+      "top": 0.5,
+      "left": 0,
+      "right": 1,
+      "font": "300 52px 'Source Sans Pro'",
+      "color": "#ffffff",
+      "align": "center",
+      "lineHeight": 52,
+      "lineSpacing": 7
     },
     "cropAnchor": {
       "y": "middle",
@@ -56,6 +68,40 @@
     },
     "wave": {
       "color": "#dcac2a"
+    }
+  },
+  "BBC Academy - Quote" :{
+    "backgroundImage": {
+      "landscape": "BBCAcademy_landscape.png"
+    },
+    "pattern": "curve",
+    "wave": {
+      "color": "#8e90c2",
+      "y": 0.85
+    },
+    "subtitles": {
+      "enabled": true,
+      "lineWidth": 25,
+      "top": 0.1,
+      "left": 0,
+      "right": 1,
+      "align": "center",
+      "font": "'Source Sans Pro'",
+      "fontSize": 60,
+      "fontWeight" : 400,
+      "color": "white",
+      "linesMax": 3,
+      "lineSpacing": 10
+    },
+    "caption" : {
+      "top": 0.49,
+      "left": 0,
+      "right": 1,
+      "font": "300 47px 'Source Sans Pro'",
+      "color": "#ffffff",
+      "align": "center",
+      "lineHeight": 52,
+      "lineSpacing": 7
     }
   },
   "Custom" :{

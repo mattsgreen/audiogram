@@ -1,7 +1,5 @@
 
-var lineWidth = 30,
-    linesMax = 2,
-    nextStart = {i: 0, j: 0, time: 0},
+var nextStart = {i: 0, j: 0, time: 0},
     lines = [];
 
 function _transcript(_) {
@@ -13,6 +11,7 @@ function _nextStart(_) {
 }
 
 function ifNumeric(val, alt, ratio) {
+  ratio = ratio || 1;
   return (typeof val === "number" && !isNaN(val)) ? val*ratio : alt;
 }
 
@@ -32,7 +31,8 @@ function draw(context, options) {
       lines = [];
       var line = 0,
           lineLength = 0,
-          linesMax = ifNumeric(theme.subtitleLines, 2);
+          lineWidth = ifNumeric(theme.subtitles.lineWidth, 30); 
+          linesMax = ifNumeric(theme.subtitles.linesMax, 2);
 
       // Split text into lines
       loopSegments:

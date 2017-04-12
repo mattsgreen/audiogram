@@ -100,6 +100,7 @@ app.get("/vcs/media/:id/", vcs.media);
 // Get simulcast media
 app.post("/simulcast/", simulcast.post);
 app.get("/simulcast/media/:id/", simulcast.pipe);
+app.get("/simulcast", simulcast.readme);
 
 // Serve background images and themes JSON statically
 app.use("/settings/", function(req, res, next) {

@@ -1,5 +1,4 @@
-var vpids = require('./simulcast_vpids.json'),
-	request = require('request'),
+var request = require('request'),
 	reith = "http://www-cache.reith.bbc.co.uk:80",
 	requestProxy = request.defaults({'proxy':'www-cache.reith.bbc.co.uk:80'}),
 	concat = require('concat-files'),
@@ -201,7 +200,12 @@ function pipeMedia(req, res){
 	}
 }
 
+function readme(req, res){
+	res.redirect("https://github.com/BBC-News-Labs/audiogram/blob/master/SIMULCAST.md");
+;}
+
 module.exports = {
   post: startJob,
-  pipe: pipeMedia
+  pipe: pipeMedia,
+  readme: readme
 };

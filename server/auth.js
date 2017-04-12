@@ -28,7 +28,7 @@ module.exports = (WHITELIST) => {
       }
     }
 
-    var reg = new RegExp("^/(css|fonts|images|favicon)", "i"); // Don't block these requests
+    var reg = new RegExp("^/(css|fonts|images|favicon|simulcast)", "i"); // Don't block these requests
     if (reg.test(req.url) || (req.header('ssl_client_verify') === 'SUCCESS' && isWhitelisted(req.header('ssl_client_s_dn')))) {
       return next();
     } else {

@@ -17,6 +17,7 @@ var whitelist = require("./whitelist.js"),
     whoami = require("./whoami.js"),
     kaldi = require("./kaldi.js"),
     vcs = require("./vcs.js"),
+    simulcast = require("./simulcast.js"),
     errorHandlers = require("./error.js");
 
 // Settings
@@ -95,6 +96,10 @@ app.get("/kaldi/:job/", kaldi.get);
 app.get("/vcs/search/:id/", vcs.search);
 app.get("/vcs/transcript/:id/", vcs.transcript);
 app.get("/vcs/media/:id/", vcs.media);
+
+// Get simulcast media
+app.post("/simulcast/", simulcast.post);
+app.get("/simulcast/media/:id/", simulcast.pipe);
 
 // Serve background images and themes JSON statically
 app.use("/settings/", function(req, res, next) {

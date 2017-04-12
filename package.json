@@ -30,6 +30,7 @@
     "browserify": "13.0.0",
     "canvas": "git+https://github.com/chearon/node-canvas.git#12971f64a66b",
     "compression": "1.6.2",
+    "concat-files": "^0.1.1",
     "d3": "4.5.0",
     "dotenv": "2.0.0",
     "express": "4.14.1",
@@ -48,8 +49,10 @@
     "transcript-editor": "^0.2.0",
     "transcript-model": "^0.2.1",
     "underscore": "1.8.3",
+    "uuid": "^3.0.1",
     "webaudio-peaks": "0.0.5",
-    "winston": "2.3.1"
+    "winston": "2.3.1",
+    "xml2json": "^0.11.0"
   },
   "devDependencies": {
     "supertest": "1.2.0",

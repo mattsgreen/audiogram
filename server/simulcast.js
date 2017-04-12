@@ -1,6 +1,5 @@
 var request = require('request'),
 	reith = "http://www-cache.reith.bbc.co.uk:80",
-	requestProxy = request.defaults({'proxy':'www-cache.reith.bbc.co.uk:80'}),
 	concat = require('concat-files'),
     fs = require("fs"),
     uuid = require('uuid/v4'),
@@ -141,9 +140,12 @@ function startJob(req, res) {
 	var start = +req.body.start || 0,
 		end = +req.body.end || 0,
 		now = Math.floor(Date.now() / 1000);
-	if (start>end) [start, end] = [end, start];
 	if (start==0 || end==0 || !req.body.vpid || req.body.vpid=="") {
 		return res.json({ error: "Missing arguments." });
+	}
+	if (start>end){
+		start = +req.body.end || 0;
+		end = +req.body.start || 0;
 	}
 	if (start<(now-43000)) {
 		return res.json({ error: "Too far in the past. Clip must be from the last 12 hours." });

@@ -1,4 +1,4 @@
-FROM ubuntu:16.04
+FROM ubuntu:16.10
 
 # Install server dependencies
 RUN apt-get install --fix-missing \

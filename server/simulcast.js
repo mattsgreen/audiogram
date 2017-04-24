@@ -134,6 +134,8 @@ function generateMedia(type, start, end, cb) {
 
 function startJob(req, res) {
 
+	var fileAudio = null,
+		fileVideo = null;
 	q = queue(1);
 
 	// Validate times
@@ -166,8 +168,8 @@ function startJob(req, res) {
 
 	// Return expected filenames
 	q.defer(function(cb){
-		var fileAudio = "https://audiogram.newslabs.co/simulcast/media/" + job + ".mp3",
-			fileVideo = mediaURL.template.video ? "https://audiogram.newslabs.co/simulcast/media/" + job + ".mp4" : null;
+		fileAudio = "https://audiogram.newslabs.co/simulcast/media/" + job + ".mp3";
+		fileVideo = mediaURL.template.video ? "https://audiogram.newslabs.co/simulcast/media/" + job + ".mp4" : null;
 		res.json({ audio: fileAudio, video: fileVideo });
 		cb(null);
 	})
@@ -180,8 +182,8 @@ function startJob(req, res) {
 
 	q.await(function(err){
 		if (err) {
-			console.log(err);
-			res.json({ error: err });
+			console.log("SIMULCAST ERROR: " + err);
+			if (fileAudio==null && fileVideo==null) return res.json({ err: err });
 		}
 		// Delete tmp media files
 		if (fs.existsSync(tmpPath + "audio.m4s")) fs.unlinkSync(tmpPath + "audio.m4s");
@@ -203,7 +205,7 @@ function pipeMedia(req, res){
 }
 
 function readme(req, res){
-	res.redirect("https://github.com/BBC-News-Labs/audiogram/blob/master/SIMULCAST.md");
+	return res.redirect(301, "https://github.com/BBC-News-Labs/audiogram/blob/master/SIMULCAST.md");
 ;}
 
 module.exports = {

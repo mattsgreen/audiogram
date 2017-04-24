@@ -123,6 +123,7 @@
 
 div.wrapper {
   width: 100%;
+  max-width: 1500px;
   padding: 20px;
   margin-bottom: 60px;
   margin: 1rem auto 0 auto;

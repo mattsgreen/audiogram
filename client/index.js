@@ -325,6 +325,13 @@ function initialize(err, themesWithImages) {
 
   d3.select(window).on("resize", windowResize).each(windowResize);
 
+  // Fetch broadcast audio
+  d3.selectAll("input[id^='input-tx-']").on("keyup", txTimeUpdate);
+  d3.select("#tx-search").on("click", txSearch);
+
+  // Set background video
+  d3.select("#videoload a").on("click", setBackground);
+
   // Search for VCS audio
   d3.select("#vcs-search").on("click", vcsSearch);
   d3.select("#input-vcs").on("keydown", function(){
@@ -369,6 +376,17 @@ function generateTranscript(blob) {
 
 }
 
+function loadAudioFromURL(url) {
+  var blob = null;
+  var xhr = new XMLHttpRequest(); 
+  xhr.open("GET", url); 
+  xhr.responseType = "blob";
+  xhr.onload = function() {
+    updateAudioFile(xhr.response);
+  }
+  xhr.send();
+}
+
 function updateAudioFile(blob) {
 
   d3.select("#row-audio").classed("error", false);
@@ -411,16 +429,87 @@ function updateAudioFile(blob) {
 
     d3.selectAll("#minimap, #submit").classed("hidden", !!err);
 
-    if (audioFile.type.startsWith("video")) {
-      setTimeout(function(){
-        if (confirm("\nThe audio from this video has been extracted.\n\nIf you would also like to use the video as the Audiogram background, click OK.\n")) {
-          jQuery("#input-background")[0].files = jQuery("#input-audio")[0].files;
-        }
-      },250);
+    if (!blob && audioFile.type.startsWith("video")) {
+      $("#videoload a").attr("data-used", false);
+      d3.select("#videoload").classed("hidden", false);
     }
 
   });
 
+}
+
+
+function txTimeUpdate() {
+  var isValid = /^([0-1]?[0-9]|2[0-3]):([0-5][0-9])(:[0-5][0-9])?$/.test(this.value);
+  $("#tx-search").attr("disabled", !isValid);
+  this.style.backgroundColor = isValid ? null : "#fba";
+}
+
+function txGetDate(time) {
+  var now = new Date();
+      dateString = now.toDateString();
+      inputString = dateString + " " + time;
+      inputDate = new Date(inputString);
+  if (now < inputDate) {
+    inputDate.setTime(inputDate.getTime() - (24*60*60*1000));
+  }
+  return inputDate;
+}
+
+function txSearch() {
+  setClass(null);
+  var now = new Date(),
+      min = now.getTime() - (12*60*60*1000),
+      start = txGetDate($("#input-tx-start").val()),
+      end = txGetDate($("#input-tx-end").val()),
+      vpid = $("#input-tx-vpid").val();
+  console.log(start);
+  console.log(end);
+  if (start.getTime() < min) {
+    return setClass("error", "TX media is only available for the last 12 hours.");
+  } else if (end.getTime() - start.getTime() > (15*60*1000)) {
+    return setClass("error", "Please select a TX window < 15 minutes. If a larger window would be useful, please contact us.");
+  }
+  d3.select("#loading-message").text("Fetching " + vpid + " media from " + start.toLocaleString());
+  setClass("loading");
+  jQuery.post("/simulcast", {vpid: vpid, start: start.getTime()/1000, end: end.getTime()/1000})
+        .fail(function(xhr, status, error) {
+           setClass("error", status);
+        })
+        .done(function(data){
+          console.log(data);
+          if (data.error) {
+            return setClass("error", data.error);
+          }
+          $("#videoload a").attr("data-src",data.video);
+          $("#videoload a").attr("data-used", false);
+          d3.select("#videoload").classed("hidden", data.video==null);
+          txPoll(data.audio);
+        });
+}
+
+function txPoll(url) {
+    setClass("loading");
+    jQuery.getJSON( url, function( data ) {
+      console.log(data);
+      if (data.ready===true) {
+        if (data.type==="audio") {
+          loadAudioFromURL(data.src);
+        } else if (data.type==="video") {
+          var blob = null;
+          var xhr = new XMLHttpRequest(); 
+          xhr.open("GET", data.src); 
+          xhr.responseType = "blob";
+          xhr.onload = function() {
+            updateBackground(null, xhr.response);
+          }
+          xhr.send();
+          console.log("LOAD VIDEO");
+        }
+      } else {
+        txPollTimeout = setTimeout(function(){txPoll(url)},5000);
+      }
+    });
 }
 
 function vcsTranscript(id) {
@@ -452,14 +541,7 @@ function vcsAudio(url) {
   setClass("loading");
 
   // Get aduio
-  var blob = null;
-  var xhr = new XMLHttpRequest(); 
-  xhr.open("GET", "/vcs/media/" + id); 
-  xhr.responseType = "blob";
-  xhr.onload = function() {
-      updateAudioFile(xhr.response);
-  }
-  xhr.send();
+  loadAudioFromURL("/vcs/media/" + id);
 
   // Get transcript
   clearTimeout(vcsTranscriptTimeout);
@@ -516,20 +598,36 @@ function vcsSearch(id, media) {
 
 }
 
-function updateBackground() {
+function setBackground() {
+  d3.select("#loading-message").text("Loading video...");
+  setClass("loading");
+  $("#videoload a").attr("data-used", true);
+  var type = $("#sourceWrapper li.active a").attr("href").split("-").pop();
+  if (type=="upload") {
+    $("#input-background")[0].files = $("#input-audio")[0].files;
+    setClass(null);
+  } else if (type=="tx") {
+    var src = $("#videoload a").attr("data-src");
+    txPoll(src);
+  }
+  d3.select("#videoload").classed("hidden", true);
+}
+
+function updateBackground(event, blob) {
 
     d3.select("#row-background").classed("error", false);
 
-    // Skip if empty
-    if (!this.files || !this.files[0]) {
-        preview.background(null);
-        var input = jQuery("#input-background");
-        input.replaceWith(input.val('').clone(true));
-        setClass(null);
-        return true;
+    var upload = this;
+
+    if ( blob===false || (blob===undefined && (!upload.files || !upload.files[0])) ) {
+      preview.background(null);
+      var input = jQuery("#input-background");
+      input.replaceWith(input.val('').clone(true));
+      setClass(null);
+      return true;
     }
 
-    backgroundFile = this.files[0];
+    backgroundFile = blob || this.files[0];
 
     if (backgroundFile.type.startsWith("video")) {
 
@@ -594,6 +692,7 @@ function updateTheme() {
   var theme = d3.select(this.options[this.selectedIndex]).datum();
   preview.theme(theme);
   updateBackground();
+  $("#videoload a[data-used=true]").parent().removeClass("hidden");
   // Reset custom config fields
   jQuery(".themeConfig").each(function() {
     if (this.name!="size") {

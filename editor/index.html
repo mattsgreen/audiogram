@@ -59,6 +59,8 @@
                 <li>
                   <a href="#source-tab-upload" data-toggle="tab">File Upload</a>
                 </li>
+                <li>
+                  <a href="#source-tab-tx" data-toggle="tab">Broadcast</a>
                 </li>
               </ul>
               <div class="tab-content">
@@ -79,9 +81,174 @@
                   </div>
                 </div>
                 <div class="tab-pane" id="source-tab-upload">
-                    <input id="input-audio" name="audio" type="file" style="width: 100%" />
+                  <div class="row">
+                    <div class="col-md-3">
+                      <label class="settings" for="input-audio">Audio/Video File:</label>
+                    </div>
+                    <div class="col-md-9">
+                      <input id="input-audio" name="audio" type="file" style="width: 100%" />
+                    </div>
+                  </div>
+                </div>
+                <div class="tab-pane" id="source-tab-tx">
+                  <div class="row">
+                    <div class="col-md-4">
+                      <label class="intGEL-arrow" for="input-size">
+                        <select id="input-tx-vpid" class="form-control">
+                          <option value="bbc_1xtra">bbc_1xtra</option>
+                          <option value="bbc_1xtra_video">bbc_1xtra_video</option>
+                          <option value="bbc_6music">bbc_6music</option>
+                          <option value="bbc_afghan_radio">bbc_afghan_radio</option>
+                          <option value="bbc_afrique_radio">bbc_afrique_radio</option>
+                          <option value="bbc_alba">bbc_alba</option>
+                          <option value="bbc_arabic_radio">bbc_arabic_radio</option>
+                          <option value="bbc_asian_network">bbc_asian_network</option>
+                          <option value="bbc_bangla_radio">bbc_bangla_radio</option>
+                          <option value="bbc_burmese_radio">bbc_burmese_radio</option>
+                          <option value="bbc_cantonese_radio">bbc_cantonese_radio</option>
+                          <option value="bbc_dari_radio">bbc_dari_radio</option>
+                          <option value="bbc_four">bbc_four</option>
+                          <option value="bbc_four_hd">bbc_four_hd</option>
+                          <option value="bbc_gahuza_radio">bbc_gahuza_radio</option>
+                          <option value="bbc_hausa_radio">bbc_hausa_radio</option>
+                          <option value="bbc_hindi_radio">bbc_hindi_radio</option>
+                          <option value="bbc_indonesian_radio">bbc_indonesian_radio</option>
+                          <option value="bbc_kyrgyz_radio">bbc_kyrgyz_radio</option>
+                          <option value="bbc_london">bbc_london</option>
+                          <option value="bbc_nepali_radio">bbc_nepali_radio</option>
+                          <option value="bbc_news24">bbc_news24</option>
+                          <option value="bbc_news_channel_hd">bbc_news_channel_hd</option>
+                          <option value="bbc_one_cambridge">bbc_one_cambridge</option>
+                          <option value="bbc_one_channel_islands">bbc_one_channel_islands</option>
+                          <option value="bbc_one_east">bbc_one_east</option>
+                          <option value="bbc_one_east_midlands">bbc_one_east_midlands</option>
+                          <option value="bbc_one_east_yorkshire">bbc_one_east_yorkshire</option>
+                          <option value="bbc_one_hd">bbc_one_hd</option>
+                          <option value="bbc_one_london">bbc_one_london</option>
+                          <option value="bbc_one_north_east">bbc_one_north_east</option>
+                          <option value="bbc_one_north_west">bbc_one_north_west</option>
+                          <option value="bbc_one_northern_ireland">bbc_one_northern_ireland</option>
+                          <option value="bbc_one_northern_ireland_hd">bbc_one_northern_ireland_hd</option>
+                          <option value="bbc_one_oxford">bbc_one_oxford</option>
+                          <option value="bbc_one_scotland">bbc_one_scotland</option>
+                          <option value="bbc_one_scotland_hd">bbc_one_scotland_hd</option>
+                          <option value="bbc_one_south">bbc_one_south</option>
+                          <option value="bbc_one_south_east">bbc_one_south_east</option>
+                          <option value="bbc_one_south_west">bbc_one_south_west</option>
+                          <option value="bbc_one_wales">bbc_one_wales</option>
+                          <option value="bbc_one_wales_hd">bbc_one_wales_hd</option>
+                          <option value="bbc_one_west">bbc_one_west</option>
+                          <option value="bbc_one_west_midlands">bbc_one_west_midlands</option>
+                          <option value="bbc_one_yorks">bbc_one_yorks</option>
+                          <option value="bbc_parliament">bbc_parliament</option>
+                          <option value="bbc_pashto_radio">bbc_pashto_radio</option>
+                          <option value="bbc_persian_radio">bbc_persian_radio</option>
+                          <option value="bbc_radio_berkshire">bbc_radio_berkshire</option>
+                          <option value="bbc_radio_bristol">bbc_radio_bristol</option>
+                          <option value="bbc_radio_cambridge">bbc_radio_cambridge</option>
+                          <option value="bbc_radio_cornwall">bbc_radio_cornwall</option>
+                          <option value="bbc_radio_coventry_warwickshire">bbc_radio_coventry_warwickshire</option>
+                          <option value="bbc_radio_cumbria">bbc_radio_cumbria</option>
+                          <option value="bbc_radio_cymru">bbc_radio_cymru</option>
+                          <option value="bbc_radio_derby">bbc_radio_derby</option>
+                          <option value="bbc_radio_devon">bbc_radio_devon</option>
+                          <option value="bbc_radio_essex">bbc_radio_essex</option>
+                          <option value="bbc_radio_five_live">bbc_radio_five_live</option>
+                          <option value="bbc_radio_five_live_video">bbc_radio_five_live_video</option>
+                          <option value="bbc_radio_four_extra">bbc_radio_four_extra</option>
+                          <option value="bbc_radio_fourfm">bbc_radio_fourfm</option>
+                          <option value="bbc_radio_fourlw">bbc_radio_fourlw</option>
+                          <option value="bbc_radio_foyle">bbc_radio_foyle</option>
+                          <option value="bbc_radio_gloucestershire">bbc_radio_gloucestershire</option>
+                          <option value="bbc_radio_guernsey">bbc_radio_guernsey</option>
+                          <option value="bbc_radio_hereford_worcester">bbc_radio_hereford_worcester</option>
+                          <option value="bbc_radio_humberside">bbc_radio_humberside</option>
+                          <option value="bbc_radio_jersey">bbc_radio_jersey</option>
+                          <option value="bbc_radio_kent">bbc_radio_kent</option>
+                          <option value="bbc_radio_lancashire">bbc_radio_lancashire</option>
+                          <option value="bbc_radio_leeds">bbc_radio_leeds</option>
+                          <option value="bbc_radio_leicester">bbc_radio_leicester</option>
+                          <option value="bbc_radio_lincolnshire">bbc_radio_lincolnshire</option>
+                          <option value="bbc_radio_manchester">bbc_radio_manchester</option>
+                          <option value="bbc_radio_merseyside">bbc_radio_merseyside</option>
+                          <option value="bbc_radio_nan_gaidheal">bbc_radio_nan_gaidheal</option>
+                          <option value="bbc_radio_newcastle">bbc_radio_newcastle</option>
+                          <option value="bbc_radio_norfolk">bbc_radio_norfolk</option>
+                          <option value="bbc_radio_northampton">bbc_radio_northampton</option>
+                          <option value="bbc_radio_nottingham">bbc_radio_nottingham</option>
+                          <option value="bbc_radio_one">bbc_radio_one</option>
+                          <option value="bbc_radio_one_video">bbc_radio_one_video</option>
+                          <option value="bbc_radio_oxford">bbc_radio_oxford</option>
+                          <option value="bbc_radio_scotland_fm">bbc_radio_scotland_fm</option>
+                          <option value="bbc_radio_scotland_mw">bbc_radio_scotland_mw</option>
+                          <option value="bbc_radio_sheffield">bbc_radio_sheffield</option>
+                          <option value="bbc_radio_shropshire">bbc_radio_shropshire</option>
+                          <option value="bbc_radio_solent">bbc_radio_solent</option>
+                          <option value="bbc_radio_solent_west_dorset">bbc_radio_solent_west_dorset</option>
+                          <option value="bbc_radio_somerset_sound">bbc_radio_somerset_sound</option>
+                          <option value="bbc_radio_stoke">bbc_radio_stoke</option>
+                          <option value="bbc_radio_suffolk">bbc_radio_suffolk</option>
+                          <option value="bbc_radio_surrey">bbc_radio_surrey</option>
+                          <option value="bbc_radio_sussex">bbc_radio_sussex</option>
+                          <option value="bbc_radio_three">bbc_radio_three</option>
+                          <option value="bbc_radio_two">bbc_radio_two</option>
+                          <option value="bbc_radio_two_country">bbc_radio_two_country</option>
+                          <option value="bbc_radio_ulster">bbc_radio_ulster</option>
+                          <option value="bbc_radio_wales_fm">bbc_radio_wales_fm</option>
+                          <option value="bbc_radio_wiltshire">bbc_radio_wiltshire</option>
+                          <option value="bbc_radio_york">bbc_radio_york</option>
+                          <option value="bbc_russian_radio">bbc_russian_radio</option>
+                          <option value="bbc_sinhala_radio">bbc_sinhala_radio</option>
+                          <option value="bbc_somali_radio">bbc_somali_radio</option>
+                          <option value="bbc_swahili_radio">bbc_swahili_radio</option>
+                          <option value="bbc_tamil_radio">bbc_tamil_radio</option>
+                          <option value="bbc_tees">bbc_tees</option>
+                          <option value="bbc_three_counties_radio">bbc_three_counties_radio</option>
+                          <option value="bbc_two_england">bbc_two_england</option>
+                          <option value="bbc_two_hd">bbc_two_hd</option>
+                          <option value="bbc_two_northern_ireland_digital">bbc_two_northern_ireland_digital</option>
+                          <option value="bbc_two_scotland">bbc_two_scotland</option>
+                          <option value="bbc_two_wales_digital">bbc_two_wales_digital</option>
+                          <option value="bbc_urdu_radio">bbc_urdu_radio</option>
+                          <option value="bbc_uzbek_radio">bbc_uzbek_radio</option>
+                          <option value="bbc_wm">bbc_wm</option>
+                          <option value="bbc_world_service">bbc_world_service</option>
+                          <option value="bbc_world_service_americas">bbc_world_service_americas</option>
+                          <option value="bbc_world_service_australasia">bbc_world_service_australasia</option>
+                          <option value="bbc_world_service_east_africa">bbc_world_service_east_africa</option>
+                          <option value="bbc_world_service_east_asia">bbc_world_service_east_asia</option>
+                          <option value="bbc_world_service_europe">bbc_world_service_europe</option>
+                          <option value="bbc_world_service_news_internet">bbc_world_service_news_internet</option>
+                          <option value="bbc_world_service_south_asia">bbc_world_service_south_asia</option>
+                          <option value="bbc_world_service_west_africa">bbc_world_service_west_africa</option>
+                          <option value="cbbc">cbbc</option>
+                          <option value="cbbc_hd">cbbc_hd</option>
+                          <option value="cbeebies">cbeebies</option>
+                          <option value="cbeebies_hd">cbeebies_hd</option>
+                          <option value="satellite_and_cable_one">satellite_and_cable_one</option>
+                        </select>
+                      </label>
+                    </div>
+                    <div class="col-md-3">
+                      <input id="input-tx-start" type="text" placeholder="HH:MM" class="form-control" style="text-align: center;" value="10:00:00" />
+                    </div>
+                    <div class="col-md-3">
+                      <input id="input-tx-end" type="text" placeholder="HH:MM" class="form-control" style="text-align: center;" value="10:05:00" />
+                    </div>
+                    <div class="col-md-2">
+                      <button id="tx-search" class="btn btn-secondary" type="button"><i class="fa fa-search"></i>Find</button>
+                    </div>
+                  </div>
                 </div>
               </div>
+            </div>
+
+            <div id="videoload" class="hidden alert alert-info" role="alert" style="margin: 10px 0">
+              <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+              The audio has been extracted from the video media you imported.<br/>
+              <a href="#" style="text-decoration: underline">Click here to use the video background as well.</a>
             </div>
 
             <section id="minimap" class="well" style="border: none;">

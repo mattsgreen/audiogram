@@ -168,8 +168,8 @@ function startJob(req, res) {
 
 	// Return expected filenames
 	q.defer(function(cb){
-		fileAudio = "https://audiogram.newslabs.co/simulcast/media/" + job + ".mp3";
-		fileVideo = mediaURL.template.video ? "https://audiogram.newslabs.co/simulcast/media/" + job + ".mp4" : null;
+		fileAudio = "/simulcast/status/" + job + ".mp3";
+		fileVideo = mediaURL.template.video ? "/simulcast/status/" + job + ".mp4" : null;
 		res.json({ audio: fileAudio, video: fileVideo });
 		cb(null);
 	})
@@ -192,6 +192,17 @@ function startJob(req, res) {
 
 }
 
+
+function poll(req, res) {
+	var file = req.params.id.split("."),
+		job = file[0],
+		ext = file[1],
+		type = (ext==="mp3") ? "audio" : (ext==="mp4") ? "video" : null;
+		mediaPath = path.join(__dirname, "../tmp/", job, "/", job + "." + ext),
+		exists = fs.existsSync(mediaPath);
+	return res.json({ ready: exists, src: "/simulcast/media/" + job + "." + ext, type: type });
+}
+
 function pipeMedia(req, res){
 	var file = req.params.id.split("."),
 		job = file[0],
@@ -200,7 +211,7 @@ function pipeMedia(req, res){
 	if (fs.existsSync(mediaPath)) {
 		res.sendFile(mediaPath);
 	} else {
-		res.status(204).send('HTTP/1.1 204 No Content');
+		res.status(404);
 	}
 }
 
@@ -210,6 +221,7 @@ function readme(req, res){
 
 module.exports = {
   post: startJob,
+  poll: poll,
   pipe: pipeMedia,
   readme: readme
 };

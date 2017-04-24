@@ -99,6 +99,7 @@ app.get("/vcs/media/:id/", vcs.media);
 
 // Get simulcast media
 app.post("/simulcast/", simulcast.post);
+app.get("/simulcast/status/:id/", simulcast.poll);
 app.get("/simulcast/media/:id/", simulcast.pipe);
 app.get("/simulcast", simulcast.readme);
 

@@ -109,7 +109,7 @@ function load(json) {
 
   var props = {
     transcript: currentTranscript,
-    showSpeakers: false,
+    showSpeakers: true,
     onTranscriptUpdate: function(data){
       currentTranscript = data;
       var preview = require("./preview.js");

@@ -59,6 +59,9 @@ function draw(context, options) {
                 if (transcript.segments[i].words[j].text) {
                   lines[line] = (lines[line] || "") + transcript.segments[i].words[j].text + " ";
                 }
+                if (j == transcript.segments[i].words.length - 1) {
+                  break loopSegments;
+                }
               }
             }
         }

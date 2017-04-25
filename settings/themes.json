@@ -17,16 +17,22 @@
     "subtitles" : {
       "enabled": true,
       "lineWidth": 30,
-      "bottom": 0.9,
-      "left": 0,
-      "right": 1,
       "align": "center",
+      "valign": "middle",
+      "margin": {
+        "vertical": 0.8,
+        "horizontal": 0.5
+      },
+      "box": {
+        "opacity": 0,
+        "color": "#000000"
+      },
       "font": "'Source Sans Pro'",
       "fontSize": 60,
       "fontWeight" : 400,
-      "color": "white",
+      "color": "#ffffff",
       "stroke": {
-        "color": "black",
+        "color": "#000000",
         "width": 7
       },
       "linesMax": 2,
@@ -79,18 +85,24 @@
       "color": "#8e90c2",
       "y": 0.85
     },
-    "subtitles": {
+    "subtitles" : {
       "enabled": true,
-      "lineWidth": 25,
-      "top": 0.1,
-      "left": 0,
-      "right": 1,
+      "lineWidth": 30,
       "align": "center",
+      "valign": "middle",
+      "margin": {
+        "vertical": 0.25,
+        "horizontal": 0.5
+      },
       "font": "'Source Sans Pro'",
       "fontSize": 60,
       "fontWeight" : 400,
-      "color": "white",
-      "linesMax": 3,
+      "color": "#ffffff",
+      "stroke": {
+        "color": "#000000",
+        "width": 0
+      },
+      "linesMax": 2,
       "lineSpacing": 10
     },
     "caption" : {
@@ -102,6 +114,82 @@
       "align": "center",
       "lineHeight": 52,
       "lineSpacing": 7
+    }
+  },
+  "BBC News - Quote": {
+    "pattern": "wave",
+    "wave": {
+      "color": "#ad000d",
+      "y": 0.76,
+      "height": 0.32,
+      "width": 0.5,
+      "x": 0.75
+    },
+    "foregroundColor": "#942924",
+    "subtitles": {
+      "enabled": true,
+      "lineWidth": 15,
+      "align": "left",
+      "valign": "top",
+      "margin": {
+        "vertical": 0.32,
+        "horizontal": 0.08
+      },
+      "font": "'Source Sans Pro'",
+      "fontSize": 60,
+      "fontWeight": 400,
+      "color": "#363636",
+      "stroke": {
+        "color": "#000000",
+        "width": 0
+      },
+      "linesMax": 4,
+      "lineSpacing": 10
+    },
+    "cropAnchor": {
+      "y": "middle",
+      "x": "center"
+    },
+    "backgroundColor": "#eee",
+    "foregroundImage": {
+      "landscape": "BBCNews_quote.png"
+    },
+    "caption" : {
+      "top": 0.8,
+      "left": 0,
+      "right": 0.5,
+      "font": "300 40px 'Source Sans Pro'",
+      "color": "#363636",
+      "align": "center",
+      "lineHeight": 52,
+      "lineSpacing": 7
+    }
+  },
+  "Radio 1 - Blank" : {
+    "pattern": "none",
+    "subtitles": {
+      "enabled": true,
+      "lineWidth": "45",
+      "align": "center",
+      "valign": "middle",
+      "margin": {
+        "vertical": 0.84,
+        "horizontal": 0.5
+      },
+      "font": "'Source Sans Pro'",
+      "fontSize": 50,
+      "fontWeight": 200,
+      "color": "#ffffff",
+      "stroke": {
+        "color": "#000000",
+        "width": 0
+      },
+      "box": {
+        "opacity": 0.6,
+        "color": "#000000"
+      },
+      "linesMax": "2",
+      "lineSpacing": 10
     }
   },
   "Custom" :{

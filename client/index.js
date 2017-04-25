@@ -234,7 +234,7 @@ function initialize(err, themesWithImages) {
   // Key listeners
   d3.select(document).on("keydown", function(){
     if (!d3.select("body").classed("rendered") && !d3.matcher("input, textarea, button, select, [contenteditable='true']").call(d3.event.target)) {
-      let start = audio.extent()[0]*audio.duration(),
+      var start = audio.extent()[0]*audio.duration(),
           end = audio.extent()[1]*audio.duration(),
           duration = audio.duration();
           current = audio.currentTime();
@@ -680,7 +680,10 @@ function updateTrim(extent) {
   var start = extent[0] || parseFloat(d3.select("#start").property("value"));
   var end = extent[1] || parseFloat(d3.select("#end").property("value"));
   if (!isNaN(start) && !isNaN(end)) {
-    if (start>end) [start, end] = [end, start];
+    if (start>end){
+      end = extent[0] || parseFloat(d3.select("#start").property("value"));
+      start = extent[1] || parseFloat(d3.select("#end").property("value"));
+    }
     var duration = Math.round(100*audio.duration())/100;
     start = start/duration;
     end = end/duration;

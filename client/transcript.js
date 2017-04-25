@@ -2,7 +2,7 @@ var jQuery = require("jquery"),
     ReactDOM = require('react-dom'),
     React = require('react'),
     TranscriptEditor = require('transcript-editor').default,
-    { Transcript } = require('transcript-model'),
+    Transcript = require('transcript-model').Transcript,
     currentTranscript,
     kaldiPoll;
 
@@ -61,7 +61,10 @@ jQuery(document).on('mousedown', '.public-DraftStyleDefault-block', function(){
                         duration = Math.round(100*audio.duration())/100,
                         start = +jQuery(selectionStart).attr("data-start"),
                         end = +jQuery(selectionEnd).attr("data-end");
-                    if (start>end) [start, end] = [end, start];
+                    if (start>end) {
+                        end = +jQuery(selectionStart).attr("data-start");
+                        start = +jQuery(selectionEnd).attr("data-end");
+                    } 
                     if (!jQuery(this).is(".public-DraftStyleDefault-block") || end-start>1) {
                       start = (start)/duration;
                       end = (end)/duration;

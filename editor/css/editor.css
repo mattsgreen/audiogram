@@ -261,6 +261,12 @@ input[type='submit']:active {
   text-decoration: underline;
 }
 
+.tip.subFormatToggle{
+  position: absolute;
+  top: 11px;
+  right: 15px;
+}
+
 #duration {
   font-size: 13px;
   line-height: 13px;

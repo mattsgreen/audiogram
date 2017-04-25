@@ -208,6 +208,15 @@ function initialize(err, themesWithImages) {
         }
       }
     });
+    $(".subs-slider").slider({
+      range: false,
+      min: 0,
+      max: 100,
+      values: [ 50 ],
+      slide: function( event, ui ) {
+        preview.themeConfig("subtitles.margin." + jQuery(this).attr("name"), ui.value/100);
+      }
+    });
 
   // Get initial theme
   d3.select("#input-theme").each(updateTheme);
@@ -292,9 +301,12 @@ function initialize(err, themesWithImages) {
     }
   });
   d3.select("#controls .tip a").on("click", function(){
-    jQuery("#shortcuts").toggleClass("hideen");
+    jQuery("#shortcuts").toggleClass("hidden");
     stopIt(d3.event);
   });
+  d3.selectAll(".subFormatToggle").on("click", function(){
+    $("#transcript .subFormatToggle, #transcript-settings").toggleClass("hidden");
+  })
 
   // Button listeners
   d3.selectAll("#play, #pause").on("click", function(){
@@ -720,6 +732,9 @@ function updateTheme() {
   // Reset wave sliders
   jQuery(".wave-slider[name=vertical]").slider("values", [ (theme.wave.y-(theme.wave.height/2))*100, (theme.wave.y+(theme.wave.height/2))*100 ]);
   jQuery(".wave-slider[name=horizontal]").slider("values", [ (theme.wave.x-(theme.wave.width/2))*100, (theme.wave.x+(theme.wave.width/2))*100 ]);
+  // Reset subs sliders
+  jQuery(".subs-slider[name=vertical]").slider("values", [theme.subtitles.margin.vertical*100]);
+  jQuery(".subs-slider[name=horizontal]").slider("values", [theme.subtitles.margin.horizontal*100]);
   // Show options for settings not specified in theme
   d3.select("#row-background").classed("hidden", theme.raw.backgroundImage);
   d3.select("#row-wave").classed("hidden", theme.raw.wave);

@@ -31,8 +31,8 @@ function draw(context, options) {
       lines = [];
       var line = 0,
           lineLength = 0,
-          lineWidth = ifNumeric(theme.subtitles.lineWidth, 30); 
-          linesMax = ifNumeric(theme.subtitles.linesMax, 2);
+          lineWidth = ifNumeric(+theme.subtitles.lineWidth, 30); 
+          linesMax = ifNumeric(+theme.subtitles.linesMax, 2);
 
       // Split text into lines
       loopSegments:
@@ -60,6 +60,8 @@ function draw(context, options) {
                   lines[line] = (lines[line] || "") + transcript.segments[i].words[j].text + " ";
                 }
                 if (j == transcript.segments[i].words.length - 1) {
+                  i++;
+                  j=0;
                   break loopSegments;
                 }
               }
@@ -85,33 +87,37 @@ function draw(context, options) {
         left = ifNumeric(theme.subtitles.left, 0, theme.width),
         right = ifNumeric(theme.subtitles.right, 1, theme.width),
         captionWidth = right - left,
-        bottom = ifNumeric(theme.subtitles.bottom, null, theme.height),
-        top = ifNumeric(theme.subtitles.top, null, theme.height);
-    if (bottom === null && top === null) {
-      top = 0;
-    }
+        horizontal = ifNumeric(+theme.subtitles.margin.horizontal, 0.5, theme.width),
+        vertical = ifNumeric(+theme.subtitles.margin.vertical, 0.5, theme.height),
+        spacing = theme.subtitles.lineSpacing;
 
-    var totalHeight = lines.length * (fontSize + (theme.subtitles.lineSpacing * ratio.width)),
-        x = theme.subtitles.align === "left" ? left : theme.subtitles.align === "right" ? right : (left + right) / 2,
+    var totalHeight = lines.length * (fontSize + (spacing * ratio.width)),
+        x = horizontal,
+        // x = theme.subtitles.align === "left" ? left : theme.subtitles.align === "right" ? right : (left + right) / 2,
         y;
 
-    if (top !== null && bottom !== null) {
-      // Vertical center
-      y = (bottom + top - totalHeight) / 2;
-    } else if (bottom !== null) {
-      // Vertical align bottom
-      y = bottom - totalHeight;
+    if (theme.subtitles.valign=="top") {
+      y = vertical;
+    } else if (theme.subtitles.valign=="bottom") {
+      y = vertical - totalHeight;
     } else {
-      // Vertical align top
-      y = top;
+      y = vertical - totalHeight/2;
+    }
+
+    // Draw background box
+    if (lines.length && theme.subtitles.box && theme.subtitles.box.opacity>0) {
+      context.globalAlpha = theme.subtitles.box.opacity;
+      context.fillStyle = theme.subtitles.box.color || "#000000";
+      context.fillRect(0, y-spacing, theme.width, totalHeight+spacing*3);
+      context.globalAlpha = 1;
     }
 
     context.font = font;
     context.textBaseline = "top";
     context.textAlign = theme.subtitles.align || "center";
     lines.forEach(function(text, i){
-      var lineY = y + i * (fontSize + (theme.subtitles.lineSpacing * ratio.width))
-      if (theme.subtitles.stroke) {
+      var lineY = y + i * (fontSize + (spacing * ratio.width))
+      if (theme.subtitles.stroke && theme.subtitles.stroke.width>0) {
         context.strokeStyle = theme.subtitles.stroke.color;
         context.lineWidth = theme.subtitles.stroke.width * ratio.width;
         context.strokeText(text, x, lineY);

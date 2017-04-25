@@ -115,7 +115,7 @@ module.exports = function(t) {
     o = h/1.5;
     context.drawImage(bbcDog, o, o, w, h);
 
-    patterns[theme.pattern || "wave"](context, options.waveform, theme);
+    if (theme.pattern!="none") patterns[theme.pattern || "wave"](context, options.waveform, theme);
 
     // Write the caption
     if (options.caption) {

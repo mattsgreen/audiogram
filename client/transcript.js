@@ -119,11 +119,9 @@ function load(json) {
       preview.redraw();
     }
   };
-  var TS = React.createClass({
-    render: function() {
-      return React.createElement(TranscriptEditor, props);
-    }
-  });
+  var TS = () => (
+    React.createElement(TranscriptEditor, props)
+  );
   var transcriptElement = document.querySelector("transcript");
   ReactDOM.render(React.createElement(TS), transcriptElement);
 

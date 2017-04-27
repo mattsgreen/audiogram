@@ -71,7 +71,7 @@ function draw(context, options) {
           nextStart = {
             i: i,
             j: j,
-            time: transcript.segments[i] ? transcript.segments[i].words[j].start : options.end
+            time: transcript.segments[i] ?  transcript.segments[i].words[j] ? transcript.segments[i].words[j].start : options.end : options.end
           };
         }
 

@@ -1,6 +1,7 @@
 var d3 = require("d3"),
     $ = require("jquery"),
     transcript = require("./transcript.js"),
+    logger = require("./slack.js"),
     preview = require("./preview.js"),
     minimap = require("./minimap.js"),
     video = require("./video.js"),

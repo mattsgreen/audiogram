@@ -11,6 +11,15 @@ var backgroundFile,
     vcsTranscriptTimeout,
     audioSource = "vcs";
 
+// Load user details
+global.USER = {"name":"Unknown","email":null};
+jQuery.getJSON( "/whoami", function( data ) {
+  if (data.user) {
+    USER.name = data.user.match(new RegExp("CN=(.*)\/OU="))[1];
+    USER.email = data.user.match(new RegExp("emailAddress=(.*)\/CN="))[1];
+  }
+});
+
 d3.json("/settings/themes.json", function(err, themes){
 
   var errorMessage;

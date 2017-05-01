@@ -18,6 +18,7 @@ function Audiogram(id) {
 
   // Unique audiogram ID
   this.id = id;
+  this.set("id",id);
 
   // File locations to use
   this.dir = path.join(serverSettings.workingDirectory, this.id);

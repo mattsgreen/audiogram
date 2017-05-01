@@ -42,8 +42,9 @@ function render(job) {
 
     if (err) {
       console.log("RLW: ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ! ");
+      err.path = __dirname.replace("/bin","");
       audiogram.status("error");
-      audiogram.set("error", err.toString());
+      audiogram.set("error", JSON.stringify(err, Object.getOwnPropertyNames(err)));
       throw err;
     }
 

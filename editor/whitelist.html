@@ -65,7 +65,7 @@
                 </span>
               </p>
             </div>
-            <form action="/whitelist" method="post">
+            <form id="whitelistForm" action="/whitelist" method="post">
               <textarea id="list" name="list" disabled rows="15" style="width: 100%">Loading...</textarea>
               <hr>
               <div class="btn-group">
@@ -81,16 +81,87 @@
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     <script>
+
+      // This is all standalone so that it's not bundled into bundle.js, and therefore is only exposed to admin users
+
       $(function() {
 
-        $.getJSON( "/whitelist/get", function( data ) {
-          if (data.list) {
-            var list = $.map(data.list, function(el) { return el });
-            $("#list").val(list.join("\n")).attr("disabled",false);
-          } else {
-            console.log(data);
+        // Get user
+        USER = {"name":"Unknown","email":null};
+        jQuery.getJSON( "/whoami", function( data ) {
+          if (data.user) {
+            USER.name = data.user.match(new RegExp("CN=(.*)\/OU="))[1];
+            USER.email = data.user.match(new RegExp("emailAddress=(.*)\/CN="))[1];
           }
         });
+
+        // Load whitelist
+        function get() {
+          $.getJSON( "/whitelist/get", function( data ) {
+            if (data.list) {
+              var list = $.map(data.list, function(el) { return el });
+              $("#list").val(list.join("\n")).attr("disabled",false);
+              $("body").removeClass("loading");
+            } else {
+              console.log(data);
+            }
+          });
+        }
+        get();
+
+        // Update whitelist
+        $( "#whitelistForm" ).submit(function( event ) {
+          $("body").addClass("loading");
+          $("#success").addClass("hidden");
+          event.preventDefault();
+          var form = $( this ),
+              list = form.find( "#list" ).val(),
+              post = $.post( "/whitelist", { list: list } );
+          post.done(function( data ) {
+            console.log(data);
+            if (data.error===null && data.diff && (data.diff.added.length || data.diff.removed.length) ) {
+              $("#success-added").text(data.diff.added.join(", "));
+              $("#success-removed").text(data.diff.removed.join(", "));
+              $("#success").removeClass("hidden");
+              log(data.diff, USER);
+            }
+            get();
+          });
+        });
+
+        // Log changes
+        function log(diff) {
+          var user = USER.email ? "<http://ad-lookup.bs.bbc.co.uk/adlookup.php?q=" + USER.email + "|" + USER.name + ">" : USER.name,
+              payload = { "attachments": [{
+                            "fallback": USER.name + " updated the whitelist of authorised users.",
+                            "text" : user + " updated the whitelist of authorised users.",
+                            "fields": [
+                              {
+                                "title": "Added",
+                                "value": diff.added.length ? diff.added.join(", ") : "none",
+                                "short": true
+                              },
+                              {
+                                "title": "Removed",
+                                "value": diff.removed.length ? diff.removed.join(", ") : "none",
+                                "short": true
+                              }
+                            ],
+                            "color": "#007ab8",
+                            "mrkdwn_in": ["text", "pretext"]
+                          }]};
+          jQuery.ajax({
+            url: "https://hooks.slack.com/services/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",
+            data: JSON.stringify(payload),
+            cache: false,
+            contentType: false,
+            processData: false,
+            type: 'POST',
+            success: function(data){
+              // console.log(data);
+            }
+          });
+        }
 
       });
     </script>

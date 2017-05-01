@@ -19,6 +19,7 @@ jQuery.getJSON( "/whoami", function( data ) {
     USER.name = data.user.match(new RegExp("CN=(.*)\/OU="))[1];
     USER.email = data.user.match(new RegExp("emailAddress=(.*)\/CN="))[1];
   }
+  logger.info(USER.name + " logged in.", USER);
 });
 
 d3.json("/settings/themes.json", function(err, themes){
@@ -141,6 +142,7 @@ function poll(id) {
         if (result && result.status && result.status === "ready" && result.url) {
           video.update(result.url, preview.theme().name);
           setClass("rendered");
+          logger.success(result);
         } else if (result.status === "error") {
           console.log("RLW status error");
           error(result.error);
@@ -155,23 +157,17 @@ function poll(id) {
 
 }
 
-function error(msg) {
-  console.log("RLW  client error function: "  + msg.code + " / " + msg.name + " / " + msg.message);
-
-  if (msg.responseText) {
-    msg = msg.responseText;
+function error(err) {
+  var error = JSON.parse(err);
+  console.error(error.message);
+  console.log(error.stack);
+  // console.log("RLW  client error function: "  + msg.code + " / " + msg.name + " / " + msg.message);
+  if (!error.message) {
+    error.message = "Unknown error";
   }
-
-  if (typeof msg !== "string") {
-    msg = JSON.stringify(msg);
-  }
-
-  if (!msg) {
-    msg = "Unknown error";
-  }
-
+  logger.error(error.message, error, USER);
   d3.select("#loading-message").text("Loading...");
-  setClass("error", msg);
+  setClass("error", error.message, false);
 
 }
 
@@ -444,7 +440,8 @@ function updateAudioFile(blob) {
 
     if (err) {
       d3.select("#row-audio").classed("error", true);
-      setClass("error", "Error decoding audio file");
+      var filename = jQuery("#input-audio").val().split("\\").pop();
+      setClass("error", "Error decoding audio file (" + filename + ")");
     } else {
       setClass(null);
     }
@@ -599,18 +596,24 @@ function vcsSearch(id, media) {
         d3.select("#vcs-results").insert("div").html(option).classed("error", false);
       }
     } else if (statusCode==404) {
-      d3.select("#vcs-results").html("<b>That item wasn't found.</b><br/>Make sure your item is saved in a logstore that auto-exports to the S-drive.").classed("error", true);
+      d3.select("#vcs-results").classed("hidden",true);
+      setClass("error","VCS item '" + item + "' wasn't found. Make sure your item is saved in a logstore that auto-exports to the S-drive.")
+      // d3.select("#vcs-results").html("<b>That item wasn't found.</b><br/>Make sure your item is saved in a logstore that auto-exports to the S-drive.").classed("error", true);
     } else {
-      d3.select("#vcs-results").html("<b>There was an error searching for that item.</b><br/>Check it was correctly formated, or try again.").classed("error", true);
+      d3.select("#vcs-results").classed("hidden",true);
+      setClass("error","There was an error searching for VCS item '" + item + "'. Check it's correctly formated.");
+      // d3.select("#vcs-results").html("<b>There was an error searching for that item.</b><br/>Check it was correctly formated, or try again.").classed("error", true);
     }
 
-    if (statusCode!=200) setClass(null);
+    // if (statusCode!=200) setClass(null);
 
   }).fail(function(jqXHR, textStatus, errorThrown) {
     
-    d3.select("#vcs-results").html("<b>An internal error occured.</b><br/>Please try again, or <a href='mailto:jonty.usborne@bbc.co.uk'>report the issue</a>.").classed("error", true);
+    d3.select("#vcs-results").classed("hidden",true);
+    setClass("error","An internal error occured searching for VCS item '" + item + "'. " + errorThrown);
+    // d3.select("#vcs-results").html("<b>An internal error occured.</b><br/>Please try again, or <a href='mailto:jonty.usborne@bbc.co.uk'>report the issue</a>.").classed("error", true);
     console.log(errorThrown);
-    setClass(null);
+    // setClass(null);
 
   }).complete(function(){
 
@@ -832,9 +835,18 @@ function preloadImages(themes) {
 
 }
 
-function setClass(cl, msg) {
+function setClass(cl, msg, log) {
   d3.select("body").attr("class", cl || null);
   d3.select("#error").text(msg || "");
+  // Log warning
+  if ( (log || log===undefined && cl=="error") && msg ) {
+    // Get stack trace
+      console.warn(msg);
+      console.trace();
+      var err = new Error();
+    // Log
+    logger.warn(msg, err, USER);
+  }
 }
 
 function statusMessage(result) {

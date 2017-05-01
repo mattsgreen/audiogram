@@ -23,6 +23,12 @@
     <link rel="icon" type="image/png" href="/favicon-48x48.png" sizes="48x48">
     <!-- 96x96 -->
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <style>
+      body.loading #whitelist,
+      body:not(.loading) #loading{
+        display: none;
+      }
+    </style>
   </head>
   <body class="loading">
     <header>
@@ -33,6 +39,12 @@
       <h1 class="page-title">Audiogram<span class="title-superscript">ALPHA</span></h1>
     </header>
     <div class="wrapper">
+      <div id="loading">
+        <div id="loading-bars">
+          <div class="r1"></div><div class="r2"></div><div class="r3"></div><div class="r4"></div><div class="r5"></div>
+        </div>
+        <div id="loading-message">Loading...</div>
+      </div><!-- #loading -->
       <div id="whitelist" class="intGEL">
     
           <section id="splash" class="well" style="border: none;">
@@ -40,6 +52,11 @@
               Access Control - Certificate Whitelist
             </h1>
             <hr>
+            <div id="success" class="alert alert-success hidden" role="alert" style="margin-bottom: 10px; padding-left: 36px;">
+              <p>
+                <i class="fa fa-check" style="margin-left: -24px;"></i> <b>Added:</b> <span id="success-added"></span><br/><b>Removed:</b> <span id="success-removed"></span><br/>
+              </p>
+            </div>
             <div class="alert alert-danger" role="alert" style="margin-bottom: 10px; padding-left: 36px;">
               <p>
                 <i class="fa fa-warning" style="margin-left: -24px;"></i> <b>Careful!</b> There's no validation on submit, so try not to break anything! One email per line.<br/>

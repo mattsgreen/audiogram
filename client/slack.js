@@ -1,6 +1,7 @@
 // Whitelist logging is done direclty within whitelist.html, so update the webook there too if it changes
 
 function sendMessage(payload) {
+	if (window.location.href.includes("localhost")) return;
 	jQuery.ajax({
 		url: "https://hooks.slack.com/services/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",
 		data: JSON.stringify(payload),

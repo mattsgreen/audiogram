@@ -112,7 +112,7 @@ function generateMedia(type, start, end, cb) {
 	q.await(function(err){
 		if (err) return cb(err);
 		// Build ffmpeg arguments
-		var args = ['-loglevel', 'error'];
+		var args = ['-loglevel', 'fatal'];
 		args.push('-i', tmpPath + 'audio.m4s');
 		if (type==="video") args.push('-i', tmpPath + 'video.m4s');
 		args.push(tmpPath + type + '.' + ext);

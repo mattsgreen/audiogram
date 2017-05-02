@@ -19,7 +19,7 @@ jQuery.getJSON( "/whoami", function( data ) {
     USER.name = data.user.match(new RegExp("CN=(.*)\/OU="))[1];
     USER.email = data.user.match(new RegExp("emailAddress=(.*)\/CN="))[1];
   }
-  logger.info(USER.name + " logged in.", USER);
+  logger.info(USER.name + " logged in.\n`" + navigator.userAgent + "`");
 });
 
 d3.json("/settings/themes.json", function(err, themes){
@@ -124,6 +124,17 @@ function submitted() {
 		processData: false,
 		success: function(data){
       poll(data.id, 0);
+      // Metrics/logging
+      var result = {},
+          fields = [];
+      for (var entry of this.data.entries()) {
+        result[entry[0]] = entry[1];
+      }
+      fields.push({'title': 'New Audiogram Started', 'value': '...' + data.id.split("-").pop(), 'short': true});
+      fields.push({'title': 'User', 'value': "<http://ad-lookup.bs.bbc.co.uk/adlookup.php?q=" + USER.email + "|" + USER.name + ">", 'short': true});
+      fields.push({'title': 'Theme', 'value': JSON.parse(result.theme).name, 'short': true});
+      fields.push({'title': 'Duration', 'value': Math.round(+result.duration*10,2)/10 + 's', 'short': true});
+      logger.info(null, fields, USER.name + " started generating a new audiogram");
 		},
     error: error
 
@@ -442,15 +453,17 @@ function updateAudioFile(blob) {
 
   setClass("loading");
 
+  if(audioFile.size)
 
   preview.loadAudio(audioFile, function(err){
 
+    var filename = blob ? "blob" : jQuery("#input-audio").val().split("\\").pop();
     if (err) {
       d3.select("#row-audio").classed("error", true);
-      var filename = jQuery("#input-audio").val().split("\\").pop();
       setClass("error", "Error decoding audio file (" + filename + ")");
     } else {
       setClass(null);
+      if (!blob) logger.info(USER.name + " uploaded a local audio file: " + filename);
     }
 
     d3.selectAll("#minimap, #submit").classed("hidden", !!err);
@@ -510,17 +523,19 @@ function txSearch() {
           $("#videoload a").attr("data-src",data.video);
           $("#videoload a").attr("data-used", false);
           d3.select("#videoload").classed("hidden", data.video==null);
-          txPoll(data.audio);
+          txPoll(data.audio, vpid);
         });
 }
 
-function txPoll(url) {
+function txPoll(url, vpid) {
     setClass("loading");
+    vpid = vpid || $("#input-tx-vpid").val();
     jQuery.getJSON( url, function( data ) {
       console.log(data);
       if (data.err) {
-        setClass("error", data.err);
+        setClass("error", "Simulcast Error: " + data.err);
       } else if (data.ready===true) {
+        logger.info(USER.name + " imported " + data.type + " from " + vpid);
         if (data.type==="audio") {
           loadAudioFromURL(data.src);
         } else if (data.type==="video") {
@@ -557,11 +572,17 @@ function vcsTranscript(id) {
     } else {
       console.log("VCS TRANSCRIPT ERROR");
       console.log(data);
+      var item = d3.select("#input-vcs").property("value");
+      if (data.statusCode==404) {
+        setClass("error", "That VCS item (" + item + ") has expired.");
+      } else {
+        setClass("error", "Error (" + data.statusCode + ") fetching transcript for VCS item " + item);
+      }
     }
   });
 }
 
-function vcsAudio(url) {
+function vcsAudio(url, item) {
 
   id = url.split("/").pop();
 
@@ -574,6 +595,9 @@ function vcsAudio(url) {
   // Get transcript
   clearTimeout(vcsTranscriptTimeout);
   vcsTranscript(id);
+
+  item = item || d3.select("#input-vcs").property("value");
+  logger.info(USER.name + " imported VCS Item #" + item);
 
 }
 
@@ -591,7 +615,7 @@ function vcsSearch(id, media) {
     if (statusCode==200) {
       var items = JSON.parse(data.body);
       // Load audio
-      vcsAudio(media || items[items.length - 1].mediaurl);
+      vcsAudio(media || items[items.length - 1].mediaurl, item);
       // Write results
       d3.select("#vcs-results").html("");
       for (var i = items.length - 1; i >= 0; i--) {
@@ -640,6 +664,8 @@ function setBackground() {
   if (type=="upload") {
     $("#input-background")[0].files = $("#input-audio")[0].files;
     setClass(null);
+    var filename = jQuery("#input-audio").val().split("\\").pop();
+    logger.info(USER.name + " used their audio source file (" + filename + ") as the background video");
   } else if (type=="tx") {
     var src = $("#videoload a").attr("data-src");
     txPoll(src);
@@ -853,6 +879,7 @@ function setClass(cl, msg, log) {
       console.warn(msg);
       console.trace();
       var err = new Error();
+      console.log(err.stack);
     // Log
     logger.warn(msg, err, USER);
   }

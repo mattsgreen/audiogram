@@ -1,9 +1,13 @@
-// Whitelist logging is done direclty within whitelist.html, so update the webook there too if it changes
 
 function sendMessage(payload) {
-	if (window.location.href.includes("localhost")) return;
+	// Whitelist logging is done direclty within whitelist.html, so update the webook there too if it changes
+	var webhook = {
+					"live" : "https://hooks.slack.com/services/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",
+					"dev" : "https://hooks.slack.com/services/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"
+				  };
+	var url = (window.location.href.includes("localhost")) ? webhook.dev : webhook.live;
 	jQuery.ajax({
-		url: "https://hooks.slack.com/services/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",
+		url: url,
 		data: JSON.stringify(payload),
 		cache: false,
 		contentType: false,
@@ -15,14 +19,18 @@ function sendMessage(payload) {
 	});
 }
 
-function info(msg) {
-	var text = USER.email ? msg.replace(USER.name,"<http://ad-lookup.bs.bbc.co.uk/adlookup.php?q=" + USER.email + "|" + USER.name + ">") : msg,
+function info(msg,fields,fallback) {
+	fallback = fallback || msg.split("\n")[0];
+	var text = msg ? USER.email ? msg.replace(USER.name,"<http://ad-lookup.bs.bbc.co.uk/adlookup.php?q=" + USER.email + "|" + USER.name + ">") : msg : null,
 		payload = { "attachments": [{
-	                "fallback": msg,
+	                "fallback": fallback,
 	                "text": text,
 	                "color": "#007ab8",
 	                "mrkdwn_in": ["text", "pretext"]
 	              }]};
+	if (fields) {
+		payload.attachments[0].fields = fields;
+	}
 	sendMessage(payload);
 }
 
@@ -99,12 +107,12 @@ function success(result) {
 	var url = window.location.href.slice(0,-1) + result.url,
 		user = USER.email ? "<http://ad-lookup.bs.bbc.co.uk/adlookup.php?q=" + USER.email + "|" + USER.name + ">" : USER.name,
 		payload = { "attachments": [{
-	                "fallback": "New audiogram by " + USER.name,
+	                "fallback": USER.name + "'s video is ready.",
 	                "fields": [
 	                	{
-	                		"title": "New Audiogram",
-	                		"value": "<" + url + "|" + result.id +">",
-	                		"short": false
+	                		"title": "Audiogram Finished",
+	                		"value": "<" + url + "|..." + result.id.split("-").pop() +">",
+	                		"short": true
 	                	},
 	                	{
 	                		"title": "User",

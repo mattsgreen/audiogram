@@ -183,6 +183,7 @@ function startJob(req, res) {
 	q.await(function(err){
 		if (err) {
 			console.log("SIMULCAST ERROR: " + err);
+			fs.writeFile(tmpPath + job + ".log", err);
 			if (fileAudio==null && fileVideo==null) return res.json({ err: err });
 		}
 		// Delete tmp media files
@@ -198,9 +199,22 @@ function poll(req, res) {
 		job = file[0],
 		ext = file[1],
 		type = (ext==="mp3") ? "audio" : (ext==="mp4") ? "video" : null;
+		logPath = path.join(__dirname, "../tmp/", job, "/", job + ".log"),
+		logExists = fs.existsSync(logPath),
 		mediaPath = path.join(__dirname, "../tmp/", job, "/", job + "." + ext),
-		exists = fs.existsSync(mediaPath);
-	return res.json({ ready: exists, src: "/simulcast/media/" + job + "." + ext, type: type });
+		mediaExists = fs.existsSync(mediaPath);
+	if (logExists) {
+		fs.readFile(logPath, 'utf8', function(err, data) {
+			if (err) {
+				var error = "Error reading log file: " + err;
+			} else {
+				var error = data;
+			}
+			return res.json({ ready: false, err: error, src: "/simulcast/media/" + job + "." + ext, type: type });
+		});
+	} else {
+		return res.json({ ready: mediaExists, err: null, src: "/simulcast/media/" + job + "." + ext, type: type });
+	}
 }
 
 function pipeMedia(req, res){

@@ -511,7 +511,9 @@ function txPoll(url) {
     setClass("loading");
     jQuery.getJSON( url, function( data ) {
       console.log(data);
-      if (data.ready===true) {
+      if (data.err) {
+        setClass("error", data.err);
+      } else if (data.ready===true) {
         if (data.type==="audio") {
           loadAudioFromURL(data.src);
         } else if (data.type==="video") {

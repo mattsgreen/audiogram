@@ -346,6 +346,13 @@ function initialize(err, themesWithImages) {
   // Fetch broadcast audio
   d3.selectAll("input[id^='input-tx-']").on("keyup", txTimeUpdate);
   d3.select("#tx-search").on("click", txSearch);
+  // Populate tx times
+  var now = new Date(),
+      startDate = new Date(now - 120000),
+      endDate = new Date(now - 60000);
+  $("#input-tx-start").val(startDate.getHours() + ":" + startDate.getMinutes() + ":00");
+  $("#input-tx-end").val(endDate.getHours() + ":" + endDate.getMinutes() + ":00");
+
 
   // Set background video
   d3.select("#videoload a").on("click", setBackground);

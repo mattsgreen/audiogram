@@ -1,7 +1,7 @@
 var d3 = require("d3"),
     patterns = require("./patterns.js"),
     subtitles = require("./subtitles.js"),
-    textWrapper = require("./text-wrapper.js");
+    captionRenderer = require("./caption.js");
 
 module.exports = function(t) {
 
@@ -50,7 +50,7 @@ module.exports = function(t) {
     theme.waveLeft = (theme.wave.x * theme.width) - ((theme.wave.width * theme.width)/2);
     theme.waveRight = theme.waveLeft + (theme.wave.width * theme.width);
 
-    wrapText = textWrapper(theme);
+    drawCaption = captionRenderer(theme);
 
     return this;
   };
@@ -119,7 +119,7 @@ module.exports = function(t) {
 
     // Write the caption
     if (options.caption) {
-      wrapText(context, options.caption);
+      drawCaption(context, options.caption);
     }
 
     // Write subtitles

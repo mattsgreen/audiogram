@@ -119,9 +119,9 @@ function load(json) {
       preview.redraw();
     }
   };
-  var TS = () => (
-    React.createElement(TranscriptEditor, props)
-  );
+  var TS = function() {
+    return React.createElement(TranscriptEditor, props);
+  };
   var transcriptElement = document.querySelector("transcript");
   ReactDOM.render(React.createElement(TS), transcriptElement);
 

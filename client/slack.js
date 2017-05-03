@@ -40,6 +40,7 @@ function error(msg,err) {
 		user = USER.email ? "<http://ad-lookup.bs.bbc.co.uk/adlookup.php?q=" + USER.email + "|" + USER.name + ">" : USER.name,
 		payload = { "attachments": [{
 	                "fallback": "NodeJS Error: " + msg,
+	                "pretext": "ATTN: <!channel>...",
 	                "fields": [
 	                	{
 	                		"title": "NodeJS Error",

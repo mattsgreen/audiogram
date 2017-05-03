@@ -10,6 +10,7 @@ var express = require("express"),
 
 // Routes and middleware
 var whitelist = require("./whitelist.js"),
+    themes = require("./themes.js"),
     logger = require("../lib/logger/"),
     render = require("./render.js"),
     status = require("./status.js"),
@@ -17,6 +18,7 @@ var whitelist = require("./whitelist.js"),
     whoami = require("./whoami.js"),
     kaldi = require("./kaldi.js"),
     vcs = require("./vcs.js"),
+    ichef = require("./ichef.js"),
     simulcast = require("./simulcast.js"),
     errorHandlers = require("./error.js");
 
@@ -41,6 +43,7 @@ app.use(bodyParser.json());
 app.get("/whitelist/get/", whitelist.get);
 app.get("/whitelist/", whitelist.editor);
 app.post("/whitelist/", whitelist.set);
+
 
 // Options for where to store uploaded audio and max size
 var fileOptions = {
@@ -97,6 +100,9 @@ app.get("/status/:id/", status);
 // Handle kaldi transcripts
 app.post("/kaldi/", [multer(fileOptions).fields([{ name: 'audio', maxCount: 1 }]), kaldi.post]);
 app.get("/kaldi/:job/", kaldi.get);
+
+// ichef
+app.get("/ichef/:pid/", ichef.pipe);
 
 // VCS
 app.get("/vcs/search/:id/", vcs.search);

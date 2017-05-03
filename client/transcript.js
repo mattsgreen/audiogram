@@ -155,7 +155,8 @@ function poll(job) {
 
 function generate(blob) {
 
-
+  clear();
+  
   var formData = new FormData();
   formData.append("audio",blob);
 

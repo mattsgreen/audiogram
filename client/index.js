@@ -587,7 +587,7 @@ function updateAudioFile(blob) {
 
   setClass("loading");
 
-  if(audioFile.size)
+  // if(audioFile.size)
 
   preview.loadAudio(audioFile, function(err){
 

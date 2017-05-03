@@ -62,7 +62,7 @@ function _themeConfig(prop,val) {
 }
 
 function _caption(_) {
-  return arguments.length ? (caption = _, redraw()) : caption;
+  return arguments.length ? (theme.caption.text = _, redraw()) : theme.caption.text;
 }
 
 function _selection(_) {
@@ -152,7 +152,7 @@ function redraw() {
   renderer.backgroundImage(background ? background : theme.backgroundImageFile ? theme.backgroundImageFile[theme.orientation] : null);
 
   renderer.drawFrame(context, {
-    caption: caption,
+    caption: theme.caption.text,
     transcript: transcript.toJSON(),
     waveform: sampleWave,
     backgroundInfo: (background && backgroundInfo ? backgroundInfo : theme.backgroundImageInfo ? theme.backgroundImageInfo[theme.orientation] : null),

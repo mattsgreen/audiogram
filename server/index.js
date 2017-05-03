@@ -69,6 +69,12 @@ if (serverSettings.maxUploadSize) {
 var filesToUpload = [{ name: 'audio', maxCount: 1 }, { name: 'background', maxCount: 1 }];
 app.post("/submit/", [multer(fileOptions).fields(filesToUpload), render.validate, render.route]);
 
+// Edit themes
+var filesToUpload = [{ name: 'background', maxCount: 1 }];
+app.post("/themes/add", [multer({ dest: "./settings/backgrounds" }).single('background'), themes.add]);
+// Edit themes
+// app.post("/themes/add/", themes.add);
+
 // If not using S3, serve videos locally
 if (!serverSettings.s3Bucket) {
   app.use("/video/", express.static(path.join(serverSettings.storagePath, "video")));

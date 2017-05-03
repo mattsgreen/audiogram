@@ -8,7 +8,8 @@ var d3 = require("d3"),
     audio = require("./audio.js");
 global.jQuery = $;
 
-var backgroundFile,
+var themesRaw,
+    backgroundFile,
     vcsTranscriptTimeout,
     audioSource = "vcs";
 
@@ -41,16 +42,21 @@ d3.json("/settings/themes.json", function(err, themes){
     d3.select("#loading-bars").remove();
     d3.select("#loading-message").html(errorMessage);
     if (err) {
+      logger.error(errorMessage,err);
       throw err;
     }
     return;
   }
 
   for (var key in themes) {
+    themes[key].name = key;
     var raw = JSON.stringify(themes[key]);
     if (key!="default") themes[key]["raw"] = JSON.parse(raw);
     themes[key] = $.extend({}, themes.default, themes[key]);
   }
+
+  var themesStr = JSON.stringify(themes);
+  themesRaw = JSON.parse(themesStr);
 
   preloadImages(themes);
 
@@ -80,15 +86,15 @@ function submitted() {
 
   if (!audioFile) {
     d3.select("#row-audio").classed("error", true);
-    return setClass("error", "No audio file selected.");
+    return setClass("error", "Submit Error: No audio file selected.");
   }
 
   if (theme.maxDuration && selection.duration > theme.maxDuration) {
-    return setClass("error", "Your Audiogram must be under " + theme.maxDuration + " seconds.");
+    return setClass("error", "Submit Error: Your Audiogram must be under " + theme.maxDuration + " seconds.");
   }
 
   if (!theme || !theme.width || !theme.height) {
-    return setClass("error", "No valid theme detected.");
+    return setClass("error", "Submit Error: No valid theme detected.");
   }
 
   video.kill();
@@ -96,6 +102,7 @@ function submitted() {
 
   var formData = new FormData();
 
+  formData.append("user", USER.email);
   formData.append("audio", audioFile);
   formData.append("background", backgroundFile);
   formData.append("backgroundInfo", JSON.stringify(backgroundInfo || theme.backgroundImageInfo[theme.orientation]));
@@ -115,6 +122,11 @@ function submitted() {
   setClass("loading");
   d3.select("#loading-message").text("Uploading audio...");
 
+  var info = {"theme": theme.name},
+      fullDuration = Math.round(+audio.duration()*10,2)/10,
+      cutDuration = Math.round(+jQuery("#duration strong").text()*10,2)/10;
+  info.duration =  (fullDuration==cutDuration) ? fullDuration + "s" : cutDuration + "s (cut from " + fullDuration + "s)";
+
 	$.ajax({
 		url: "/submit/",
 		type: "POST",
@@ -125,16 +137,12 @@ function submitted() {
 		processData: false,
 		success: function(data){
       poll(data.id, 0);
-      // Metrics/logging
-      var result = {},
-          fields = [];
-      for (var entry of this.data.entries()) {
-        result[entry[0]] = entry[1];
-      }
+      // Logging
+      var fields = [];
       fields.push({'title': 'New Audiogram Started', 'value': '...' + data.id.split("-").pop(), 'short': true});
       fields.push({'title': 'User', 'value': "<http://ad-lookup.bs.bbc.co.uk/adlookup.php?q=" + USER.email + "|" + USER.name + ">", 'short': true});
-      fields.push({'title': 'Theme', 'value': JSON.parse(result.theme).name, 'short': true});
-      fields.push({'title': 'Duration', 'value': Math.round(+result.duration*10,2)/10 + 's', 'short': true});
+      fields.push({'title': 'Theme', 'value': info.theme, 'short': true});
+      fields.push({'title': 'Duration', 'value': info.duration, 'short': true});
       logger.info(null, fields, USER.name + " started generating a new audiogram");
 		},
     error: error
@@ -192,6 +200,13 @@ function stopIt(e) {
   }
 }
 
+function pad(n, width, z) {
+  z = z || '0';
+  width = width || 2;
+  n = n + '';
+  return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+}
+
 // Once images are downloaded, set up listeners
 function initialize(err, themesWithImages) {
 
@@ -209,6 +224,7 @@ function initialize(err, themesWithImages) {
       });
 
   // Initialize wave sliders
+  $(function() {
     $(".wave-slider").slider({
       range: true,
       min: 0,
@@ -235,6 +251,16 @@ function initialize(err, themesWithImages) {
         preview.themeConfig("subtitles.margin." + jQuery(this).attr("name"), ui.value/100);
       }
     });
+    $(".caption-slider").slider({
+      range: false,
+      min: 0,
+      max: 100,
+      values: [ 50 ],
+      slide: function( event, ui ) {
+        preview.themeConfig("caption.margin." + jQuery(this).attr("name"), ui.value/100);
+      }
+    });
+  });
 
   // Get initial theme
   d3.select("#input-theme").each(updateTheme);
@@ -243,14 +269,10 @@ function initialize(err, themesWithImages) {
   d3.selectAll(".themeConfig").on("change", updateThemeConfig);
 
   // Expand advanced configs
-  d3.select("#group-theme-advanced button").on("click", function(){
-    jQuery("#input-caption:not(:visible)").val("");
-    jQuery("#section-theme .row:not(:visible)").removeClass("hidden");
-    d3.select("#row-theme").classed("advanced", false);
-  });
-  d3.select("#group-wave-advanced button").on("click", function(){
-    jQuery("#row-wave").addClass("advanced");
-  });
+  d3.select("#group-theme-advanced button").on("click", showAdvancedConfig);
+  // d3.select("#group-wave-advanced button").on("click", function(){
+  //   jQuery("#row-wave").addClass("advanced");
+  // });
 
   // Get initial caption (e.g. back button)
   d3.select("#input-caption").on("change keyup", updateCaption).each(updateCaption);
@@ -325,6 +347,14 @@ function initialize(err, themesWithImages) {
   d3.selectAll(".subFormatToggle").on("click", function(){
     $("#transcript .subFormatToggle, #transcript-settings").toggleClass("hidden");
   })
+  d3.selectAll(".subFormatAlias").on("click", function(){
+    if ($("#transcript-settings:visible").length) {
+      $("#transcript-settings").stop().css("background-color", "#FFFF9C").animate({ backgroundColor: "#FFFFFF"}, 1500);
+    } else {
+      $("#transcript .subFormatToggle, #transcript-settings").removeClass("hidden");
+      $("#transcript .subFormatToggle").addClass("hidden");
+    }
+  })
 
   // Button listeners
   d3.selectAll("#play, #pause").on("click", function(){
@@ -345,6 +375,13 @@ function initialize(err, themesWithImages) {
   // If there's an initial background image (e.g. back button) load it
   jQuery(document).on('change', '#input-background', updateBackground);
 
+  // Image VPID as background
+  jQuery(document).on('click', '#input-image-pid', imagePid);
+
+  // Reset/save theme
+  d3.selectAll("#theme-reset").on("click", themeReset);
+  d3.selectAll("#theme-save").on("click", themeSave);
+
   d3.select("#return").on("click", function(){
     d3.event.preventDefault();
     video.kill();
@@ -362,8 +399,8 @@ function initialize(err, themesWithImages) {
   var now = new Date(),
       startDate = new Date(now - 120000),
       endDate = new Date(now - 60000);
-  $("#input-tx-start").val(startDate.getHours() + ":" + startDate.getMinutes() + ":00");
-  $("#input-tx-end").val(endDate.getHours() + ":" + endDate.getMinutes() + ":00");
+  $("#input-tx-start").val(pad(startDate.getHours()) + ":" + pad(startDate.getMinutes()) + ":00");
+  $("#input-tx-end").val(pad(endDate.getHours()) + ":" + pad(endDate.getMinutes()) + ":00");
 
 
   // Set background video
@@ -382,11 +419,107 @@ function initialize(err, themesWithImages) {
     vcsSearch(params.vcsid,params.vcs);
   }
 
+  // Select default theme
+  $(function() {
+    jQuery("#input-theme option:first").after("<option disabled></option>");
+    jQuery("#input-theme").val(jQuery("#input-theme option:eq(2)").val());
+    var sel = jQuery("#input-theme").get(0);
+    updateTheme(d3.select(sel.options[sel.selectedIndex]).datum());
+  });
+
 }
 
 function windowResize() {
   preview.redraw();
   minimap.width(jQuery("#sourceWrapper .tab-content").width());
+}
+
+function themeReset() {
+  var themes = themesRaw,
+      theme = preview.theme(),
+      name = jQuery("#input-theme").val();
+  console.log(theme);
+  var sel = jQuery("#input-theme").get(0);
+  d3.select(sel.options[sel.selectedIndex]).datum(themes[theme.name]);
+  updateTheme(themes[name]);
+}
+
+function themeSave() {
+  var theme = preview.theme();
+  // Prompt for theme name
+  var newName = prompt("Save theme with these settings.\nNOTE: The theme will be public to all users.\n\nEnter a theme name.\nUsing an existing theme name will overwrite that theme.", theme.name);
+  if (newName != null) {
+    var formData = new FormData();
+    // Get theme config
+    var themes = themesRaw,
+        themeJSON = JSON.stringify(theme),
+        newTheme = JSON.parse(themeJSON),
+        newThemeFullJSON = JSON.stringify(newTheme),
+        background = preview.background();
+    if (themes[newName] && USER.email !== themes[newName].author) {
+      setClass("error", "You can't overwrite the existing '" + newName + "' theme because you weren't the one to orignally create it. Chosse anothe name.");
+    } else {
+      // Clear useless bits
+      delete newTheme.raw;
+      delete newTheme.backgroundImageFile;
+      delete newTheme.backgroundImageInfo;
+      delete newTheme.foregroundImageFile;
+      if (!jQuery("#input-caption").val().length) {
+        delete newTheme.caption;
+      }
+      // Upload background files
+      if (background) {
+        // formData.append('background', background);
+        formData.append("background", backgroundFile);
+      }
+      // Add name/author
+      newTheme.name = newName;
+      newTheme.author = USER.email;
+      console.log(newTheme);
+      // Post
+      formData.append('theme', JSON.stringify(newTheme));
+      $.ajax({
+        url: "/themes/add/",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        dataType: "json",
+        cache: false,
+        processData: false,
+        success: function(data){
+          console.log(data);
+          setClass("success","The theme '" + newName + "' has been saved, and will be available next time you use Audiogram.");
+          var msg = themes[newName] ? USER.name + " updated the theme '" + newName + "'" : USER.name + " added a new theme: '" + newName + "'";
+          logger.info(msg);
+        },
+        error: error
+      });
+    }
+
+  }
+}
+
+function imagePid() {
+  var pid = prompt("Enter a valid image pid:", "p04zwtlb");
+  if (pid != null) {
+    setClass("loading");
+    var url = "/ichef/" + pid;
+    console.log(url);
+    var blob = null;
+    var xhr = new XMLHttpRequest(); 
+    xhr.open("GET", url); 
+    xhr.responseType = "blob";
+    xhr.onload = function(data) {
+      if (xhr.status==200) {
+        updateBackground(null, xhr.response);
+        setClass(null);
+        logger.info(USER.name + " imported an image pid from iChef (" + pid + ")");
+      } else {
+        setClass("error","There was an error (" + xhr.status + ") fetching image '" + pid + "' form iChef.");
+      }
+    }
+    xhr.send();
+  }
 }
 
 function sourceUpdate() {
@@ -506,13 +639,14 @@ function txSearch() {
   console.log(start);
   console.log(end);
   if (start.getTime() < min) {
-    return setClass("error", "TX media is only available for the last 12 hours.");
+    return setClass("error", "Broadcast media is only available for the last 12 hours. (" + vpid + ", " + start + ")");
   } else if (end.getTime() - start.getTime() > (15*60*1000)) {
-    return setClass("error", "Please select a TX window < 15 minutes. If a larger window would be useful, please contact us.");
+    return setClass("error", "Please select a broadcast window < 15 minutes. If a larger window would be useful, let us know. (" + vpid + ", " + start + ")");
   }
   d3.select("#loading-message").text("Fetching " + vpid + " media from " + start.toLocaleString());
   setClass("loading");
-  jQuery.post("/simulcast", {vpid: vpid, start: start.getTime()/1000, end: end.getTime()/1000})
+  var postData = {vpid: vpid, start: start.getTime()/1000, end: end.getTime()/1000, processStart: performance.now()};
+  jQuery.post("/simulcast", postData)
         .fail(function(xhr, status, error) {
            setClass("error", status);
         })
@@ -524,19 +658,27 @@ function txSearch() {
           $("#videoload a").attr("data-src",data.video);
           $("#videoload a").attr("data-used", false);
           d3.select("#videoload").classed("hidden", data.video==null);
-          txPoll(data.audio, vpid);
+          txPoll(data.audio, postData);
         });
 }
 
-function txPoll(url, vpid) {
+function txPoll(url, req) {
     setClass("loading");
-    vpid = vpid || $("#input-tx-vpid").val();
+    req = req || null;
+    vpid = req.vpid ? req.vpid : $("#input-tx-vpid").val();
     jQuery.getJSON( url, function( data ) {
       console.log(data);
       if (data.err) {
         setClass("error", "Simulcast Error: " + data.err);
       } else if (data.ready===true) {
-        logger.info(USER.name + " imported " + data.type + " from " + vpid);
+        var processDuration = "\n[process time: " + Math.round((performance.now()-req.processStart)/10)/100 + "s]";
+        if (req.start && req.end) {
+          var startDate = new Date(req.start*1000),
+              endDate = new Date(req.end*1000);
+          logger.info(USER.name + " imported " + data.type + " from " + vpid + " (" + pad(startDate.getHours()) + ":" + pad(startDate.getMinutes()) + ":" + pad(startDate.getSeconds()) + " - " + pad(endDate.getHours()) + ":" + pad(endDate.getMinutes()) + ":" + pad(endDate.getSeconds()) + ")" + processDuration);
+        } else {
+          logger.info(USER.name + " imported " + data.type + " from " + vpid + processDuration);
+        }
         if (data.type==="audio") {
           loadAudioFromURL(data.src);
         } else if (data.type==="video") {
@@ -551,7 +693,7 @@ function txPoll(url, vpid) {
           console.log("LOAD VIDEO");
         }
       } else {
-        txPollTimeout = setTimeout(function(){txPoll(url)},5000);
+        txPollTimeout = setTimeout(function(){txPoll(url, req)},5000);
       }
     });
 }
@@ -669,7 +811,7 @@ function setBackground() {
     logger.info(USER.name + " used their audio source file (" + filename + ") as the background video");
   } else if (type=="tx") {
     var src = $("#videoload a").attr("data-src");
-    txPoll(src);
+    txPoll(src, {processStart: performance.now()});
   }
   d3.select("#videoload").classed("hidden", true);
 }
@@ -689,6 +831,7 @@ function updateBackground(event, blob) {
     }
 
     backgroundFile = blob || this.files[0];
+    var filename = blob ? "blob" : jQuery("#input-background").val().split("\\").pop();
 
     if (backgroundFile.type.startsWith("video")) {
 
@@ -706,6 +849,7 @@ function updateBackground(event, blob) {
       source.type = backgroundFile.type;
       source.src = window.URL.createObjectURL( backgroundFile );
       vid.appendChild(source);
+      if (!blob) logger.info(USER.name + " uploaded a video background (" + filename + ")");
 
     } else if (backgroundFile.type.startsWith("image")) {
 
@@ -719,11 +863,12 @@ function updateBackground(event, blob) {
       preview.background(backgroundImage);
       backgroundImage.onload = function() {
         preview.backgroundInfo({type: backgroundFile.type, height: this.height, width: this.width});
+        if (!blob) logger.info(USER.name + " uploaded an image background (" + filename + ")");
       }
 
     } else {
 
-      setClass("error", "That file type can't be used in the background.");
+      setClass("error", "That file type can't be used in the background. (" + filename + ")");
       return true;
 
     }
@@ -731,8 +876,12 @@ function updateBackground(event, blob) {
 
 }
 
-function updateCaption() {
-  var value = jQuery("#input-caption:visible").length ? jQuery("#input-caption").val() : "";
+function updateCaption(value) {
+  if (typeof value == "string") {
+    jQuery("#input-caption").val(value);
+  } else {
+    value = jQuery("#input-caption:visible").length ? jQuery("#input-caption").val() : "";
+  }
   preview.caption(value);
 }
 
@@ -752,10 +901,22 @@ function updateTrim(extent) {
   }
 }
 
-function updateTheme() {
-  var theme = d3.select(this.options[this.selectedIndex]).datum();
+function showAdvancedConfig() {
+  jQuery("#input-caption:not(:visible)").val("");
+  jQuery("#section-theme .row").removeClass("hidden");
+  d3.select("#row-theme").classed("advanced", false);
+  jQuery("#config-save").removeClass("hidden");
+  windowResize(); // Bcause sometimes it makes the vertical scroll-bar appear, and elements need resizing
+}
+
+function updateTheme(theme) {
+  var theme = theme || d3.select(this.options[this.selectedIndex]).datum();
   preview.theme(theme);
   updateBackground();
+  if (theme.caption){
+    var caption = theme.caption.text || "";
+    updateCaption(caption);
+  }
   $("#videoload a[data-used=true]").parent().removeClass("hidden");
   // Reset custom config fields
   jQuery(".themeConfig").each(function() {
@@ -778,19 +939,31 @@ function updateTheme() {
   if (jQuery("#input-size option:selected").is(":disabled")) {
     jQuery("#input-size").val(jQuery("#input-size option:not(':disabled'):first").val());
   }
-  // Reset wave sliders
-  jQuery(".wave-slider[name=vertical]").slider("values", [ (theme.wave.y-(theme.wave.height/2))*100, (theme.wave.y+(theme.wave.height/2))*100 ]);
-  jQuery(".wave-slider[name=horizontal]").slider("values", [ (theme.wave.x-(theme.wave.width/2))*100, (theme.wave.x+(theme.wave.width/2))*100 ]);
-  // Reset subs sliders
-  jQuery(".subs-slider[name=vertical]").slider("values", [theme.subtitles.margin.vertical*100]);
-  jQuery(".subs-slider[name=horizontal]").slider("values", [theme.subtitles.margin.horizontal*100]);
+  if (jQuery().slider) {
+    // Reset wave sliders
+    jQuery(".wave-slider[name=vertical]").slider("values", [ (theme.wave.y-(theme.wave.height/2))*100, (theme.wave.y+(theme.wave.height/2))*100 ]);
+    jQuery(".wave-slider[name=horizontal]").slider("values", [ (theme.wave.x-(theme.wave.width/2))*100, (theme.wave.x+(theme.wave.width/2))*100 ]);
+    // Reset subs sliders
+    jQuery(".subs-slider[name=vertical]").slider("values", [theme.subtitles.margin.vertical*100]);
+    jQuery(".subs-slider[name=horizontal]").slider("values", [theme.subtitles.margin.horizontal*100]);
+    // Reset captions sliders
+    jQuery(".caption-slider[name=vertical]").slider("values", [theme.caption.margin.vertical*100]);
+    jQuery(".caption-slider[name=horizontal]").slider("values", [theme.caption.margin.horizontal*100]);
+  }
   // Show options for settings not specified in theme
-  d3.select("#row-background").classed("hidden", theme.raw.backgroundImage);
-  d3.select("#row-wave").classed("hidden", theme.raw.wave);
-  d3.select("#row-caption").classed("hidden", !theme.raw.caption);
-  updateCaption();
-  // Show all config options, if some are hidden
-  d3.select("#row-theme").classed("advanced", jQuery("#section-theme > .row:not(:visible)").length);
+  if (theme.name=="Custom") {
+    showAdvancedConfig();
+  } else {
+    d3.select("#row-background").classed("hidden", theme.raw.backgroundImage);
+    d3.select("#row-wave").classed("hidden", theme.raw.wave || theme.raw.pattern=="none");
+    d3.select("#row-caption").classed("hidden", !(theme.raw.caption && theme.raw.caption.hasOwnProperty("text")));
+    d3.selectAll(".row.caption-advanced").classed("hidden", !jQuery("#section-theme").hasClass("advanced"));
+    d3.select("#row-subs-alias").classed("hidden", !jQuery("#section-theme").hasClass("advanced"));
+    // Show "advanced" button, if some rows are still hidden
+    d3.select("#row-theme").classed("advanced", jQuery("#section-theme > .row:not(:visible)").length);
+    d3.select("#config-save").classed("hidden", !jQuery("#section-theme").hasClass("advanced"));
+  }
+  windowResize(); // Bcause sometimes it makes the vertical scroll-bar appear, and elements need resizing
 
 }
 
@@ -862,6 +1035,11 @@ function preloadImages(themes) {
       }, orientation);
     }
 
+    // Update raw themes
+    themesRaw[theme.name].backgroundImageFile = theme.backgroundImageFile;
+    themesRaw[theme.name].backgroundImageInfo = theme.backgroundImageInfo;
+    themesRaw[theme.name].foregroundImageFile = theme.foregroundImageFile;
+
     // Finished loading this theme
     imageQueue.await(function(err){
       return cb(err, theme);
@@ -873,7 +1051,7 @@ function preloadImages(themes) {
 
 function setClass(cl, msg, log) {
   d3.select("body").attr("class", cl || null);
-  d3.select("#error").text(msg || "");
+  d3.selectAll("#error, #success").text(msg || "");
   // Log warning
   if ( (log || log===undefined && cl=="error") && msg ) {
     // Get stack trace
@@ -884,6 +1062,7 @@ function setClass(cl, msg, log) {
     // Log
     logger.warn(msg, err, USER);
   }
+  jQuery('html,body').scrollTop(0);
 }
 
 function statusMessage(result) {

@@ -30,7 +30,7 @@
         <image class="labs-logo-image" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="images/labs-logo.svg" src="images/labs-logo.png" width="62" height="80"></image>
       </svg>
       <h1 class="page-title">Audiogram<span class="title-superscript">ALPHA</span></h1>
-      <div id="version">Version: GIT_SHA [<b>DD_MMM_YY</b>]</div>
+      <div id="version">Version: 3c29568 [<b>02 MAY 17</b>]</div>
     </header>
     <div class="wrapper">
       <div id="loading">
@@ -42,6 +42,9 @@
       <div id="loaded" class="intGEL">
         <div id="error" class="alert alert-danger" role="alert">
           <strong>Oh snap!</strong> Change a few things up and try submitting again.
+        </div>
+        <div id="success" class="alert alert-success" role="alert">
+          <strong>Yay!</strong> It works :)
         </div>
 
 
@@ -510,13 +513,13 @@
               <div class="col-md-3">
                 <label class="settings" for="input-theme">Theme:</label>
               </div>
-              <div class="col-md-9">
-                <label id="group-theme" class="intGEL-arrow" for="input-theme">
+              <div id="group-theme-wrapper" class="col-md-6">
+                <label id="group-theme" class="intGEL-arrow" style="width: 100%" for="input-theme">
                   <select id="input-theme" name="theme" class="form-control"></select>
                 </label>
-                <div id="group-theme-advanced" class="btn-group">
-                  <button type="button" class="btn btn-secondary right"><i class="fa fa-cog"></i></button>
-                </div> 
+              </div>
+              <div id="group-theme-advanced" class="col-md-3">
+                <button type="button" class="btn btn-secondary btn-block">Advanced</button>
               </div>
             </div>
             <div id="row-background" class="row">
@@ -524,20 +527,23 @@
               <div class="col-md-3">
                 <label class="settings" for="input-background">Image / Video:</label>
               </div>
-              <div class="col-md-9">
+              <div class="col-md-5">
                 <div id="input-background-type-file" class="input-background-type" style="margin-top: 10px;">
                   <input id="input-background" name="background" type="file" />
                 </div>
               </div>
+              <div class="col-md-4" style="text-align: center;">
+                <a id="input-image-pid" href="#">or Image PID</a>
+              </div>
             </div>
-            <div id="row-wave" class="row">
+            <div id="row-wave" class="row advanced">
               <hr>
               <div class="col-md-3">
                 <label class="settings" for="input-size">Audio Wave:</label>
               </div>
               <div class="col-md-9">
                 <div class="row">
-                  <div id="group-pattern" class="col-md-8">
+                  <div id="group-pattern" class="col-md-5">
                     <label class="intGEL-arrow" for="input-size">
                       <select id="input-pattern" name="pattern" class="themeConfig form-control">
                         <option value="none">None</option>
@@ -550,11 +556,11 @@
                       </select>
                     </label>
                   </div>
-                  <div id="group-color" class="col-md-4">
+                  <div id="group-color" class="col-md-3" style="padding: 0">
                     <input type="color" id="input-color" class="themeConfig" name="wave.color" value="#942924">
                   </div>
-                  <div id="group-wave-advanced" class="col-md-2">
-                    <button type="button" class="btn btn-secondary right"><i class="fa fa-arrows"></i></button>
+                  <div id="group-wave-advanced" class="col-md-4">
+                    <button type="button" class="btn btn-secondary btn-block">Position</button>
                   </div>
                 </div>
                 <div id="row-wave-sliders" class="row">
@@ -582,7 +588,68 @@
                 <label class="settings" for="input-caption">Caption:</label>
               </div>
               <div class="col-md-9">
-                  <input id="input-caption" type="text" placeholder="" class="form-control" name="caption" value="" />
+                <div class="row">
+                  <div class="col-md-12">
+                    <textarea id="input-caption" name="caption" lass="form-control" cols="30" rows="2" style="height: 52px; min-height: 0!important; width: 100%"></textarea>
+                  </div>
+                </div>
+                <div class="row caption-advanced hidden">
+                  <div class="col-md-12">
+                    <hr>
+                  </div>
+                  <div class="col-md-4">
+                    <input type="color" id="input-color" class="themeConfig" name="caption.color">
+                  </div>
+                  <div class="col-md-3">
+                    <input name="caption.fontSize" type="text" class="themeConfig form-control" style="text-align: center;" value="" />
+                  </div>
+                  <div class="col-md-5">
+                    <label class="intGEL-arrow" for="input-size">
+                      <select class="form-control themeConfig" name="caption.fontWeight" style="text-align: center;">
+                        <option value="300">Light</option>
+                        <option value="400">Bold</option>
+                      </select>
+                    </label>
+                  </div>
+                  <div class="col-md-12">
+                    <hr>
+                  </div>
+                  <div class="col-md-4">
+                    <label class="intGEL-arrow" for="input-size">
+                      <select class="form-control themeConfig" name="caption.align" style="text-align: center;">
+                        <option value="left">left</option>
+                        <option value="center">center</option>
+                        <option value="right">right</option>
+                      </select>
+                    </label>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="caption-slider" name="horizontal" style="margin: 10px 0;"></div>
+                  </div>
+                </div>
+                <div class="row caption-advanced hidden">
+                  <div class="col-md-4">
+                    <label class="intGEL-arrow" for="input-size">
+                      <select class="form-control themeConfig" name="caption.valign" style="text-align: center;">
+                        <option value="top">top</option>
+                        <option value="middle">middle</option>
+                        <option value="bottom">bottom</option>
+                      </select>
+                    </label>
+                  </div>
+                  <div class="col-md-8">
+                    <div class="caption-slider" name="vertical" style="margin: 10px 0;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div id="row-subs-alias" class="row">
+              <hr>
+              <div class="col-md-3">
+                <label class="settings" for="input-caption">Subtitles:</label>
+              </div>
+              <div class="col-md-9">
+                  <a class="subFormatAlias" href="#" style="line-height: 30px;">Edit subtitle formatting</a>
               </div>
             </div>
             <div class="row">
@@ -604,6 +671,17 @@
               </div>
             </div>
 
+          </section>
+
+          <section id="config-save" class="well hidden" style="border: none;">
+            <div class="row">
+              <div class="col-md-6">
+                <button type="button" id="theme-reset" class="btn btn-sm btn-block btn-secondary right"><i class="fa fa-undo"></i> Reset Formatting</button>
+              </div>
+              <div class="col-md-6">
+                <button type="button" id="theme-save" class="btn btn-sm btn-block btn-secondary right"><i class="fa fa-save"></i> Save Theme</button>
+              </div>
+            </div>
           </section>
 
           <section class="well">

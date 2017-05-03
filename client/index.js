@@ -16,8 +16,9 @@ var backgroundFile,
 global.USER = {"name":"Unknown","email":null};
 jQuery.getJSON( "/whoami", function( data ) {
   if (data.user) {
-    USER.name = data.user.match(new RegExp("CN=(.*)\/OU="))[1];
-    USER.email = data.user.match(new RegExp("emailAddress=(.*)\/CN="))[1];
+    data.user = data.user + "/";
+    USER.name = data.user.match(new RegExp("CN=(.*)\/"))[1].split("/").shift();
+    USER.email = data.user.match(new RegExp("emailAddress=(.*)\/"))[1].split("/").shift();
   }
   logger.info(USER.name + " logged in.\n`" + navigator.userAgent + "`");
 });

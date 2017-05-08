@@ -10,6 +10,7 @@ var path = require("path"),
     getWaveform = require("./waveform.js"),
     initializeCanvas = require("./initialize-canvas.js"),
     drawFrames = require("./draw-frames.js"),
+    subtitles = require("../renderer/subtitles.js"),
     combineFrames = require("./combine-frames.js"),
     backgroundVideo = require("./background-video.js"),
     trimAudio = require("./trim.js");
@@ -157,6 +158,35 @@ Audiogram.prototype.drawFrames = function(cb) {
 
 };
 
+// Save subtitles
+Audiogram.prototype.saveSubtitles = function(type,cb) {
+
+  var self = this;
+
+  console.log("generate subtitles: " + type);
+
+  if (self.settings.transcript) {
+    subtitles.save(type, path.join(self.dir, "subtitles." + type), function(err){
+      if (err) return cb(err);
+      transports.uploadVideo(path.join(self.dir, "subtitles." + type), "video/" + self.id + "." + type, function(err){
+        return cb(err);
+      });
+    });
+  }
+
+};
+
+// Save thumbnail image
+Audiogram.prototype.saveThumb = function(cb) {
+
+  var self = this;
+  
+  transports.uploadVideo(path.join(self.frameDir, "000001.png"), "video/" + self.id + ".png", function(err){
+    return cb(err);
+  });
+
+};
+
 // Combine the frames and audio into the final video with FFmpeg
 Audiogram.prototype.combineFrames = function(cb) {
 
@@ -202,6 +232,13 @@ Audiogram.prototype.render = function(cb) {
 
   // Draw all the frames
   q.defer(this.drawFrames.bind(this));
+
+  // Save subtitle files
+  q.defer(this.saveSubtitles.bind(this), "srt");
+  q.defer(this.saveSubtitles.bind(this), "xml");
+
+  // Save preview thumnail
+  q.defer(this.saveThumb.bind(this));
 
   // Combine audio and frames together with ffmpeg
   q.defer(this.combineFrames.bind(this));

@@ -22,6 +22,9 @@ module.exports = {
   workingDirectory: path.join(__dirname, "..", "tmp"),
   storagePath: path.join(__dirname, "..", "media"),
   fonts: [
+    { family: "HelveticaNeue", file: path.join(__dirname, "fonts", "HelveticaNeue.ttf") },
+    { family: "HelveticaNeue Medium", file: path.join(__dirname, "fonts", "HelveticaNeueMedium.ttf")  },
+    { family: "HelveticaNeue Bold", file: path.join(__dirname, "fonts", "HelveticaNeueBold.ttf") },
     { family: "Source Sans Pro", file: path.join(__dirname, "fonts", "SourceSansPro-Regular.ttf") },
     { family: "Source Sans Pro", file: path.join(__dirname, "fonts", "SourceSansPro-Light.ttf"), weight: 300 },
     { family: "Source Sans Pro", file: path.join(__dirname, "fonts", "SourceSansPro-Bold.ttf"), weight: "bold" },

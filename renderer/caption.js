@@ -18,13 +18,14 @@ module.exports = function(theme) {
       return;
     }
 
+    if (theme.caption.fontWeight=="Regular") theme.caption.fontWeight = ""; 
     var lines = caption.split("\n"),
         ratio = { // Font sizes/spacing are relative to the default theme size, (1280x720), so scale accordingly
           width: theme.width/1280,
           height: theme.height/720
         },
         fontSize = theme.caption.fontSize * ratio.width,
-        font = theme.caption.fontWeight + " " + fontSize + "px " + theme.caption.font,
+        font = fontSize + "px '" + theme.caption.font + theme.caption.fontWeight + "'",
         totalHeight = lines.length * fontSize + (lines.length - 1) * theme.caption.lineSpacing,
         horizontal = ifNumeric(+theme.caption.margin.horizontal, 0.5, theme.width),
         vertical = ifNumeric(+theme.caption.margin.vertical, 0.5, theme.height);

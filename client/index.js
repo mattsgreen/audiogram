@@ -530,10 +530,72 @@ function themeSave() {
   }
 }
 
+function webCapList() {
+  // Get list of Web:Cap files in the W1 Dropzone
+  jQuery.getJSON( "/webcap", function( data ) {
+    if (data.err) return console.log(data.err);
+    var count = 0,
+        eq = 4;
+    // Loop through each file
+    for (var i = 0; i < data.files.length; i++) {
+      var file = data.files[i];
+      if (count>100 || jQuery("#input-webcap option[value='" + file + "']").length) {
+        // Already in the list, or the list is too long
+        break;
+      }
+      if (file[0]!="." && file.endsWith(".png")) {
+        jQuery("#input-webcap option:eq(" + eq + ")").before("<option value=" + file + ">" + file + "</option>");
+        eq++;
+        count++;
+      }
+    }
+    console.log("UPDATE WEBCAP LIST");
+    jQuery("#input-webcap option[value='loading']").remove();
+    if (jQuery("#input-webcap:visible").length) setTimeout(webCapList,10000);
+  });
+}
+
+function webCapSet() {
+
+  var filename = jQuery("#input-webcap").val();
+  d3.select("#input-foreground-wrapper").classed("hidden", filename!="local");
+
+  if (filename=="local") {
+    setTimeout(function(){
+      jQuery("#input-foreground").click();
+      console.log("click");
+    },1000);
+  }
+
+  if (!filename.endsWith(".png")) {
+    updateImage(null, "foreground");
+    return;
+  }
+
+  setClass("loading");
+  var url = "/webcap/" + filename;
+  var blob = null;
+  var xhr = new XMLHttpRequest(); 
+  xhr.open("GET", url); 
+  xhr.responseType = "blob";
+  xhr.onload = function(data) {
+    if (xhr.status==200) {
+      updateImage(null, "foreground", xhr.response);
+      setClass(null);
+      logger.info(USER.name + " imported a foreground image from Web:Cap (" + filename + ")");
+    } else {
+      setClass("error","There was an error (" + xhr.status + ") fetching image '" + filename + "' form Web:Cap.");
+    }
+  }
+  xhr.send();
+
+}
+
 function imagePid() {
   var pid = prompt("Enter a valid image pid:", "p04zwtlb");
   if (pid != null) {
     setClass("loading");
+    updateImage(null, "background");
     var url = "/ichef/" + pid;
     console.log(url);
     var blob = null;
@@ -941,13 +1003,14 @@ function showAdvancedConfig() {
   jQuery("#section-theme .row").removeClass("hidden");
   d3.select("#row-theme").classed("advanced", false);
   jQuery("#config-save").removeClass("hidden");
+  webCapList();
   windowResize(); // Bcause sometimes it makes the vertical scroll-bar appear, and elements need resizing
 }
 
 function updateTheme(theme) {
   var theme = theme || d3.select(this.options[this.selectedIndex]).datum();
   preview.theme(theme);
-  updateBackground();
+  updateImage();
   if (theme.caption){
     var caption = theme.caption.text || "";
     updateCaption(caption);
@@ -955,6 +1018,9 @@ function updateTheme(theme) {
   $("#videoload a[data-used=true]").parent().removeClass("hidden");
   // Reset custom config fields
   jQuery(".themeConfig").each(function() {
+    if (this.name.includes("caption.fontWeight")) {
+      console.log(this.name);
+    }
     if (this.name!="size") {
       // XXX hack to set subproperties (eg: theme.prop.subprob) without the use of `eval`. Need a nicer wary of doing it.
       prop = this.name.split(".");
@@ -996,10 +1062,16 @@ function updateTheme(theme) {
     d3.select("#row-wave").classed("hidden", theme.raw.wave || theme.raw.pattern=="none");
     d3.select("#row-caption").classed("hidden", !(theme.raw.caption && theme.raw.caption.hasOwnProperty("text")));
     d3.selectAll(".row.caption-advanced").classed("hidden", !jQuery("#section-theme").hasClass("advanced"));
+    d3.selectAll(".row.background-advanced").classed("hidden", !jQuery("#section-theme").hasClass("advanced"));
     d3.select("#row-subs-alias").classed("hidden", !jQuery("#section-theme").hasClass("advanced"));
     // Show "advanced" button, if some rows are still hidden
     d3.select("#row-theme").classed("advanced", jQuery("#section-theme > .row:not(:visible)").length);
     d3.select("#config-save").classed("hidden", !jQuery("#section-theme").hasClass("advanced"));
+    d3.select("#row-foreground").classed("hidden", !jQuery("#section-theme").hasClass("advanced"));
+    if ($("#row-foreground:visible").length) {
+      jQuery("#input-webcap").val("");
+      webCapList();
+    }
   }
   windowResize(); // Bcause sometimes it makes the vertical scroll-bar appear, and elements need resizing
 

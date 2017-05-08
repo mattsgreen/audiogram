@@ -12,6 +12,7 @@ var express = require("express"),
 var whitelist = require("./whitelist.js"),
     themes = require("./themes.js"),
     logger = require("../lib/logger/"),
+    upload = require("./upload.js"),
     render = require("./render.js"),
     status = require("./status.js"),
     fonts = require("./fonts.js"),
@@ -19,6 +20,7 @@ var whitelist = require("./whitelist.js"),
     kaldi = require("./kaldi.js"),
     vcs = require("./vcs.js"),
     ichef = require("./ichef.js"),
+    webcap = require("./webcap.js"),
     simulcast = require("./simulcast.js"),
     errorHandlers = require("./error.js");
 
@@ -26,6 +28,12 @@ var whitelist = require("./whitelist.js"),
 var serverSettings = require("../lib/settings/");
 
 var app = express();
+
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
 
 // whitelist
 const NODE_ENV = process.env.NODE_ENV ? process.env.NODE_ENV : "development" ;
@@ -68,8 +76,11 @@ if (serverSettings.maxUploadSize) {
   };
 }
 
+// Upload files
+app.post("/upload/", [multer(fileOptions).single('file'), upload]);
+
 // On submission, check upload, validate input, and start generating a video
-var filesToUpload = [{ name: 'audio', maxCount: 1 }, { name: 'background', maxCount: 1 }];
+var filesToUpload = [{ name: 'audio', maxCount: 1 }, { name: 'background', maxCount: 1 }, { name: 'foreground', maxCount: 1 }];
 app.post("/submit/", [multer(fileOptions).fields(filesToUpload), render.validate, render.route]);
 
 // Edit themes
@@ -103,6 +114,9 @@ app.get("/kaldi/:job/", kaldi.get);
 
 // ichef
 app.get("/ichef/:pid/", ichef.pipe);
+
+// webcap
+app.get("/webcap/:file?", webcap);
 
 // VCS
 app.get("/vcs/search/:id/", vcs.search);

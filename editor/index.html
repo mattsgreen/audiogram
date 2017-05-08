@@ -69,14 +69,14 @@
               <div class="tab-content">
                 <div class="tab-pane active" id="source-tab-vcs">
                   <div class="row">
-                    <div class="col-md-2">
-                      <label class="settings" for="input-vcs">VCS Item ID:</label>
+                    <div class="col-md-3">
+                      <label class="settings" for="input-vcs">VCS Item ID Number:</label>
                     </div>
-                    <div class="col-md-10">
+                    <div class="col-md-9">
                       <div class="input-group">
                         <input id="input-vcs" type="text" placeholder="00000" class="form-control" name="vcs" value="" />
                         <span class="input-group-btn">
-                          <button id="vcs-search" class="btn btn-secondary" type="button"><i class="fa fa-search"></i>Find</button>
+                          <button id="vcs-search" class="btn btn-secondary" type="button">Import</button>
                         </span>
                       </div>
                       <div id="vcs-results" class="hidden"></div>
@@ -454,8 +454,9 @@
                 <label class="settings" style="width: 100%; text-align: center;">Weight:</label>
                 <label class="intGEL-arrow" for="input-size">
                   <select class="form-control themeConfig" name="subtitles.fontWeight" style="text-align: center;">
-                    <option value="300">Light</option>
-                    <option value="400">Bold</option>
+                    <option>Regular</option>
+                    <option>Medium</option>
+                    <option>Bold</option>
                   </select>
                 </label>
               </div>
@@ -520,6 +521,31 @@
               </div>
               <div id="group-theme-advanced" class="col-md-3">
                 <button type="button" class="btn btn-secondary btn-block">Advanced</button>
+              </div>
+            </div>
+            <div id="row-foreground" class="row">
+              <hr>
+              <div class="col-md-3">
+                <label class="settings" for="input-theme">Overlay:</label>
+              </div>
+              <div class="col-md-6">
+                <label class="intGEL-arrow" style="width: 100%" for="input-theme">
+                  <select id="input-webcap" name="webcap" class="form-control">
+                    <option value="" selected>None</option>
+                    <option value="local">Upload PNG File</option>
+                    <option disabled></option>
+                    <option disabled>Web:Cap Image Export (this list auto-refreshes)</option>
+                    <optgroup label="West 1 Editing Dropzone - Full Frame HD (1920x1080)">
+                      <option disabled value="loading">Loading...</option>
+                    </optgroup>
+                  </select>
+                </label>
+                <div id="input-foreground-wrapper" class="hidden" style="margin-top: 10px;">
+                  <input id="input-foreground" name="foreground" type="file" />
+                </div>
+              </div>
+              <div class="col-md-3" style="text-align: center;">
+                <a id="input-webcap-link" target="_blank" href="http://webcap.national.core.bbc.co.uk/">Web:Cap <i class="fa fa-external-link" style="margin: 0"></i></a>
               </div>
             </div>
             <div id="row-background" class="row">
@@ -643,8 +669,9 @@
                   <div class="col-md-5">
                     <label class="intGEL-arrow" for="input-size">
                       <select class="form-control themeConfig" name="caption.fontWeight" style="text-align: center;">
-                        <option value="300">Light</option>
-                        <option value="400">Bold</option>
+                        <option>Regular</option>
+                        <option>Medium</option>
+                        <option>Bold</option>
                       </select>
                     </label>
                   </div>
@@ -786,6 +813,8 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
     <script src="/fonts/fonts.js"></script>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript" src="http://static.bbci.co.uk/frameworks/requirejs/0.13.0/sharedmodules/require.js"></script>
 
   </body>
 </html>

@@ -486,7 +486,8 @@ function themeSave() {
         themeJSON = JSON.stringify(theme),
         newTheme = JSON.parse(themeJSON),
         newThemeFullJSON = JSON.stringify(newTheme),
-        background = preview.img("background");
+        background = preview.img("background"),
+        foreground = preview.img("foreground");
     if (themes[newName] && USER.email !== themes[newName].author) {
       setClass("error", "You can't overwrite the existing '" + newName + "' theme because you weren't the one to orignally create it. Chosse anothe name.");
     } else {
@@ -498,10 +499,12 @@ function themeSave() {
       if (!jQuery("#input-caption").val().length) {
         delete newTheme.caption;
       }
-      // Upload background files
+      // Upload image files
       if (background) {
-        // formData.append('background', background);
         formData.append("background", imgFile.background);
+      }
+      if (foreground) {
+        formData.append("foreground", imgFile.foreground);
       }
       // Add name/author
       newTheme.name = newName;
@@ -668,6 +671,15 @@ function updateAudioFile(blob) {
 
   var audioFile = blob || upload.files[0];
 
+
+  var filename = blob ? "blob" : jQuery("#input-audio").val().split("\\").pop();
+  var size = audioFile.size/1000000;
+
+  if (size>=50) {
+    setClass("error", "Maximum upload size is 50MB. (Audio: " + filename + " - " + Math.round(size*10)/10 + "MB)");
+    return;
+  }
+
   if (audioSource!="vcs") {
     clearTimeout(vcsTranscriptTimeout);
     generateTranscript(audioFile);
@@ -684,7 +696,6 @@ function updateAudioFile(blob) {
 
   preview.loadAudio(audioFile, function(err){
 
-    var filename = blob ? "blob" : jQuery("#input-audio").val().split("\\").pop();
     if (err) {
       d3.select("#row-audio").classed("error", true);
       setClass("error", "Error decoding audio file (" + filename + ")");
@@ -929,6 +940,12 @@ function updateImage(event, type, blob) {
 
     imgFile[type] = blob || this.files[0];
     var filename = blob ? "blob" : jQuery("#input-" + type).val().split("\\").pop();
+
+    var size = imgFile[type].size/1000000;
+    if (size>=50) {
+      setClass("error", "Maximum upload size is 50MB. (" + type +": " + filename + " - " + Math.round(size*10)/10 + "MB)");
+      return;
+    }
 
     if (type=="background" && imgFile[type].type.startsWith("video")) {
 

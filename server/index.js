@@ -84,8 +84,8 @@ var filesToUpload = [{ name: 'audio', maxCount: 1 }, { name: 'background', maxCo
 app.post("/submit/", [multer(fileOptions).fields(filesToUpload), render.validate, render.route]);
 
 // Edit themes
-var filesToUpload = [{ name: 'background', maxCount: 1 }];
-app.post("/themes/add", [multer({ dest: "./settings/backgrounds" }).single('background'), themes.add]);
+var filesToUpload = [{ name: 'background', maxCount: 1 },{ name: 'foreground', maxCount: 1 }];
+app.post("/themes/add", [multer({ dest: "./settings/backgrounds" }).fields(filesToUpload), themes.add]);
 // Edit themes
 // app.post("/themes/add/", themes.add);
 

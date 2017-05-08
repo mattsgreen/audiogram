@@ -1,264 +1,707 @@
 {
-  "default": {
-    "width": 1280,
-    "height": 720,
-    "framesPerSecond": 20,
-    "maxDuration": 300,
-    "samplesPerFrame": 128,
-    "pattern": "wave",
-    "wave": {
-      "color": "#AE0003",
-      "height": 0.28,
-      "width": 1,
-      "y": 0.5,
-      "x": 0.5
-    },
-    "foregroundColor": "#AE0003",
-    "subtitles": {
-      "enabled": true,
-      "lineWidth": "40",
-      "align": "center",
-      "valign": "middle",
-      "margin": {
-        "vertical": 0.8,
-        "horizontal": 0.5
-      },
-      "box": {
-        "opacity": "0.6",
-        "color": "#000000"
-      },
-      "font": "'Source Sans Pro'",
-      "fontSize": "45",
-      "fontWeight": "300",
-      "color": "#ffffff",
-      "stroke": {
-        "color": "#000000",
-        "width": "5"
-      },
-      "linesMax": 2,
-      "lineSpacing": 10
-    },
-    "caption": {
-      "margin": {
-        "vertical": 0.5,
-        "horizontal": 0.5
-      },
-      "top": 0.5,
-      "left": 0,
-      "right": 1,
-      "font": "'Source Sans Pro'",
-      "fontSize": 50,
-      "fontWeight": 300,
-      "color": "#ffffff",
-      "align": "center",
-      "valign": "middle",
-      "lineHeight": 52,
-      "lineSpacing": 7
-    },
-    "cropAnchor": {
-      "y": "middle",
-      "x": "center"
-    },
-    "backgroundColor": "#eee"
-  },
-  "Custom": {},
-  "BBC Academy - Quote": {
-    "width": 1280,
-    "height": 720,
-    "framesPerSecond": 20,
-    "maxDuration": 300,
-    "samplesPerFrame": 128,
-    "pattern": "curve",
-    "wave": {
-      "color": "#8e90c2",
-      "y": 0.85,
-      "height": 0.25,
-      "width": 1,
-      "x": 0.5
-    },
-    "foregroundColor": "#942924",
-    "subtitles": {
-      "enabled": true,
-      "lineWidth": 30,
-      "align": "center",
-      "valign": "middle",
-      "margin": {
-        "vertical": 0.25,
-        "horizontal": 0.5
-      },
-      "font": "'Source Sans Pro'",
-      "fontSize": 60,
-      "fontWeight": 400,
-      "color": "#ffffff",
-      "stroke": {
-        "color": "#000000",
-        "width": 0
-      },
-      "box": {
-        "opacity": 0,
-        "color": "#000000"
-      },
-      "linesMax": "3",
-      "lineSpacing": 10
-    },
-    "caption": {
-      "text": "Francis J. Underwood - President of the United States",
-      "margin": {
-        "vertical": 0.54,
-        "horizontal": 0.5
-      },
-      "top": 0.49,
-      "left": 0,
-      "right": 1,
-      "font": "'Source Sans Pro'",
-      "fontSize": 50,
-      "fontWeight": 300,
-      "color": "#ffffff",
-      "align": "center",
-      "valign": "middle",
-      "lineHeight": 52,
-      "lineSpacing": 7
-    },
-    "cropAnchor": {
-      "y": "middle",
-      "x": "center"
-    },
-    "backgroundColor": "#eee",
-    "name": "BBC Academy - Quote",
-    "backgroundImage": {
-      "landscape": "BBCAcademy_landscape.png"
-    },
-    "author": null,
-    "orientation": "landscape",
-    "waveColor": "#8e90c2",
-    "captionColor": "#942924",
-    "waveTop": 522,
-    "waveBottom": 702,
-    "waveLeft": 0,
-    "waveRight": 1280
-  },
-  "BBC News - Quote": {
-    "width": 1280,
-    "height": 720,
-    "framesPerSecond": 20,
-    "maxDuration": 300,
-    "samplesPerFrame": 128,
-    "pattern": "wave",
-    "wave": {
-      "color": "#ad000d",
-      "y": 0.76,
-      "height": 0.32,
-      "width": 0.5,
-      "x": 0.75
-    },
-    "foregroundColor": "#942924",
-    "subtitles": {
-      "enabled": true,
-      "lineWidth": "15",
-      "align": "left",
-      "valign": "top",
-      "margin": {
-        "vertical": 0.32,
-        "horizontal": 0.07
-      },
-      "font": "'Source Sans Pro'",
-      "fontSize": "58",
-      "fontWeight": 400,
-      "color": "#363636",
-      "stroke": {
-        "color": "#000000",
-        "width": 0
-      },
-      "box": {
-        "opacity": 0,
-        "color": "#000000"
-      },
-      "linesMax": 4,
-      "lineSpacing": 10
-    },
-    "caption": {
-      "text": "C. J. Cregg\nWhite House Press Secretary",
-      "margin": {
-        "vertical": 0.85,
-        "horizontal": 0.08
-      },
-      "top": 0.8,
-      "left": 0,
-      "right": 0.5,
-      "font": "'Source Sans Pro'",
-      "fontSize": "40",
-      "fontWeight": 300,
-      "color": "#363636",
-      "align": "left",
-      "valign": "middle",
-      "lineHeight": 52,
-      "lineSpacing": 7
-    },
-    "cropAnchor": {
-      "y": "middle",
-      "x": "center"
-    },
-    "backgroundColor": "#eee",
-    "name": "BBC News - Quote",
-    "foregroundImage": {
-      "landscape": "BBCNews_quote.png"
-    },
-    "author": null,
-    "orientation": "landscape",
-    "waveColor": "#ad000d",
-    "captionColor": "#942924",
-    "waveTop": 432.00000000000006,
-    "waveBottom": 662.4000000000001,
-    "waveLeft": 640,
-    "waveRight": 1280
-  },
-  "Radio 1 - Blank": {
-    "pattern": "none",
-    "subtitles": {
-      "enabled": true,
-      "lineWidth": "45",
-      "align": "center",
-      "valign": "middle",
-      "margin": {
-        "vertical": 0.84,
-        "horizontal": 0.5
-      },
-      "font": "'Source Sans Pro'",
-      "fontSize": 50,
-      "fontWeight": 200,
-      "color": "#ffffff",
-      "stroke": {
-        "color": "#000000",
-        "width": 0
-      },
-      "box": {
-        "opacity": 0.6,
-        "color": "#000000"
-      },
-      "linesMax": "2",
-      "lineSpacing": 10
-    }
-  },
-  "Radio 4 - Today - Background w/ Overlay": {
-    "pattern": "bars",
-    "foregroundImage": {
-      "landscape": "R4Today_foreground_landscape.png",
-      "portrait": "R4Today_foreground_portrait.png",
-      "square": "R4Today_foreground_square.png"
-    },
-    "wave": {
-      "color": "#dcac2a"
-    }
-  },
-  "Radio 4 - Today - Default": {
-    "pattern": "bars",
-    "backgroundImage": {
-      "landscape": "R4Today_landscape.png",
-      "portrait": "R4Today_portrait.png",
-      "square": "R4Today_square.png"
-    },
-    "wave": {
-      "color": "#dcac2a"
-    }
-  }
+	"default": {
+		"width": 1280,
+		"height": 720,
+		"framesPerSecond": 20,
+		"maxDuration": 300,
+		"samplesPerFrame": 128,
+		"pattern": "wave",
+		"wave": {
+			"color": "#AE0003",
+			"height": 0.28,
+			"width": 1,
+			"y": 0.5,
+			"x": 0.5
+		},
+		"foregroundColor": "#AE0003",
+		"subtitles": {
+			"enabled": true,
+			"lineWidth": "40",
+			"align": "center",
+			"valign": "middle",
+			"margin": {
+				"vertical": 0.8,
+				"horizontal": 0.5
+			},
+			"box": {
+				"opacity": "0.6",
+				"color": "#000000"
+			},
+			"font": "HelveticaNeue",
+			"fontSize": "45",
+			"fontWeight": "Medium",
+			"color": "#ffffff",
+			"stroke": {
+				"color": "#000000",
+				"width": "5"
+			},
+			"linesMax": 2,
+			"lineSpacing": 10
+		},
+		"caption": {
+			"margin": {
+				"vertical": 0.5,
+				"horizontal": 0.5
+			},
+			"top": 0.5,
+			"left": 0,
+			"right": 1,
+			"font": "HelveticaNeue",
+			"fontSize": 50,
+			"fontWeight": "Medium",
+			"color": "#ffffff",
+			"align": "center",
+			"valign": "middle",
+			"lineHeight": 52,
+			"lineSpacing": 7
+		},
+		"backgroundPosition": {
+			"width": 1,
+			"height": 1,
+			"x": 0,
+			"y": 0,
+			"align": {
+				"y": "middle",
+				"x": "center"
+			}
+		},
+		"backgroundColor": "#eee"
+	},
+	"Custom": {},
+	"BBC Academy - Quote": {
+		"width": 1280,
+		"height": 720,
+		"framesPerSecond": 20,
+		"maxDuration": 300,
+		"samplesPerFrame": 128,
+		"pattern": "curve",
+		"wave": {
+			"color": "#8e90c2",
+			"y": 0.85,
+			"height": 0.25,
+			"width": 1,
+			"x": 0.5
+		},
+		"foregroundColor": "#942924",
+		"subtitles": {
+			"enabled": true,
+			"lineWidth": "25",
+			"align": "center",
+			"valign": "middle",
+			"margin": {
+				"vertical": 0.26,
+				"horizontal": 0.5
+			},
+			"font": "HelveticaNeue",
+			"fontSize": 60,
+			"fontWeight": "Medium",
+			"color": "#ffffff",
+			"stroke": {
+				"color": "#000000",
+				"width": 0
+			},
+			"box": {
+				"opacity": 0,
+				"color": "#000000"
+			},
+			"linesMax": "3",
+			"lineSpacing": 10
+		},
+		"caption": {
+			"text": "Francis J. Underwood - President of the United States",
+			"margin": {
+				"vertical": 0.54,
+				"horizontal": 0.5
+			},
+			"top": 0.49,
+			"left": 0,
+			"right": 1,
+			"font": "HelveticaNeue",
+			"fontSize": "45",
+			"fontWeight": "",
+			"color": "#ffffff",
+			"align": "center",
+			"valign": "middle",
+			"lineHeight": 52,
+			"lineSpacing": 7
+		},
+		"backgroundPosition": {
+			"width": 1,
+			"height": 1,
+			"x": 0,
+			"y": 0,
+			"align": {
+				"y": "middle",
+				"x": "center"
+			}
+		},
+		"backgroundColor": "#eee",
+		"name": "BBC Academy - Quote",
+		"backgroundImage": {
+			"landscape": "BBCAcademy_landscape.png"
+		},
+		"author": null,
+		"orientation": "landscape",
+		"waveColor": "#8e90c2",
+		"captionColor": "#942924",
+		"waveTop": 522,
+		"waveBottom": 702,
+		"waveLeft": 0,
+		"waveRight": 1280
+	},
+	"BBC News - Quote": {
+		"width": 1280,
+		"height": 720,
+		"framesPerSecond": 20,
+		"maxDuration": 300,
+		"samplesPerFrame": 128,
+		"pattern": "wave",
+		"wave": {
+			"color": "#ad000d",
+			"y": 0.76,
+			"height": 0.32,
+			"width": 0.5,
+			"x": 0.75
+		},
+		"foregroundColor": "#942924",
+		"subtitles": {
+			"enabled": true,
+			"lineWidth": "15",
+			"align": "left",
+			"valign": "top",
+			"margin": {
+				"vertical": 0.31,
+				"horizontal": 0.07
+			},
+			"font": "HelveticaNeue",
+			"fontSize": "58",
+			"fontWeight": "Bold",
+			"color": "#363636",
+			"stroke": {
+				"color": "#000000",
+				"width": 0
+			},
+			"box": {
+				"opacity": 0,
+				"color": "#000000"
+			},
+			"linesMax": 4,
+			"lineSpacing": 10
+		},
+		"caption": {
+			"text": "C. J. Cregg\nPress Secretary",
+			"margin": {
+				"vertical": 0.91,
+				"horizontal": 0.08
+			},
+			"top": 0.8,
+			"left": 0,
+			"right": 0.5,
+			"font": "HelveticaNeue",
+			"fontSize": "40",
+			"fontWeight": "",
+			"color": "#363636",
+			"align": "left",
+			"valign": "bottom",
+			"lineHeight": 52,
+			"lineSpacing": 7
+		},
+		"backgroundPosition": {
+			"width": 0.52,
+			"height": 1,
+			"x": 0.48,
+			"y": 0,
+			"align": {
+				"y": "middle",
+				"x": "center"
+			}
+		},
+		"backgroundColor": "#eee",
+		"name": "BBC News - Quote",
+		"foregroundImage": {
+			"landscape": "BBCNews_quote.png"
+		},
+		"author": null,
+		"orientation": "landscape",
+		"waveColor": "#ad000d",
+		"captionColor": "#942924",
+		"waveTop": 432.00000000000006,
+		"waveBottom": 662.4000000000001,
+		"waveLeft": 640,
+		"waveRight": 1280
+	},
+	"BBC News - Upper Narrative - 1 line": {
+		"width": 1280,
+		"height": 720,
+		"framesPerSecond": 20,
+		"maxDuration": 300,
+		"samplesPerFrame": 128,
+		"pattern": "curve",
+		"wave": {
+			"color": "#bb1919",
+			"height": 0.32,
+			"width": 1,
+			"y": 0.59,
+			"x": 0.5
+		},
+		"foregroundColor": "#AE0003",
+		"subtitles": {
+			"enabled": true,
+			"lineWidth": "43",
+			"align": "center",
+			"valign": "middle",
+			"margin": {
+				"vertical": 0.84,
+				"horizontal": 0.5
+			},
+			"box": {
+				"opacity": "0",
+				"color": "#000000"
+			},
+			"font": "HelveticaNeue",
+			"fontSize": "45",
+			"fontWeight": "Medium",
+			"color": "#ffffff",
+			"stroke": {
+				"color": "#000000",
+				"width": "0"
+			},
+			"linesMax": 2,
+			"lineSpacing": 10
+		},
+		"caption": {
+			"margin": {
+				"vertical": 0.13,
+				"horizontal": 0.1
+			},
+			"top": 0.5,
+			"left": 0,
+			"right": 1,
+			"font": "HelveticaNeue",
+			"fontSize": "60",
+			"fontWeight": "Medium",
+			"color": "#ffffff",
+			"align": "left",
+			"valign": "top",
+			"lineHeight": 52,
+			"lineSpacing": 7,
+			"text": "Line 1"
+		},
+		"backgroundPosition": {
+			"width": 1,
+			"height": 1,
+			"x": 0,
+			"y": 0,
+			"align": {
+				"y": "middle",
+				"x": "center"
+			}
+		},
+		"backgroundColor": "#eee",
+		"name": "BBC News - Upper Narrative - 1 line",
+		"orientation": "landscape",
+		"waveColor": "#bb1919",
+		"captionColor": "#AE0003",
+		"waveTop": 309.59999999999997,
+		"waveBottom": 540,
+		"waveLeft": 0,
+		"waveRight": 1280,
+		"author": null,
+		"foregroundImage": {
+			"landscape": "570c2bb3cecd92354817b34a515976e9",
+			"portrait": "570c2bb3cecd92354817b34a515976e9",
+			"square": "570c2bb3cecd92354817b34a515976e9"
+		}
+	},
+	"BBC News - Upper Narrative - 2 lines": {
+		"width": 1280,
+		"height": 720,
+		"framesPerSecond": 20,
+		"maxDuration": 300,
+		"samplesPerFrame": 128,
+		"pattern": "curve",
+		"wave": {
+			"color": "#bb1919",
+			"height": 0.32,
+			"width": 1,
+			"y": 0.59,
+			"x": 0.5
+		},
+		"foregroundColor": "#AE0003",
+		"subtitles": {
+			"enabled": true,
+			"lineWidth": "43",
+			"align": "center",
+			"valign": "middle",
+			"margin": {
+				"vertical": 0.84,
+				"horizontal": 0.5
+			},
+			"box": {
+				"opacity": "0",
+				"color": "#000000"
+			},
+			"font": "HelveticaNeue",
+			"fontSize": "45",
+			"fontWeight": "Medium",
+			"color": "#ffffff",
+			"stroke": {
+				"color": "#000000",
+				"width": "0"
+			},
+			"linesMax": 2,
+			"lineSpacing": 10
+		},
+		"caption": {
+			"margin": {
+				"vertical": 0.22,
+				"horizontal": 0.1
+			},
+			"top": 0.5,
+			"left": 0,
+			"right": 1,
+			"font": "HelveticaNeue",
+			"fontSize": "60",
+			"fontWeight": "Medium",
+			"color": "#ffffff",
+			"align": "left",
+			"valign": "middle",
+			"lineHeight": 52,
+			"lineSpacing": 7,
+			"text": "Line 1\nLine 2"
+		},
+		"backgroundPosition": {
+			"width": 1,
+			"height": 1,
+			"x": 0,
+			"y": 0,
+			"align": {
+				"y": "middle",
+				"x": "center"
+			}
+		},
+		"backgroundColor": "#eee",
+		"name": "BBC News - Upper Narrative - 2 lines",
+		"orientation": "landscape",
+		"waveColor": "#bb1919",
+		"captionColor": "#AE0003",
+		"waveTop": 309.59999999999997,
+		"waveBottom": 540,
+		"waveLeft": 0,
+		"waveRight": 1280,
+		"author": null,
+		"foregroundImage": {
+			"landscape": "978648baa52001001c0abe38c774d6d8",
+			"portrait": "978648baa52001001c0abe38c774d6d8",
+			"square": "978648baa52001001c0abe38c774d6d8"
+		}
+	},
+	"BBC News - Upper Narrative - Overlay - 1 line": {
+		"width": 1280,
+		"height": 720,
+		"framesPerSecond": 20,
+		"maxDuration": 300,
+		"samplesPerFrame": 128,
+		"pattern": "curve",
+		"wave": {
+			"color": "#bb1919",
+			"height": 0.32,
+			"width": 1,
+			"y": 0.59,
+			"x": 0.5
+		},
+		"foregroundColor": "#AE0003",
+		"subtitles": {
+			"enabled": true,
+			"lineWidth": "43",
+			"align": "center",
+			"valign": "middle",
+			"margin": {
+				"vertical": 0.84,
+				"horizontal": 0.5
+			},
+			"box": {
+				"opacity": "0",
+				"color": "#000000"
+			},
+			"font": "HelveticaNeue",
+			"fontSize": "45",
+			"fontWeight": "Medium",
+			"color": "#ffffff",
+			"stroke": {
+				"color": "#000000",
+				"width": "0"
+			},
+			"linesMax": 2,
+			"lineSpacing": 10
+		},
+		"caption": {
+			"margin": {
+				"vertical": 0.13,
+				"horizontal": 0.1
+			},
+			"top": 0.5,
+			"left": 0,
+			"right": 1,
+			"font": "HelveticaNeue",
+			"fontSize": "60",
+			"fontWeight": "Medium",
+			"color": "#ffffff",
+			"align": "left",
+			"valign": "top",
+			"lineHeight": 52,
+			"lineSpacing": 7,
+			"text": "Line 1"
+		},
+		"backgroundPosition": {
+			"width": 1,
+			"height": 1,
+			"x": 0,
+			"y": 0,
+			"align": {
+				"y": "middle",
+				"x": "center"
+			}
+		},
+		"backgroundColor": "#eee",
+		"name": "BBC News - Upper Narrative - Overlay - 1 line",
+		"orientation": "landscape",
+		"waveColor": "#bb1919",
+		"captionColor": "#AE0003",
+		"waveTop": 309.59999999999997,
+		"waveBottom": 540,
+		"waveLeft": 0,
+		"waveRight": 1280,
+		"author": null,
+		"foregroundImage": {
+			"landscape": "7b63718817833786419fc9d1a287b7db",
+			"portrait": "7b63718817833786419fc9d1a287b7db",
+			"square": "7b63718817833786419fc9d1a287b7db"
+		}
+	},
+	"BBC News - Upper Narrative - Overlay - 2 lines": {
+		"width": 1280,
+		"height": 720,
+		"framesPerSecond": 20,
+		"maxDuration": 300,
+		"samplesPerFrame": 128,
+		"pattern": "curve",
+		"wave": {
+			"color": "#bb1919",
+			"height": 0.32,
+			"width": 1,
+			"y": 0.59,
+			"x": 0.5
+		},
+		"foregroundColor": "#AE0003",
+		"subtitles": {
+			"enabled": true,
+			"lineWidth": "43",
+			"align": "center",
+			"valign": "middle",
+			"margin": {
+				"vertical": 0.84,
+				"horizontal": 0.5
+			},
+			"box": {
+				"opacity": "0",
+				"color": "#000000"
+			},
+			"font": "HelveticaNeue",
+			"fontSize": "45",
+			"fontWeight": "Medium",
+			"color": "#ffffff",
+			"stroke": {
+				"color": "#000000",
+				"width": "0"
+			},
+			"linesMax": 2,
+			"lineSpacing": 10
+		},
+		"caption": {
+			"margin": {
+				"vertical": 0.22,
+				"horizontal": 0.1
+			},
+			"top": 0.5,
+			"left": 0,
+			"right": 1,
+			"font": "HelveticaNeue",
+			"fontSize": "60",
+			"fontWeight": "Medium",
+			"color": "#ffffff",
+			"align": "left",
+			"valign": "middle",
+			"lineHeight": 52,
+			"lineSpacing": 7,
+			"text": "Line 1\nLine 2"
+		},
+		"backgroundPosition": {
+			"width": 1,
+			"height": 1,
+			"x": 0,
+			"y": 0,
+			"align": {
+				"y": "middle",
+				"x": "center"
+			}
+		},
+		"backgroundColor": "#eee",
+		"name": "BBC News - Upper Narrative - Overlay - 2 lines",
+		"orientation": "landscape",
+		"waveColor": "#bb1919",
+		"captionColor": "#AE0003",
+		"waveTop": 309.59999999999997,
+		"waveBottom": 540,
+		"waveLeft": 0,
+		"waveRight": 1280,
+		"author": null,
+		"foregroundImage": {
+			"landscape": "bbcnews_uppernarrative_overlay_2lines.png",
+			"portrait": "bbcnews_uppernarrative_overlay_2lines.png",
+			"square": "bbcnews_uppernarrative_overlay_2lines.png"
+		}
+	},
+	"Blank - Subtitles (1 line)": {
+		"width": 1280,
+		"height": 720,
+		"framesPerSecond": 20,
+		"maxDuration": 300,
+		"samplesPerFrame": 128,
+		"pattern": "none",
+		"wave": {
+			"color": "#AE0003",
+			"height": 0.28,
+			"width": 1,
+			"y": 0.5,
+			"x": 0.5
+		},
+		"foregroundColor": "#AE0003",
+		"subtitles": {
+			"enabled": true,
+			"lineWidth": "45",
+			"align": "center",
+			"valign": "middle",
+			"margin": {
+				"vertical": 0.81,
+				"horizontal": 0.5
+			},
+			"font": "HelveticaNeue",
+			"fontSize": "45",
+			"fontWeight": "",
+			"color": "#ffffff",
+			"stroke": {
+				"color": "#000000",
+				"width": 0
+			},
+			"box": {
+				"opacity": 0.6,
+				"color": "#000000"
+			},
+			"linesMax": 1,
+			"lineSpacing": 10
+		},
+		"backgroundPosition": {
+			"width": 1,
+			"height": 1,
+			"x": 0,
+			"y": 0,
+			"align": {
+				"y": "middle",
+				"x": "center"
+			}
+		},
+		"backgroundColor": "#eee",
+		"name": "Blank - Subtitles (2 lines)",
+		"author": null,
+		"orientation": "landscape",
+		"waveColor": "#AE0003",
+		"captionColor": "#AE0003",
+		"waveTop": 259.2,
+		"waveBottom": 460.8,
+		"waveLeft": 0,
+		"waveRight": 1280
+	},
+	"Blank - Subtitles (2 lines)": {
+		"width": 1280,
+		"height": 720,
+		"framesPerSecond": 20,
+		"maxDuration": 300,
+		"samplesPerFrame": 128,
+		"pattern": "none",
+		"wave": {
+			"color": "#AE0003",
+			"height": 0.28,
+			"width": 1,
+			"y": 0.5,
+			"x": 0.5
+		},
+		"foregroundColor": "#AE0003",
+		"subtitles": {
+			"enabled": true,
+			"lineWidth": "45",
+			"align": "center",
+			"valign": "middle",
+			"margin": {
+				"vertical": 0.81,
+				"horizontal": 0.5
+			},
+			"font": "HelveticaNeue",
+			"fontSize": "45",
+			"fontWeight": "",
+			"color": "#ffffff",
+			"stroke": {
+				"color": "#000000",
+				"width": 0
+			},
+			"box": {
+				"opacity": 0.6,
+				"color": "#000000"
+			},
+			"linesMax": "2",
+			"lineSpacing": 10
+		},
+		"backgroundPosition": {
+			"width": 1,
+			"height": 1,
+			"x": 0,
+			"y": 0,
+			"align": {
+				"y": "middle",
+				"x": "center"
+			}
+		},
+		"backgroundColor": "#eee",
+		"name": "Blank - Subtitles (2 lines)",
+		"author": null,
+		"orientation": "landscape",
+		"waveColor": "#AE0003",
+		"captionColor": "#AE0003",
+		"waveTop": 259.2,
+		"waveBottom": 460.8,
+		"waveLeft": 0,
+		"waveRight": 1280
+	},
+	"Radio 4 - Today - Background w/ Overlay": {
+		"pattern": "bars",
+		"foregroundImage": {
+			"landscape": "R4Today_foreground_landscape.png",
+			"portrait": "R4Today_foreground_portrait.png",
+			"square": "R4Today_foreground_square.png"
+		},
+		"wave": {
+			"color": "#dcac2a"
+		}
+	},
+	"Radio 4 - Today - Default": {
+		"pattern": "bars",
+		"backgroundImage": {
+			"landscape": "R4Today_landscape.png",
+			"portrait": "R4Today_portrait.png",
+			"square": "R4Today_square.png"
+		},
+		"wave": {
+			"color": "#dcac2a"
+		}
+	}
 }

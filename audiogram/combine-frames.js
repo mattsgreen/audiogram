@@ -15,7 +15,7 @@ function combineFrames(options, cb) {
   // Raw ffmpeg command with standard mp4 setup
   // Some old versions of ffmpeg require -strict for the aac codec
   var args = [
-    '-loglevel', 'error',
+    '-loglevel', 'fatal',
     '-r', options.framesPerSecond,
     '-i', options.framePath,
     '-i', options.audioPath,

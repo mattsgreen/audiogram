@@ -18,49 +18,77 @@ function drawFrames(renderer, options, cb) {
 
   frameQueue.awaitAll(cb);
 
+  function loadVideoFrame(options, frameNumber, imgCb) {
+      if (options.backgroundInfo.type.startsWith("video")) {
+        // If we're using a background video, load the respective frame still as background iamge
+        var bgFrame = (frameNumber + 1) % options.backgroundInfo.frames || options.backgroundInfo.frames;
+        var bg = new Canvas.Image;
+        bg.onload = function(){
+          renderer.backgroundImage(bg);
+          return imgCb(null);
+        };
+        bg.onerror = function(e){
+          return imgCb(e);
+        };
+        var frameSrc = path.join(options.backgroundFrameDir, "/" + zeropad(bgFrame, 6) + ".png");
+        var i = 1;
+        function addSrc() {
+          // Wait for frame to exist (async ffmpeg process for making frames sometimes takes too long)
+          if (fs.existsSync(frameSrc)) {
+            bg.src = frameSrc;
+            return;
+          } else if (i<30) {
+            setTimeout(addSrc,2000);
+          } else {
+            return imgCb("Background video frame not loaded in time (" + frameSrc + ")");
+          }
+          i++;
+        }
+        addSrc();
+      } else {
+        return imgCb(null);
+      }
+  }
+
   function drawFrame(frameNumber, frameCallback) {
+
+    var drawQueue = queue(1);
 
     var canvas = canvases.pop(),
         context = canvas.getContext("2d");
 
-    if (options.backgroundInfo.type.startsWith("video")) {
-      var bgFrame = (frameNumber + 1) % options.backgroundInfo.frames || options.backgroundInfo.frames;
-      var bg = new Canvas.Image;
-      bg.src = path.join(options.backgroundFrameDir, "/" + zeropad(bgFrame, 6) + ".png");
-      renderer.backgroundImage(bg);
-    }
+    drawQueue.defer(loadVideoFrame, options, frameNumber);
 
-    renderer.drawFrame(context, {
-      caption: options.caption,
-      transcript: options.transcript,
-      waveform: options.waveform[frameNumber],
-      backgroundInfo: options.backgroundInfo,
-      start: options.start,
-      end: options.end,
-      fps: options.fps,
-      frame: frameNumber
-    });
-
-    canvas.toBuffer(function(err, buf){
-
+    drawQueue.await(function(err){
       if (err) {
         return cb(err);
       }
 
-      fs.writeFile(path.join(options.frameDir, zeropad(frameNumber + 1, 6) + ".png"), buf, function(writeErr) {
+      renderer.drawFrame(context, {
+        caption: options.caption,
+        transcript: options.transcript,
+        waveform: options.waveform[frameNumber],
+        backgroundInfo: options.backgroundInfo,
+        start: options.start,
+        end: options.end,
+        fps: options.fps,
+        frame: frameNumber
+      });
 
-        if (writeErr) {
-          return frameCallback(writeErr);
+      canvas.toBuffer(function(err, buf){
+        if (err) {
+          return cb(err);
         }
-
-        if (options.tick) {
-          options.tick();
-        }
-
-        canvases.push(canvas);
-
-        return frameCallback(null);
-
+        fs.writeFile(path.join(options.frameDir, zeropad(frameNumber + 1, 6) + ".png"), buf, function(writeErr) {
+          if (writeErr) {
+            return frameCallback(writeErr);
+          }
+          if (options.tick) {
+            options.tick();
+          }
+          canvases.push(canvas);
+          return frameCallback(null);
+        });
       });
 
     });

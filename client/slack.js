@@ -36,7 +36,7 @@ function info(msg,fields,fallback) {
 
 function error(msg,err) {
 	var stack = err.stack,
-		trace = err.stack.replace(/    at /g, '').replace(/    at /g, '').split("\n")[2].replace(err.path,""),
+		trace = stack ? stack.replace(/    at /g, '').replace(/    at /g, '').split("\n")[2].replace(err.path,"") : null,
 		user = USER.email ? "<http://ad-lookup.bs.bbc.co.uk/adlookup.php?q=" + USER.email + "|" + USER.name + ">" : USER.name,
 		payload = { "attachments": [{
 	                "fallback": "NodeJS Error: " + msg,
@@ -66,7 +66,7 @@ function error(msg,err) {
 
 function warn(msg,err) {
 	var stack = err.stack,
-		trace = err.stack.replace(/    at /g, '').replace(/    at /g, '').split("\n")[2].replace(window.location.href,"/"),
+		trace = stack ? stack.replace(/    at /g, '').replace(/    at /g, '').split("\n")[2].replace(window.location.href,"/") : null,
 		url = window.location.href + trace.match(/\(?\/(.*):(.*):/)[1];
 	if (trace.includes("(")) {
 		trace = trace.replace("(","(<"+url+"|").replace(")",">)");

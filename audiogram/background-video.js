@@ -8,7 +8,8 @@ function backgroundVideo(options, cb) {
     var spawn = require("child_process").spawn;
     var command = spawn("ffmpeg", args);
     command.stderr.on('data', function(data) {
-      stderr += data;
+      var buff = new Buffer(data);
+      stderr += buff.toString('utf8');
     });
     command.on('exit', function() {
       command.kill();
@@ -27,7 +28,7 @@ function backgroundVideo(options, cb) {
   function makeFrames(callback) {
     // Trim and split into frames
     var arguments = [
-      '-loglevel', 'error',
+      '-loglevel', 'fatal',
       '-i', options.origin,
       '-vf', "select='gt(t,0)*lt(t," + options.duration + ")'",
       options.destination + '/%06d.png'

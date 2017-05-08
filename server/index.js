@@ -12,7 +12,6 @@ var express = require("express"),
 var whitelist = require("./whitelist.js"),
     themes = require("./themes.js"),
     logger = require("../lib/logger/"),
-    upload = require("./upload.js"),
     render = require("./render.js"),
     status = require("./status.js"),
     fonts = require("./fonts.js"),
@@ -75,9 +74,6 @@ if (serverSettings.maxUploadSize) {
     fileSize: +serverSettings.maxUploadSize
   };
 }
-
-// Upload files
-app.post("/upload/", [multer(fileOptions).single('file'), upload]);
 
 // On submission, check upload, validate input, and start generating a video
 var filesToUpload = [{ name: 'audio', maxCount: 1 }, { name: 'background', maxCount: 1 }, { name: 'foreground', maxCount: 1 }];

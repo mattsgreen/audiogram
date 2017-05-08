@@ -52,7 +52,7 @@
               Access Control - Certificate Whitelist
             </h1>
             <hr>
-            <div id="success" class="alert alert-success hidden" role="alert" style="margin-bottom: 10px; padding-left: 36px;">
+            <div id="update-success" class="alert alert-success hidden" role="alert" style="margin-bottom: 10px; padding-left: 36px;">
               <p>
                 <i class="fa fa-check" style="margin-left: -24px;"></i> <b>Added:</b> <span id="success-added"></span><br/><b>Removed:</b> <span id="success-removed"></span><br/>
               </p>
@@ -122,7 +122,7 @@
             if (data.error===null && data.diff && (data.diff.added.length || data.diff.removed.length) ) {
               $("#success-added").text(data.diff.added.join(", "));
               $("#success-removed").text(data.diff.removed.join(", "));
-              $("#success").removeClass("hidden");
+              $("#update-success").removeClass("hidden");
               log(data.diff, USER);
             }
             get();

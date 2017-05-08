@@ -53,6 +53,17 @@ function route(req, res) {
     });
   }
 
+  if (req.files['foreground']) {
+    var foregroundFile = req.files['foreground'][0],
+        foregroundId = foregroundFile.destination.split(path.sep).pop(),
+        foregroundImagePath = "foreground/" + foregroundId;
+    transports.uploadForeground(path.join(foregroundFile.destination, "foreground"), foregroundImagePath, function(err) {
+      if (err) {
+        throw err;
+      }
+    });
+  }
+
   var audioFile = req.files['audio'][0],
       audioId = audioFile.destination.split(path.sep).pop();
   transports.uploadAudio(path.join(audioFile.destination, "audio"), "audio/" + audioId, function(err) {
@@ -63,7 +74,7 @@ function route(req, res) {
     }
 
     // Queue up the job with a timestamp
-    var themeWithBackgroundImage =  _.extend(req.body.theme, { customBackgroundPath: backgroundImagePath });
+    var themeWithBackgroundImage =  _.extend(req.body.theme, { customBackgroundPath: backgroundImagePath, customForegroundPath: foregroundImagePath });
     transports.addJob(_.extend({ id: audioId, created: (new Date()).getTime(), theme: themeWithBackgroundImage }, req.body));
 
     res.json({ id: audioId });

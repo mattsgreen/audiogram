@@ -13,24 +13,24 @@ var context = d3.select("canvas").node().getContext("2d");
 var theme,
     caption,
     file,
-    background,
-    backgroundInfo,
+    img = {},
+    imgInfo = {},
     selection;
 
 function _file(_) {
   return arguments.length ? (file = _) : file;
 }
 
-function _background(_) {
-  if (arguments.length) {
-    background = _;
-    if (background==null) redraw();
+function _img(type, _) {
+  if (arguments.length>1) {
+    img[type] = _;
+    if (img[type]==null) redraw();
   }
-  return background;
+  return img[type];
 }
 
-function _backgroundInfo(_) {
-  return arguments.length ? (backgroundInfo = _, redraw()) : backgroundInfo;
+function _imgInfo(type, _) {
+  return _ ? (imgInfo[type] = _, redraw()) : imgInfo[type];
 }
 
 function _theme(_) {
@@ -145,17 +145,15 @@ function redraw() {
   // BBC watermark
   renderer.bbcDog(bbcDog || null);
 
-  // Foregroung image
-  renderer.foregroundImage(theme.foregroundImageFile ? theme.foregroundImageFile[theme.orientation] : null);
-
-  // Background image
-  renderer.backgroundImage(background ? background : theme.backgroundImageFile ? theme.backgroundImageFile[theme.orientation] : null);
+  // Render images
+  renderer.foregroundImage(img.foreground ? img.foreground : theme.foregroundImageFile ? theme.foregroundImageFile[theme.orientation] : null);
+  renderer.backgroundImage(img.background ? img.background : theme.backgroundImageFile ? theme.backgroundImageFile[theme.orientation] : null);
 
   renderer.drawFrame(context, {
     caption: theme.caption.text,
     transcript: transcript.toJSON(),
     waveform: sampleWave,
-    backgroundInfo: (background && backgroundInfo ? backgroundInfo : theme.backgroundImageInfo ? theme.backgroundImageInfo[theme.orientation] : null),
+    backgroundInfo: (img.background && imgInfo.background ? imgInfo.background : theme.backgroundImageInfo ? theme.backgroundImageInfo[theme.orientation] : null),
     preview: true,
     start: selection ? selection.start : 0,
     frame: 0
@@ -187,8 +185,8 @@ module.exports = {
   theme: _theme,
   themeConfig: _themeConfig,
   file: _file,
-  background: _background,
-  backgroundInfo: _backgroundInfo,
+  img: _img,
+  imgInfo: _imgInfo,
   loadAudio: loadAudio,
   redraw: redraw,
   selection: _selection

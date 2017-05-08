@@ -10,7 +10,8 @@
   margin: 0;
 }
 
-#input-image-pid {
+#input-image-pid,
+#input-webcap-link {
   line-height: 35px;
   font-size: 0.9em;
   border-bottom: 1px dotted;
@@ -23,6 +24,10 @@
 #input-subtitles {
   position: relative;
   top: -1px;
+}
+
+.input-background-type {
+  width: calc(100% + 30px);
 }
 
 .transcript-editor {
@@ -166,6 +171,9 @@ h1 {
 }
 .intGEL input[type='text'].form-control {
   width: 100%;
+}
+.intGEL .dropdown-menu[role='menu'] {
+  max-width: none;
 }
 label.settings {
     line-height: 33px;

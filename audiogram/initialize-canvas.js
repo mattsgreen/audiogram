@@ -16,9 +16,13 @@ function initializeCanvas(theme, cb) {
   renderer.bbcDog(dog);
 
   // Load foreground image
-  if (theme.foregroundImage) {
+  if (theme.customForegroundPath || theme.foregroundImage) {
     var fg = new Canvas.Image;
-    fg.src = path.join(__dirname, "..", "settings", "backgrounds", theme.foregroundImage);
+    if (!theme.customForegroundPath) {
+      fg.src = path.join(__dirname, "..", "settings", "backgrounds", theme.foregroundImage);
+    } else {
+      fg.src = path.join(serverSettings.storagePath, theme.customForegroundPath);
+    }
     renderer.foregroundImage(fg);
   }
 

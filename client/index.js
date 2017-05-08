@@ -9,7 +9,7 @@ var d3 = require("d3"),
 global.jQuery = $;
 
 var themesRaw,
-    backgroundFile,
+    imgFile={},
     vcsTranscriptTimeout,
     audioSource = "vcs";
 
@@ -81,12 +81,16 @@ function submitted() {
   var theme = preview.theme(),
       caption = preview.caption(),
       selection = preview.selection(),
-      backgroundInfo = preview.backgroundInfo(),
+      backgroundInfo = preview.imgInfo("background"),
       audioFile = preview.file();
 
   if (!audioFile) {
     d3.select("#row-audio").classed("error", true);
     return setClass("error", "Submit Error: No audio file selected.");
+  }
+
+  if (!theme.backgroundImage && !backgroundInfo) {
+    return setClass("error", "Submit Error: The '" + theme.name + "' theme requires you upload/import a background image or video");
   }
 
   if (theme.maxDuration && selection.duration > theme.maxDuration) {
@@ -104,7 +108,8 @@ function submitted() {
 
   formData.append("user", USER.email);
   formData.append("audio", audioFile);
-  formData.append("background", backgroundFile);
+  formData.append("background", imgFile.background);
+  formData.append("foreground", imgFile.foreground);
   formData.append("backgroundInfo", JSON.stringify(backgroundInfo || theme.backgroundImageInfo[theme.orientation]));
   if (selection.start || selection.end) {
     formData.append("start", selection.start);
@@ -120,7 +125,7 @@ function submitted() {
   formData.append("transcript", JSON.stringify(transcript.toJSON()));
 
   setClass("loading");
-  d3.select("#loading-message").text("Uploading audio...");
+  d3.select("#loading-message").text("Uploading files...");
 
   var info = {"theme": theme.name},
       fullDuration = Math.round(+audio.duration()*10,2)/10,
@@ -160,7 +165,7 @@ function poll(id) {
       dataType: "json",
       success: function(result){
         if (result && result.status && result.status === "ready" && result.url) {
-          video.update(result.url, preview.theme().name);
+          video.update(result.url, preview.theme());
           setClass("rendered");
           logger.success(result);
         } else if (result.status === "error") {
@@ -178,7 +183,12 @@ function poll(id) {
 }
 
 function error(err) {
-  var error = JSON.parse(err);
+  setClass("error", "Error...", false);
+  if (typeof err === "string") {
+    var error = {message: err, stack: null};
+  } else {
+    var error = JSON.parse(err);
+  }
   console.error(error.message);
   console.log(error.stack);
   // console.log("RLW  client error function: "  + msg.code + " / " + msg.name + " / " + msg.message);
@@ -390,7 +400,9 @@ function initialize(err, themesWithImages) {
   d3.select("#input-audio").on("change", updateAudioFile).each(updateAudioFile);
 
   // If there's an initial background image (e.g. back button) load it
-  jQuery(document).on('change', '#input-background', updateBackground);
+  jQuery(document).on('change', '#input-background', updateImage);
+  jQuery(document).on('change', '#input-foreground', updateImage);
+  jQuery(document).on('change', '#input-webcap', webCapSet);
 
   // Image VPID as background
   jQuery(document).on('click', '#input-image-pid', imagePid);
@@ -447,8 +459,10 @@ function initialize(err, themesWithImages) {
 }
 
 function windowResize() {
-  preview.redraw();
-  minimap.width(jQuery("#sourceWrapper .tab-content").width());
+  if (!jQuery("body").is(".loading,.rendered")) {
+    preview.redraw();
+    minimap.width(jQuery("#sourceWrapper .tab-content").width());
+  }
 }
 
 function themeReset() {
@@ -472,7 +486,7 @@ function themeSave() {
         themeJSON = JSON.stringify(theme),
         newTheme = JSON.parse(themeJSON),
         newThemeFullJSON = JSON.stringify(newTheme),
-        background = preview.background();
+        background = preview.img("background");
     if (themes[newName] && USER.email !== themes[newName].author) {
       setClass("error", "You can't overwrite the existing '" + newName + "' theme because you weren't the one to orignally create it. Chosse anothe name.");
     } else {
@@ -487,7 +501,7 @@ function themeSave() {
       // Upload background files
       if (background) {
         // formData.append('background', background);
-        formData.append("background", backgroundFile);
+        formData.append("background", imgFile.background);
       }
       // Add name/author
       newTheme.name = newName;
@@ -528,7 +542,7 @@ function imagePid() {
     xhr.responseType = "blob";
     xhr.onload = function(data) {
       if (xhr.status==200) {
-        updateBackground(null, xhr.response);
+        updateImage(null, "background", xhr.response);
         setClass(null);
         logger.info(USER.name + " imported an image pid from iChef (" + pid + ")");
       } else {
@@ -704,7 +718,7 @@ function txPoll(url, req) {
           xhr.open("GET", data.src); 
           xhr.responseType = "blob";
           xhr.onload = function() {
-            updateBackground(null, xhr.response);
+            updateImage(null, "background", xhr.response);
           }
           xhr.send();
           console.log("LOAD VIDEO");
@@ -833,24 +847,28 @@ function setBackground() {
   d3.select("#videoload").classed("hidden", true);
 }
 
-function updateBackground(event, blob) {
+function updateImage(event, type, blob) {
 
-    d3.select("#row-background").classed("error", false);
-
+    type = type ? type : event ? event.target.name : null;
+    
+    d3.select("#row-" + type).classed("error", false);
     var upload = this;
 
-    if ( blob===false || (blob===undefined && (!upload.files || !upload.files[0])) ) {
-      preview.background(null);
-      var input = jQuery("#input-background");
-      input.replaceWith(input.val('').clone(true));
+    if ( !type || blob===false || (blob===undefined && (!upload.files || !upload.files[0])) ) {
+      var types = type ? [type] : ["background","foreground"];
+      types.forEach(function(type){
+        preview.img(type,null);
+        var input = jQuery("#input-" + type);
+        input.replaceWith(input.val('').clone(true));
+      });
       setClass(null);
       return true;
     }
 
-    backgroundFile = blob || this.files[0];
-    var filename = blob ? "blob" : jQuery("#input-background").val().split("\\").pop();
+    imgFile[type] = blob || this.files[0];
+    var filename = blob ? "blob" : jQuery("#input-" + type).val().split("\\").pop();
 
-    if (backgroundFile.type.startsWith("video")) {
+    if (type=="background" && imgFile[type].type.startsWith("video")) {
 
       var vid = document.createElement("video");
       vid.autoplay = false;
@@ -858,34 +876,34 @@ function updateBackground(event, blob) {
       vid.style.display = "none";
       vid.addEventListener("loadeddata", function(){
           setTimeout(function(){
-            preview.background(vid);
-            preview.backgroundInfo({type: backgroundFile.type, height: vid.videoHeight, width: vid.videoWidth, duration: vid.duration});
+            preview.img(type,vid);
+            preview.imgInfo(type,{type: imgFile[type].type, height: vid.videoHeight, width: vid.videoWidth, duration: vid.duration});
           });
       }, false);
       var source = document.createElement("source");
-      source.type = backgroundFile.type;
-      source.src = window.URL.createObjectURL( backgroundFile );
+      source.type = imgFile[type].type;
+      source.src = window.URL.createObjectURL( imgFile[type] );
       vid.appendChild(source);
-      if (!blob) logger.info(USER.name + " uploaded a video background (" + filename + ")");
+      if (!blob) logger.info(USER.name + " uploaded a video " + type + " (" + filename + ")");
 
-    } else if (backgroundFile.type.startsWith("image")) {
+    } else if (type=="background" && imgFile[type].type.startsWith("image") || imgFile[type].type.endsWith("png")) {
 
       function getImage(file) {
-        var backgroundImageFile = new Image();
-        backgroundImageFile.src = window.URL.createObjectURL( file );
-        return backgroundImageFile;
+        var imageFile = new Image();
+        imageFile.src = window.URL.createObjectURL( file );
+        return imageFile;
       }
 
-      backgroundImage = getImage(backgroundFile);
-      preview.background(backgroundImage);
-      backgroundImage.onload = function() {
-        preview.backgroundInfo({type: backgroundFile.type, height: this.height, width: this.width});
-        if (!blob) logger.info(USER.name + " uploaded an image background (" + filename + ")");
+      imgImage = getImage(imgFile[type]);
+      preview.img(type,imgImage);
+      imgImage.onload = function() {
+        preview.imgInfo(type,{type: imgFile[type].type, height: this.height, width: this.width});
+        if (!blob) logger.info(USER.name + " uploaded an image " + type + " (" + filename + ")");
       }
 
     } else {
 
-      setClass("error", "That file type can't be used in the background. (" + filename + ")");
+      setClass("error", "That file type can't be used in the " + type + ". (" + filename + ")");
       return true;
 
     }

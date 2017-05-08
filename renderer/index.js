@@ -59,81 +59,120 @@ module.exports = function(t) {
   renderer.drawFrame = function(context, options){
 
     context.patternQuality = "best";
-
-    // Draw the background image and/or background color
     context.clearRect(0, 0, theme.width, theme.height);
-
     context.fillStyle = theme.backgroundColor;
     context.fillRect(0, 0, theme.width, theme.height);
 
+    // BACKGROUND IMAGE
     if (backgroundImage && options.backgroundInfo) {
-      var h, w, r,
+
+      var x, y,
+          h, w, r,
           H, W, R;
+
       // Source dimensions
-      h = options.backgroundInfo.height;
-      w = options.backgroundInfo.width;
-      r = w/h;
+        h = options.backgroundInfo.height;
+        w = options.backgroundInfo.width;
+        r = w/h;
+
       // Target dimensions
-      H = theme.height;
-      W = theme.width;
-      R = W/H;
-      // Draw
-      if (r===R) {
-        context.drawImage(backgroundImage, 0, 0, W, H);
-      // } else if ( (R>1 && r<1) || (R<1 && r>1) || (R==1 && r<1) ) {
-      } else if ( (R>1 && r<1) || (R>1 && r>1 && R>r) || (R==1 && r<1) ) {
-        // Vertical align
-        if (theme.cropAnchor.y=="top") {
-          context.drawImage(backgroundImage, 0, 0, w, (w/R), 0, 0, W, H);
-        } else if (theme.cropAnchor.y=="bottom") {
-          context.drawImage(backgroundImage, 0, (h-(w/R))/2, w, (w/R), 0, 0, W, H);
-        } else {
-          context.drawImage(backgroundImage, 0, (h-(w/R)), w, (w/R), 0, 0, W, H);
+        x = theme.backgroundPosition.x * theme.width;
+        y = theme.backgroundPosition.y * theme.height;
+        H = theme.backgroundPosition.height * theme.height;
+        W = theme.backgroundPosition.width * theme.width;
+        R = W/H;
+
+      // Align/crop
+        var sx = 0,
+            sy = 0,
+            swidth = w,
+            sheight = h,
+            width = W,
+            height = H;
+
+        if ( (R>1 && r<1) || (R>1 && r>1 && R>r) || (R==1 && r<1) || (R>1 && r==1) ) {
+          swidth = w;
+          sheight = w/R;
+          if (theme.backgroundPosition.align.y=="bottom") {
+            sy = (h-(w/R)); // bottom align
+          } else if (theme.backgroundPosition.align.y!="top") {
+            sy = (h-(w/R))/2; // middle align
+          }
+        } else if (r!==R) {
+          // Horizontal align
+          swidth = h*R;
+          sheight = h;
+          if (theme.backgroundPosition.align.x=="right") {
+            sx = (w-(h*R)); // right align
+          } else if (theme.backgroundPosition.align.x!="left") {
+            sx = (w-(h*R))/2; // center align
+          }
         }
-      } else {
-        // Horizontal align
-        if (theme.cropAnchor.x=="left") {
-          context.drawImage(backgroundImage, 0, 0, (h*R), h, 0, 0, W, H);
-        } else if (theme.cropAnchor.x=="right") {
-          context.drawImage(backgroundImage, (w-(h*R)), 0, (h*R), h, 0, 0, W, H);
-        } else {
-          context.drawImage(backgroundImage, (w-(h*R))/2, 0, (h*R), h, 0, 0, W, H);
-        }
-      }
+
+      context.drawImage(backgroundImage, sx, sy, swidth, sheight, x, y, width, height);
+
+      // // Draw
+      // if (r===R) {
+      //   context.drawImage(backgroundImage, 0, 0, W, H);
+      // // } else if ( (R>1 && r<1) || (R<1 && r>1) || (R==1 && r<1) ) {
+      // } else if ( (R>1 && r<1) || (R>1 && r>1 && R>r) || (R==1 && r<1) ) {
+      //   // Vertical align
+      //   if (theme.cropAnchor.y=="top") {
+      //     context.drawImage(backgroundImage, 0, 0, w, (w/R), 0, 0, W, H);
+      //   } else if (theme.cropAnchor.y=="bottom") {
+      //     context.drawImage(backgroundImage, 0, (h-(w/R))/2, w, (w/R), 0, 0, W, H);
+      //   } else {
+      //     context.drawImage(backgroundImage, 0, (h-(w/R)), w, (w/R), 0, 0, W, H);
+      //   }
+      // } else {
+      //   // Horizontal align
+      //   if (theme.cropAnchor.x=="left") {
+      //     context.drawImage(backgroundImage, 0, 0, (h*R), h, 0, 0, W, H);
+      //   } else if (theme.cropAnchor.x=="right") {
+      //     context.drawImage(backgroundImage, (w-(h*R)), 0, (h*R), h, 0, 0, W, H);
+      //   } else {
+      //     context.drawImage(backgroundImage, (w-(h*R))/2, 0, (h*R), h, 0, 0, W, H);
+      //   }
+      // }
+
     }
 
-    // Draw foreground image
+
+    // FOREGROUND IMAGE
     if (foregroundImage) {
       context.drawImage(foregroundImage, 0, 0, theme.width, theme.height);
     }
+    
+    // WAVE
+    if (theme.pattern!="none") patterns[theme.pattern || "wave"](context, options.waveform, theme);
 
-    // Overlay BBC watermark
+    // CAPTION
+    if (options.caption) {
+      drawCaption(context, options.caption);
+    }
+
+    // SUBTITLES
+    if (theme.subtitles.enabled && options.transcript) {
+      var currentTime = options.frame / options.fps;
+      subtitles.transcript(options.transcript);
+      subtitles.draw(context, {
+        theme: theme,
+        time: currentTime,
+        offset: options.start,
+        end: options.end,
+        preview: options.preview
+      });
+    }
+
+    console.log("FONT>>> " + context.font);
+
+    // BBC WATERMARK
     var A, h, w, o;
     A = 0.0075 * (theme.width*theme.height);
     h = Math.sqrt(A/3.5);
     w = h*3.5;
     o = h/1.5;
     context.drawImage(bbcDog, o, o, w, h);
-
-    if (theme.pattern!="none") patterns[theme.pattern || "wave"](context, options.waveform, theme);
-
-    // Write the caption
-    if (options.caption) {
-      drawCaption(context, options.caption);
-    }
-
-    // Write subtitles
-    if (theme.subtitles.enabled && options.transcript) {
-      var currenTime = options.frame / options.fps;
-      subtitles.transcript(options.transcript);
-      subtitles.draw(context, {
-        theme: theme,
-        time: currenTime,
-        offset: options.start,
-        end: options.end,
-        preview: options.preview
-      });
-    }
 
     return this;
 

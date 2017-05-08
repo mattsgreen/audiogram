@@ -527,13 +527,50 @@
               <div class="col-md-3">
                 <label class="settings" for="input-background">Image / Video:</label>
               </div>
-              <div class="col-md-5">
-                <div id="input-background-type-file" class="input-background-type" style="margin-top: 10px;">
-                  <input id="input-background" name="background" type="file" />
+              <div class="col-md-9">
+                <div class="row">
+                  <div class="col-md-7">
+                    <div id="input-background-type-file" class="input-background-type" style="margin-top: 10px;">
+                      <input id="input-background" name="background" type="file" style="width:calc(100% + 15px)" />
+                    </div>
+                  </div>
+                  <div class="col-md-5" style="text-align: center;">
+                    <a id="input-image-pid" href="#">or Image PID</a>
+                  </div>
                 </div>
-              </div>
-              <div class="col-md-4" style="text-align: center;">
-                <a id="input-image-pid" href="#">or Image PID</a>
+
+                  <div class="row background-advanced hidden">
+                    <div class="col-md-12">
+                      <hr>
+                    </div>
+                    <div class="col-md-4">
+                      <label class="intGEL-arrow" for="input-size">
+                        <select class="form-control themeConfig" name="backgroundPosition.align.x" style="text-align: center;">
+                          <option value="left">left</option>
+                          <option value="center">center</option>
+                          <option value="right">right</option>
+                        </select>
+                      </label>
+                    </div>
+                    <div class="col-md-8">
+                      <div class="background-slider" name="horizontal" style="margin: 10px 0;"></div>
+                    </div>
+                  </div>
+                  <div class="row background-advanced hidden">
+                    <div class="col-md-4">
+                      <label class="intGEL-arrow" for="input-size">
+                        <select class="form-control themeConfig" name="backgroundPosition.align.y" style="text-align: center;">
+                          <option value="top">top</option>
+                          <option value="middle">middle</option>
+                          <option value="bottom">bottom</option>
+                        </select>
+                      </label>
+                    </div>
+                    <div class="col-md-8">
+                      <div class="background-slider" name="vertical" style="margin: 10px 0;"></div>
+                    </div>
+                  </div>
+
               </div>
             </div>
             <div id="row-wave" class="row advanced">
@@ -712,9 +749,7 @@
           <div class="page-header">
             <h1>Generated Video</h1>
           </div>
-          <video width="640" height="360" controls>
-            <source type="video/mp4" />
-          </video>
+          <div id="mediaPlayer" style="width:100%; height: 100%; margin: 0;"></div>
         </section>
         <section class="well">
           <div class="btn-group">

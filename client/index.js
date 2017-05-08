@@ -242,6 +242,23 @@ function initialize(err, themesWithImages) {
         }
       }
     });
+    $(".background-slider").slider({
+      range: true,
+      min: 0,
+      max: 100,
+      values: [ 25, 75 ],
+      slide: function( event, ui ) {
+        var size = ui.values[1] - ui.values[0],
+            pos = ui.values[0];
+        if (jQuery(this).attr("name")=="vertical") {
+          preview.themeConfig("backgroundPosition.height",size/100);
+          preview.themeConfig("backgroundPosition.y",pos/100);
+        } else {
+          preview.themeConfig("backgroundPosition.width",size/100);
+          preview.themeConfig("backgroundPosition.x",pos/100);
+        }
+      }
+    });
     $(".subs-slider").slider({
       range: false,
       min: 0,
@@ -943,6 +960,9 @@ function updateTheme(theme) {
     // Reset wave sliders
     jQuery(".wave-slider[name=vertical]").slider("values", [ (theme.wave.y-(theme.wave.height/2))*100, (theme.wave.y+(theme.wave.height/2))*100 ]);
     jQuery(".wave-slider[name=horizontal]").slider("values", [ (theme.wave.x-(theme.wave.width/2))*100, (theme.wave.x+(theme.wave.width/2))*100 ]);
+    // Reset background sliders
+    jQuery(".background-slider[name=vertical]").slider("values", [ theme.backgroundPosition.y*100, (theme.backgroundPosition.y + theme.backgroundPosition.height)*100 ]);
+    jQuery(".background-slider[name=horizontal]").slider("values", [ theme.backgroundPosition.x*100, (theme.backgroundPosition.x + theme.backgroundPosition.width)*100 ]);
     // Reset subs sliders
     jQuery(".subs-slider[name=vertical]").slider("values", [theme.subtitles.margin.vertical*100]);
     jQuery(".subs-slider[name=horizontal]").slider("values", [theme.subtitles.margin.horizontal*100]);

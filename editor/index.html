@@ -754,8 +754,21 @@
         <section class="well">
           <div class="btn-group">
             <button id="return" type="button" class="left btn btn-secondary"><i class="fa fa-edit"></i>Return to editor</button>
-            <a id="download" class="button right btn btn-primary" href="#" target="_blank"><i class="fa fa-download"></i>Download</a>
-          </div> 
+            <div style="float: right;">
+              <div id="download-btns" class="dropdown-button btn-group btn-group">
+                <a href="#" class="btn btn-primary download-video">Download</a>
+                <button aria-expanded="false" data-toggle="dropdown" class="btn btn-primary btn-primary dropdown-toggle" type="button">
+                  <span class="caret"></span>
+                  <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul role="menu" class="dropdown-menu">
+                  <li><a class="download-video" href="#"><strong>Video (MP4)</strong></a></li>
+                  <li><a class="download-srt" href="#">Facebook Subtitles (SRT)</a></li>
+                  <li><a class="download-ebu" href="#">BBC Subtitles (EBU-TT-D)</a></li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </section>
       </div>
     </div><!-- .wrapper -->

@@ -78,7 +78,8 @@ function draw(context, options) {
       var line = 0,
           lineLength = 0,
           lineWidth = ifNumeric(+theme.subtitles.lineWidth, 30); 
-          linesMax = ifNumeric(+theme.subtitles.linesMax, 2);
+          linesMax = ifNumeric(+theme.subtitles.linesMax, 2),
+          speaker = 0;
 
       // Split text into lines
       loopSegments:
@@ -106,6 +107,7 @@ function draw(context, options) {
                   // Add word
                   lines[line] = (lines[line] || "") + transcript.segments[i].words[j].text + " ";
                   times.push({start: wordStart-offset, end: wordEnd-offset});
+                  speaker = transcript.segments[i].speaker;
                   // console.log("times.length: " + times.length);
                 }
                 if (j == transcript.segments[i].words.length - 1) {
@@ -172,7 +174,7 @@ function draw(context, options) {
         context.lineWidth = theme.subtitles.stroke.width * ratio.width;
         context.strokeText(text, x, lineY);
       }
-      context.fillStyle = theme.subtitles.color;
+      context.fillStyle = theme.subtitles.color[speaker] ? theme.subtitles.color[speaker] : theme.subtitles.color[0];
       context.fillText(text, x, lineY);
     });
 

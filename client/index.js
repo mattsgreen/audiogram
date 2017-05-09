@@ -1090,6 +1090,7 @@ function updateTheme(theme) {
       webCapList();
     }
   }
+  transcript.format();
   windowResize(); // Bcause sometimes it makes the vertical scroll-bar appear, and elements need resizing
 
 }
@@ -1097,6 +1098,7 @@ function updateTheme(theme) {
 function updateThemeConfig() {
   preview.themeConfig( this.name, (this.type=="checkbox" ? this.checked : this.value) );
   if (this.name=="subtitles.enabled") d3.select("#transcript-pane").classed("hidden", !this.checked);
+  if (this.name.includes("subtitles")) transcript.format();
 }
 
 function preloadImages(themes) {

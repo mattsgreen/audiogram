@@ -30,6 +30,22 @@
   width: calc(100% + 30px);
 }
 
+select.transcript-speaker {
+  width: 100px;
+  margin: -2px 0 !important;
+  height: 20px;
+  padding: 0;
+  color: #337ab7;
+  text-decoration: underline;
+  cursor: pointer;
+  background: none;
+  border: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  text-indent: 1px;
+  text-overflow: '';
+}
+
 .transcript-editor {
   border: 1px solid #ddd;
   padding: 15px;
@@ -48,12 +64,18 @@
 .transcript-editor-block__text {
   flex: 1;
   line-height: 1.7;
+  position: relative;
+  clear: both;
+  border-left-width: 3px;
+  border-left-style: solid;
+  padding-left: 10px;
+  margin-left: -10px;
 }
 
 .transcript-editor-block__word {
   background-color: #d4eaff;
   border: 1px solid #ddd;
-  padding: 0 2px;
+  padding: 1px 2px;
 }
 
 .transcript-editor-block__word.unused {
@@ -73,11 +95,31 @@
 }
 
 #transcript .transcript-editor-block__space,
+#transcript .transcript-editor-block__word {
+  display: inline-block;
+  float: left;
+  line-height: 1em;
+  margin-bottom: 5px;
+}
+
+#transcript .transcript-editor-block__space.line-break {
+  clear: both;
+  width: 0;
+}
+
+#transcript .transcript-editor-block__space.page-break {
+  clear: both;
+  width: 100%;
+  height: 5px;
+}
+
+#transcript .transcript-editor-block__space,
 #transcript .transcript-editor-block__space *{
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  display: inline-block;
 }
 
 #transcript.loading transcript,

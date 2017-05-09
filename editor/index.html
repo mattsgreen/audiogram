@@ -443,14 +443,10 @@
             <hr>
             <div class="row">
               <div class="col-md-3">
-                <label class="settings" style="width: 100%; text-align: center;">Font Colour:</label>
-                <input type="color" id="input-color" class="themeConfig" name="subtitles.color">
-              </div>
-              <div class="col-md-2">
                 <label class="settings" style="width: 100%; text-align: center;">Size:</label>
                 <input name="subtitles.fontSize" type="text" class="themeConfig form-control" style="text-align: center;" value="" />
               </div>
-              <div class="col-md-2">
+              <div class="col-md-3">
                 <label class="settings" style="width: 100%; text-align: center;">Weight:</label>
                 <label class="intGEL-arrow" for="input-size">
                   <select class="form-control themeConfig" name="subtitles.fontWeight" style="text-align: center;">
@@ -460,13 +456,29 @@
                   </select>
                 </label>
               </div>
-              <div class="col-md-2" style="border-left: 1px solid #eee;">
+              <div class="col-md-3" style="border-left: 1px solid #eee;">
                 <label class="settings" style="width: 100%; text-align: center;">Stroke:</label>
                 <input name="subtitles.stroke.width" type="text" class="themeConfig form-control" style="text-align: center;" value="" />
               </div>
               <div class="col-md-3">
                 <label class="settings" style="width: 100%; text-align: center;">Stroke Colour:</label>
                 <input type="color" id="input-color" class="themeConfig" name="subtitles.stroke.color">
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-md-3">
+                <label class="settings" style="width: 100%; text-align: center;">Font Colours:</label>
+              </div>
+              <div class="col-md-9">
+                <div class="row">
+                  <div class="col-md-3 subtitle-color-col">
+                    <input type="color" id="input-color" class="themeConfig" name="subtitles.color.0">
+                  </div>
+                  <div class="col-md-3 subtitle-color-col">
+                    <input type="color" id="input-color" class="themeConfig" name="subtitles.color.1">
+                  </div>
+                </div>
               </div>
             </div>
           </section>

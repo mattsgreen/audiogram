@@ -34,7 +34,7 @@ function update(url, theme) {
   smpRequireMap = {
     'jquery-1.9'  : 'https://static.bbci.co.uk/frameworks/jquery/0.3.0/sharedmodules/jquery-1.9.1',
     'swfobject-2' : 'https://static.bbci.co.uk/frameworks/swfobject/0.1.10/sharedmodules/swfobject-2',
-    'bump-3'      : 'https://emp.bbci.co.uk/emp/bump-3/bump-3.js'
+    'bump-3'      : 'https://emp.bbci.co.uk/emp/bump-3/bump-3'
   };
   window.require({
     paths: smpRequireMap,

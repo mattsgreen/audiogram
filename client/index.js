@@ -399,6 +399,10 @@ function initialize(err, themesWithImages) {
   // If there's an initial piece of audio (e.g. back button) load it
   d3.select("#input-audio").on("change", updateAudioFile).each(updateAudioFile);
 
+  // Export transcript
+  d3.selectAll(".transcript-export-btn").on("click", exportTranscript);
+  d3.selectAll("#input-transcript").on("change", importTranscript);
+
   // If there's an initial background image (e.g. back button) load it
   jQuery(document).on('change', '#input-background', updateImage);
   jQuery(document).on('change', '#input-foreground', updateImage);
@@ -642,6 +646,128 @@ function generateTranscript(blob) {
 
 }
 
+function importTranscript() {
+
+    function onReaderLoad(event){
+      console.log(event.target.result);
+      var obj = JSON.parse(event.target.result);
+      transcript.load(obj);
+    }
+
+    var reader = new FileReader();
+    reader.onload = onReaderLoad;
+    reader.readAsText(this.files[0]);
+
+}
+
+function exportTranscript() {
+
+  function formatHMS(t) {
+    t = Number(t);
+    var h = Math.floor(t / 3600),
+        m = Math.floor(t % 3600 / 60),
+        s = (t % 3600 % 60).toFixed(2),
+        string = `00${h}`.slice(-2) + ":" + `00${m}`.slice(-2) + ":" + `00${s}`.slice(-5);
+    return string;
+  }
+
+  var format = this.dataset.format,
+      script = transcript.toJSON(),
+      selection = preview.selection(),
+      text = "";
+
+  if (format.startsWith("plain")) {
+    // PLAIN
+    script.segments.forEach(function(segment, i){
+      newLine = true;
+      segment.words.forEach(function(word, i){
+        if ( word.start>=selection.start && word.end<=selection.end ) {
+          if (newLine) {
+            if (format=="plain-timecodes") {
+              text += formatHMS(word.start) + "\n";
+            }
+            newLine = false;
+          }
+          text += word.text + " ";
+        }
+      })
+      text += "\n\n";
+    })
+    window.open("data:text/plain;charset=utf-8;base64," + btoa(text));
+
+  } else if (format=="srt") {
+    // SRT
+    script.segments.forEach(function(segment, i){
+      var lineLength = 0,
+          lines = 1;
+      segment.words.forEach(function(word, i){
+        if ( word.start>=selection.start && word.end<=selection.end ) {
+          if (lineLength + word.text.length + 1 > 37) {
+            text += "\n";
+            lines++;
+            lineLength = 0;
+          }
+          if (lines>2) {
+            lines = 1;
+            text += "\n";
+          }
+          if (lines==1 & lineLength==0) {
+            var start = word.start,
+                end = Math.min(selection.end, segment.words[segment.words.length-1].end);
+            text += formatHMS(start).replace(".",",") + " --> " + formatHMS(end).replace(".",",") + "\n";
+          }
+          text += word.text + " ";
+          lineLength += word.text.length + 1;
+        }
+      })
+      text += "\n\n";
+    })
+    text += "</div> </body> </tt>";
+    console.log(text);
+    var src = "data:text/srt;base64," + btoa(text);
+    jQuery("#trasncript-export-dummy").attr("href", src);
+    jQuery("#trasncript-export-dummy").attr("download", "transcript.srt");
+    document.getElementById("trasncript-export-dummy").click();
+
+  } else if (format=="ebu") {
+    // EBU
+    text = '<?xml version="1.0"?> <tt xmlns="http://www.w3.org/2006/10/ttaf1" xmlns:st="http://www.w3.org/ns/ttml#styling" xml:lang="eng" ';
+    text += '> <head> <styling> <style id="backgroundStyle" st:fontFamily="proportionalSansSerif" st:fontSize="18px" st:textAlign="center" st:backgroundColor="rgba(0,0,0,0)" st:displayAlign="center"/> </styling> <layout/> </head> <body> <div>';
+    script.segments.forEach(function(segment, i){
+      var lineLength = 0,
+          lines = 1;
+      segment.words.forEach(function(word, i){
+        if ( word.start>=selection.start && word.end<=selection.end ) {
+          if (lineLength + word.text.length + 1 > 37) {
+            lines++;
+            text += "<br/>";
+            lineLength = 0;
+          }
+          if (lines>2) {
+            lines = 1;
+            text += '</p>';
+          }
+          if (lines==1 & lineLength==0) {
+            var start = word.start,
+                end = Math.min(selection.end, segment.words[segment.words.length-1].end);
+            text += '<p begin="' + formatHMS(start).split(".").shift() + '" end="' + formatHMS(end).split(".").shift() + '">';
+          }
+          text += word.text + " ";
+          lineLength += word.text.length + 1;
+        }
+      })
+      text += '</p>';
+    })
+    console.log(text);
+    var src = "data:text/srt;base64," + btoa(text);
+    jQuery("#trasncript-export-dummy").attr("href", src);
+    jQuery("#trasncript-export-dummy").attr("download", "transcript.xml");
+    document.getElementById("trasncript-export-dummy").click();
+  }
+
+
+}
+
 function loadAudioFromURL(url) {
   var blob = null;
   var xhr = new XMLHttpRequest(); 
@@ -683,6 +809,10 @@ function updateAudioFile(blob) {
   if (audioSource!="vcs") {
     clearTimeout(vcsTranscriptTimeout);
     generateTranscript(audioFile);
+  } else {
+    // Get transcript
+    clearTimeout(vcsTranscriptTimeout);
+    vcsTranscript(id, audioFile);
   }
 
   d3.select("#splash").classed("hidden", true);
@@ -802,7 +932,7 @@ function txPoll(url, req) {
     });
 }
 
-function vcsTranscript(id) {
+function vcsTranscript(id, audioFile) {
   d3.select("#transcript").classed("loading", true);
   transcript.clear();
   $.getJSON( "/vcs/transcript/" + id, function( data ) {
@@ -813,15 +943,17 @@ function vcsTranscript(id) {
       if (loaded) {
         transcript.load(body);
         d3.select("#transcript").classed("loading", false);
+      } else if (audioFile) {
+        generateTranscript(audioFile);
       } else {
-        vcsTranscriptTimeout = setTimeout(function(){vcsTranscript(id)},10000);
+        setClass("error", "Error generating VCS transcript (audioFile not loaded) for #" + item);
       }
     } else {
       console.log("VCS TRANSCRIPT ERROR");
       console.log(data);
       var item = d3.select("#input-vcs").property("value");
-      if (data.statusCode==404) {
-        setClass("error", "That VCS item (" + item + ") has expired.");
+      if (data.statusCode==404 && audioFile) {
+        generateTranscript(audioFile);
       } else {
         setClass("error", "Error (" + data.statusCode + ") fetching transcript for VCS item " + item);
       }
@@ -838,10 +970,6 @@ function vcsAudio(url, item) {
 
   // Get aduio
   loadAudioFromURL("/vcs/media/" + id);
-
-  // Get transcript
-  clearTimeout(vcsTranscriptTimeout);
-  vcsTranscript(id);
 
   item = item || d3.select("#input-vcs").property("value");
   logger.info(USER.name + " imported VCS Item #" + item);

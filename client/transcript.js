@@ -236,6 +236,8 @@ function load(json) {
     currentTranscript = Transcript.fromComma(json);
   } else if (json.hasOwnProperty("kaldi")) {
     currentTranscript = Transcript.fromKaldi(json.transcript, json.segments);
+  } else {
+    currentTranscript = Transcript.fromJSON(json);
   }
 
   var props = {

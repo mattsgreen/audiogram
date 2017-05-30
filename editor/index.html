@@ -30,7 +30,7 @@
         <image class="labs-logo-image" xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="images/labs-logo.svg" src="images/labs-logo.png" width="62" height="80"></image>
       </svg>
       <h1 class="page-title">Audiogram<span class="title-superscript">ALPHA</span></h1>
-      <div id="version">Version: 3c29568 [<b>02 MAY 17</b>]</div>
+      <div id="version">Version: b8cbea7 [<b>09 MAY 17</b>]</div>
     </header>
     <div class="wrapper">
       <div id="loading">
@@ -483,7 +483,7 @@
             </div>
           </section>
 
-          <section id="transcript" class="well hidden">
+          <section id="transcript" class="well ">
             <div class="page-header">
               <input id="input-subtitles" class="themeConfig" type="checkbox" name="subtitles.enabled" value="true" checked> 
               <h1 style="display: inline-block">
@@ -496,6 +496,9 @@
               </div>
             </div>
             <div id="transcript-pane">
+                <br/>
+                 <input id="input-transcript" name="transcript" type="file" />
+
               <div class="tip" style="margin: -5px 0 10px 0;">
                 Highlight text to select the corresponding audio clip. You can edit the transcription manually below.<br/>
                 <em>Word(s) within each blue box appear at the same time, so try to edit word by word.</em>
@@ -503,7 +506,21 @@
               <transcript></transcript>
               <div class="loading">
                 The transcript for this clip is waiting in a queue to be processed.<br/>
-                It will appear here automatically when ready.
+                It will appear here automatically when ready.              </div>
+              <div class="transcript-export">
+                <a id="trasncript-export-dummy" href="" target="_blank" style="display: none"></a>
+                <hr>
+                <div class="btn-group">
+                    <div class="dropdown-button right btn-group btn-group" style=" float: right; width: auto;">
+                    <button class="btn-sm btn-secondary dropdown-toggle btn" title="Create a new document" type="button" data-toggle="dropdown" aria-expanded="false">Export Transcript <span class="caret"></span></button>
+                    <ul class="dropdown-menu" role="menu">
+                      <li role="presentation"><a class="transcript-export-btn" data-format="plain" role="menuitem" target="_blank" href="data:text/plain;charset=utf-8;base64,RXJyb3IgbG9hZGluZyB0cmFuc2NyaXB0">Plain text (script only)</a></li>
+                      <li role="presentation"><a class="transcript-export-btn" data-format="plain-timecodes" role="menuitem" target="_blank" href="data:text/plain;charset=utf-8;base64,RXJyb3IgbG9hZGluZyB0cmFuc2NyaXB0">Plain text (with timecodes)</a></li>
+                      <li role="presentation"><a class="transcript-export-btn" data-format="srt" role="menuitem" href="#">Facebook Subs (SRT)</a></li>
+                      <li role="presentation"><a class="transcript-export-btn" data-format="ebu" role="menuitem" href="#">BBC Subs (EBU-TT-D)</a></li>
+                    </ul>
+                  </div>
+                </div>
               </div>
             </div>
           </section>

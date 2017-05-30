@@ -123,6 +123,7 @@ select.transcript-speaker {
 }
 
 #transcript.loading transcript,
+#transcript.loading .transcript-export,
 #transcript:not(.loading) .loading{
   display: none;
 }

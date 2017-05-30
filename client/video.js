@@ -46,7 +46,7 @@ function update(url, theme) {
           product: "news",
           autoplay: true,
           playlistObject: {
-            holdingImageURL: window.location.protocol + "//" + window.location.host + url.replace(".mp4",".png"),
+            holdingImageURL: window.location.protocol + "//" + window.location.host + url.replace(".mp4",".jpg"),
             items: [{
               href: [
               {

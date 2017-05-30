@@ -181,7 +181,7 @@ Audiogram.prototype.saveThumb = function(cb) {
 
   var self = this;
   
-  transports.uploadVideo(path.join(self.frameDir, "000001.png"), "video/" + self.id + ".png", function(err){
+  transports.uploadVideo(path.join(self.frameDir, "000001.jpg"), "video/" + self.id + ".jpg", function(err){
     return cb(err);
   });
 
@@ -193,7 +193,7 @@ Audiogram.prototype.combineFrames = function(cb) {
   this.status("combine");
 
   combineFrames({
-    framePath: path.join(this.frameDir, "%06d.png"),
+    framePath: path.join(this.frameDir, "%06d.jpg"),
     audioPath: this.audioPath,
     videoPath: this.videoPath,
     framesPerSecond: this.settings.theme.framesPerSecond
@@ -247,7 +247,7 @@ Audiogram.prototype.render = function(cb) {
   q.defer(transports.uploadVideo, this.videoPath, "video/" + this.id + ".mp4");
 
   // Delete working directory
-  q.defer(rimraf, this.dir);
+  // q.defer(rimraf, this.dir);
   // TO DO: also need to remove bg directory
 
   // Final callback, results in a URL where the finished video is accessible

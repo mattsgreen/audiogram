@@ -75,20 +75,18 @@ function drawFrames(renderer, options, cb) {
         frame: frameNumber
       });
 
-      canvas.toBuffer(function(err, buf){
-        if (err) {
-          return cb(err);
+      var out = fs.createWriteStream(path.join(options.frameDir, zeropad(frameNumber + 1, 6) + ".jpg"));
+      var stream = canvas.createJPEGStream({
+        bufsize: 2048,
+        quality: 80
+      });
+      stream.pipe(out);
+      out.on('finish', function(){
+        if (options.tick) {
+          options.tick();
         }
-        fs.writeFile(path.join(options.frameDir, zeropad(frameNumber + 1, 6) + ".png"), buf, function(writeErr) {
-          if (writeErr) {
-            return frameCallback(writeErr);
-          }
-          if (options.tick) {
-            options.tick();
-          }
-          canvases.push(canvas);
-          return frameCallback(null);
-        });
+        canvases.push(canvas);
+        return frameCallback(null);
       });
 
     });

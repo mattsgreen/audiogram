@@ -77,6 +77,7 @@ function draw(context, options) {
       lines = [];
       var line = 0,
           lineLength = 0,
+          totalChars = 0,
           lineWidth = ifNumeric(+theme.subtitles.lineWidth, 30); 
           linesMax = ifNumeric(+theme.subtitles.linesMax, 2),
           speaker = 0;
@@ -106,6 +107,7 @@ function draw(context, options) {
                 if (transcript.segments[i].words[j].text) {
                   // Add word
                   lines[line] = (lines[line] || "") + transcript.segments[i].words[j].text + " ";
+                  totalChars += transcript.segments[i].words[j].text.length + 1;
                   times.push({start: wordStart-offset, end: wordEnd-offset});
                   speaker = transcript.segments[i].speaker;
                   // console.log("times.length: " + times.length);
@@ -127,6 +129,32 @@ function draw(context, options) {
         }
 
     }
+
+    // Re-distribute lines evenly
+    if (lines.length>1) {
+      var avgCharLine = totalChars/lines.length,
+          redistribute = false;
+      for (var i = 0; i < lines.length; i++) {
+        var diff = Math.abs(lines[i].length - avgCharLine);
+        if (diff > 0.5*avgCharLine) {
+          redistribute = true;
+          break;
+        }
+      }
+      if (redistribute) {
+        var words = lines.join(" ").split(" "),
+            line = 0;
+        lines = [""];
+        for (var i = 0; i < words.length; i++) {
+          if (lines[line].length + words[i].length > avgCharLine && (line+2 <= linesMax) ) {
+            line++;
+            lines[line] = "";
+          }
+          lines[line] += words[i] + " ";
+        }
+      }
+    }
+
 
     // Format
     if (theme.subtitles.fontWeight=="Regular") theme.subtitles.fontWeight = ""; 
@@ -168,6 +196,7 @@ function draw(context, options) {
     context.textBaseline = "top";
     context.textAlign = theme.subtitles.align || "center";
     lines.forEach(function(text, i){
+      text = text.replace(/  +/g, ' ');
       var lineY = y + i * (fontSize + (spacing * ratio.width))
       if (theme.subtitles.stroke && theme.subtitles.stroke.width>0) {
         context.strokeStyle = theme.subtitles.stroke.color;

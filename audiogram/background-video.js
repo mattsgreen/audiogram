@@ -18,11 +18,13 @@ function backgroundVideo(options, cb) {
   }
 
   function getFps(callback) {
+
+    callback(null,25);
     // Get framerate of video
-    run(['-i', options.origin], function(stderr){
-      var fps = parseFloat((stderr+'').split('fps').shift().split(',').pop());
-      callback(null,fps);
-    });
+    // run(['-i', options.origin], function(stderr){
+    //   var fps = parseFloat((stderr+'').split('fps').shift().split(',').pop());
+    //   callback(null,fps);
+    // });
   }
 
   function makeFrames(callback) {
@@ -30,6 +32,7 @@ function backgroundVideo(options, cb) {
     var arguments = [
       '-loglevel', 'fatal',
       '-i', options.origin,
+      '-r', 25,
       '-vf', "select='gt(t,0)*lt(t," + options.duration + ")'",
       options.destination + '/%06d.png'
     ];

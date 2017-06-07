@@ -93,8 +93,12 @@ function generateMedia(type, start, end, cb) {
 		segments = [],
 		ext = ((type==="video") ? "mp4" : "mp3");
 
- 	start = Math.floor(start/segmentDuration);
-	end = Math.ceil(end/segmentDuration);
+	// Leap-second offset
+	start = +start + 37;
+	end = +end + 37;
+
+ 	start = Math.floor( start / segmentDuration ) + 1;
+	end = Math.ceil( end / segmentDuration ) + 1;
 
 	// Download init segment
 	q.defer( fetchSegment, mediaURL.init[type], tmpPath + type + "-0.m4s");

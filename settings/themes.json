@@ -30,7 +30,11 @@
 			"font": "HelveticaNeue",
 			"fontSize": "45",
 			"fontWeight": "Medium",
-			"color": "#ffffff",
+			"color": [
+				"#ffffff",
+				"#ebec00",
+				"#ff0000"
+			],
 			"stroke": {
 				"color": "#000000",
 				"width": "5"
@@ -95,7 +99,11 @@
 			"font": "HelveticaNeue",
 			"fontSize": 60,
 			"fontWeight": "Medium",
-			"color": "#ffffff",
+			"color": [
+				"#ffffff",
+				"#ebec00",
+				"#ff0000"
+			],
 			"stroke": {
 				"color": "#000000",
 				"width": 0
@@ -176,7 +184,9 @@
 			"font": "HelveticaNeue",
 			"fontSize": "58",
 			"fontWeight": "Bold",
-			"color": "#363636",
+			"color": [
+				"#363636"
+			],
 			"stroke": {
 				"color": "#000000",
 				"width": 0
@@ -261,7 +271,11 @@
 			"font": "HelveticaNeue",
 			"fontSize": "45",
 			"fontWeight": "Medium",
-			"color": "#ffffff",
+			"color": [
+				"#ffffff",
+				"#ebec00",
+				"#ff0000"
+			],
 			"stroke": {
 				"color": "#000000",
 				"width": "0"
@@ -344,7 +358,11 @@
 			"font": "HelveticaNeue",
 			"fontSize": "45",
 			"fontWeight": "Medium",
-			"color": "#ffffff",
+			"color": [
+				"#ffffff",
+				"#ebec00",
+				"#ff0000"
+			],
 			"stroke": {
 				"color": "#000000",
 				"width": "0"
@@ -427,7 +445,11 @@
 			"font": "HelveticaNeue",
 			"fontSize": "45",
 			"fontWeight": "Medium",
-			"color": "#ffffff",
+			"color": [
+				"#ffffff",
+				"#ebec00",
+				"#ff0000"
+			],
 			"stroke": {
 				"color": "#000000",
 				"width": "0"
@@ -510,7 +532,11 @@
 			"font": "HelveticaNeue",
 			"fontSize": "45",
 			"fontWeight": "Medium",
-			"color": "#ffffff",
+			"color": [
+				"#ffffff",
+				"#ebec00",
+				"#ff0000"
+			],
 			"stroke": {
 				"color": "#000000",
 				"width": "0"
@@ -562,7 +588,7 @@
 			"square": "bbcnews_uppernarrative_overlay_2lines.png"
 		}
 	},
-	"Blank - Subtitles (1 line)": {
+	"Subtitles Only - box - 1 line": {
 		"width": 1280,
 		"height": 720,
 		"framesPerSecond": 20,
@@ -589,7 +615,11 @@
 			"font": "HelveticaNeue",
 			"fontSize": "45",
 			"fontWeight": "",
-			"color": "#ffffff",
+			"color": [
+				"#ffffff",
+				"#ebec00",
+				"#ff0000"
+			],
 			"stroke": {
 				"color": "#000000",
 				"width": 0
@@ -612,7 +642,7 @@
 			}
 		},
 		"backgroundColor": "#eee",
-		"name": "Blank - Subtitles (2 lines)",
+		"name": "Subtitles Only - box - 1 line",
 		"author": null,
 		"orientation": "landscape",
 		"waveColor": "#AE0003",
@@ -622,7 +652,7 @@
 		"waveLeft": 0,
 		"waveRight": 1280
 	},
-	"Blank - Subtitles (2 lines)": {
+	"Subtitles Only - box - 2 lines": {
 		"width": 1280,
 		"height": 720,
 		"framesPerSecond": 20,
@@ -649,7 +679,11 @@
 			"font": "HelveticaNeue",
 			"fontSize": "45",
 			"fontWeight": "",
-			"color": "#ffffff",
+			"color": [
+				"#ffffff",
+				"#ebec00",
+				"#ff0000"
+			],
 			"stroke": {
 				"color": "#000000",
 				"width": 0
@@ -672,7 +706,7 @@
 			}
 		},
 		"backgroundColor": "#eee",
-		"name": "Blank - Subtitles (2 lines)",
+		"name": "Subtitles Only - box - 2 lines",
 		"author": null,
 		"orientation": "landscape",
 		"waveColor": "#AE0003",
@@ -683,15 +717,73 @@
 		"waveRight": 1280
 	},
 	"Radio 4 - Today - Background w/ Overlay": {
+		"width": 1280,
+		"height": 720,
+		"framesPerSecond": 20,
+		"maxDuration": 300,
+		"samplesPerFrame": 128,
 		"pattern": "bars",
+		"wave": {
+			"color": "#dcac2a",
+			"height": 0.25,
+			"width": 1,
+			"x": 0.5,
+			"y": 0.5
+		},
+		"foregroundColor": "#AE0003",
+		"subtitles": {
+			"enabled": true,
+			"lineWidth": "40",
+			"align": "center",
+			"valign": "middle",
+			"margin": {
+				"vertical": 0.8,
+				"horizontal": 0.5
+			},
+			"box": {
+				"opacity": "0.6",
+				"color": "#000000"
+			},
+			"font": "HelveticaNeue",
+			"fontSize": "45",
+			"fontWeight": "Medium",
+			"color": [
+				"#ffffff",
+				"#ebec00",
+				"#ff0000"
+			],
+			"stroke": {
+				"color": "#000000",
+				"width": "5"
+			},
+			"linesMax": 2,
+			"lineSpacing": 10
+		},
+		"backgroundPosition": {
+			"width": 1,
+			"height": 1,
+			"x": 0,
+			"y": 0,
+			"align": {
+				"y": "middle",
+				"x": "center"
+			}
+		},
+		"backgroundColor": "#eee",
+		"name": "Radio 4 - Today - Background w/ Overlay",
 		"foregroundImage": {
 			"landscape": "R4Today_foreground_landscape.png",
 			"portrait": "R4Today_foreground_portrait.png",
 			"square": "R4Today_foreground_square.png"
 		},
-		"wave": {
-			"color": "#dcac2a"
-		}
+		"author": "jonty.usborne@bbc.co.uk",
+		"orientation": "landscape",
+		"waveColor": "#dcac2a",
+		"captionColor": "#AE0003",
+		"waveTop": 270,
+		"waveBottom": 450,
+		"waveLeft": 0,
+		"waveRight": 1280
 	},
 	"Radio 4 - Today - Default": {
 		"pattern": "bars",

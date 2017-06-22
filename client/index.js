@@ -801,8 +801,8 @@ function updateAudioFile(blob) {
   var filename = blob ? "blob" : jQuery("#input-audio").val().split("\\").pop();
   var size = audioFile.size/1000000;
 
-  if (size>=50) {
-    setClass("error", "Maximum upload size is 50MB. (Audio: " + filename + " - " + Math.round(size*10)/10 + "MB)");
+  if (size>=150) {
+    setClass("error", "Maximum upload size is 150MB. (Audio: " + filename + " - " + Math.round(size*10)/10 + "MB)");
     return;
   }
 
@@ -1070,8 +1070,8 @@ function updateImage(event, type, blob) {
     var filename = blob ? "blob" : jQuery("#input-" + type).val().split("\\").pop();
 
     var size = imgFile[type].size/1000000;
-    if (size>=50) {
-      setClass("error", "Maximum upload size is 50MB. (" + type +": " + filename + " - " + Math.round(size*10)/10 + "MB)");
+    if (size>=150) {
+      setClass("error", "Maximum upload size is 150MB. (" + type +": " + filename + " - " + Math.round(size*10)/10 + "MB)");
       return;
     }
 

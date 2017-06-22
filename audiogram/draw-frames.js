@@ -12,7 +12,7 @@ function drawFrames(renderer, options, cb) {
     canvases.push(new Canvas(options.width, options.height));
   }
 
-  for (var i = 0; i < options.numFrames-1; i++) {
+  for (var i = 0; i < options.numFrames-2; i++) {
     frameQueue.defer(drawFrame, i);
   }
 

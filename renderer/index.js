@@ -135,7 +135,7 @@ module.exports = function(t) {
           end = segment.words[segment.words.length-1].end,
           dur = end-start;
           // console.log("(" + i + ") - " + start + ", " + end + ", " + dur);
-          if (dur<1) {
+          if ( dur<1 && options.transcript.segments[i-1] && options.transcript.segments[i-1].words && options.transcript.segments[i-1].words[options.transcript.segments[i-1].words.length-1] && options.transcript.segments[i+1].words[0]) {
             var diff = 1 - dur;
             segment.words[0].start -= diff/2;
             segment.words[segment.words.length-1].end += diff/2;

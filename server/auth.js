@@ -1,7 +1,7 @@
 module.exports = (WHITELIST) => {
 
   function isAdmin (emailAddress) {
-    var ADMINS = ["jonty.usborne@bbc.co.uk", "rachel.wilson@bbc.co.uk", "robert.mckenzie@bbc.co.uk", "miles.bernie@bbc.co.uk"];
+    var ADMINS = ["jonty.usborne@bbc.co.uk", "robert.mckenzie@bbc.co.uk", "miles.bernie@bbc.co.uk"];
     return ADMINS.some(function(e) {
       var re = new RegExp(e,"i");
       return emailAddress.match(re)}
@@ -19,7 +19,8 @@ module.exports = (WHITELIST) => {
 
     if (req.url.startsWith("/whitelist")) {
       // Edit whitelist
-      if (req.header('BBC_IDOK') === 'SUCCESS' && isAdmin(req.header('BBC_EMAIL'))) {
+      // if (req.header('BBC_IDOK') === 'SUCCESS' && isAdmin(req.header('BBC_EMAIL'))) {
+      if (req.header('BBC_IDOK') && isAdmin(req.header('BBC_EMAIL'))) {
         delete require.cache[require.resolve('../whitelist.json')];
         WHITELIST = require('../whitelist.json');
         return next();
@@ -28,8 +29,9 @@ module.exports = (WHITELIST) => {
       }
     }
 
-    var reg = new RegExp("^/(css|fonts|images|favicon|simulcast)", "i"); // Don't block these requests
-    if (reg.test(req.url) || (req.header('BBC_IDOK') === 'SUCCESS' && isWhitelisted(req.header('BBC_EMAIL')))) {
+    var reg = new RegExp("^/(css|fonts|images|favicon|simulcast|whoami)", "i"); // Don't block these requests
+    // if (reg.test(req.url) || (req.header('BBC_IDOK') === 'SUCCESS' && isWhitelisted(req.header('BBC_EMAIL')))) {
+    if (reg.test(req.url) || (req.header('BBC_EMAIL') && isWhitelisted(req.header('BBC_EMAIL')))) {
       return next();
     } else {
       var path = require("path"),

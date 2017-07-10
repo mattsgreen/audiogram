@@ -16,10 +16,9 @@ var themesRaw,
 // Load user details
 global.USER = {"name":"Unknown","email":null};
 jQuery.getJSON( "/whoami", function( data ) {
-  if (data.user) {
-    data.user = data.user + "/";
-    USER.name = data.user.match(new RegExp("CN=(.*)\/"))[1].split("/").shift();
-    USER.email = data.user.match(new RegExp("emailAddress=(.*)\/"))[1].split("/").shift();
+  if (data.email) {
+    USER.name = data.name;
+    USER.email = data.email;
   }
   logger.info(USER.name + " logged in.\n`" + navigator.userAgent + "`");
 });

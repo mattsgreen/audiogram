@@ -19,7 +19,7 @@ module.exports = (WHITELIST) => {
 
     if (req.url.startsWith("/whitelist")) {
       // Edit whitelist
-      if (req.header('ssl_client_verify') === 'SUCCESS' && isAdmin(req.header('ssl_client_s_dn'))) {
+      if (req.header('BBC_IDOK') === 'SUCCESS' && isAdmin(req.header('BBC_EMAIL'))) {
         delete require.cache[require.resolve('../whitelist.json')];
         WHITELIST = require('../whitelist.json');
         return next();
@@ -29,7 +29,7 @@ module.exports = (WHITELIST) => {
     }
 
     var reg = new RegExp("^/(css|fonts|images|favicon|simulcast)", "i"); // Don't block these requests
-    if (reg.test(req.url) || (req.header('ssl_client_verify') === 'SUCCESS' && isWhitelisted(req.header('ssl_client_s_dn')))) {
+    if (reg.test(req.url) || (req.header('BBC_IDOK') === 'SUCCESS' && isWhitelisted(req.header('BBC_EMAIL')))) {
       return next();
     } else {
       var path = require("path"),
